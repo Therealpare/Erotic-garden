@@ -228,8 +228,8 @@
     <div class="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-4">
       <div>
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.planVisit.openingHours' | translate }}</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">
-          {{ siteSettings()?.openingHours?.[0]?.days }}: {{ siteSettings()?.openingHours?.[0]?.hours }}
+        <p *ngFor="let entry of siteSettings()?.openingHours" class="mt-3 text-sm leading-relaxed text-stone">
+          {{ formatHoursDay(entry.days) }}: {{ formatHoursValue(entry.hours) }}
         </p>
       </div>
       <div>
@@ -250,8 +250,8 @@
       </div>
     </div>
 
-    <div class="mt-12">
-      <app-map [address]="siteSettings()?.address ?? ''" title="Map showing Chiang Mai Erotic Garden & Teahouse"></app-map>
+    <div class="mt-12" *ngIf="siteSettings() as settings">
+      <app-map [latitude]="settings.latitude" [longitude]="settings.longitude" [address]="settings.address" label="Erotic Garden & Teahouse"></app-map>
     </div>
 
     <div class="mt-10 flex flex-wrap gap-4">

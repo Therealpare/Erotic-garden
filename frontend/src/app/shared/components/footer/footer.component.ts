@@ -1,10 +1,12 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ContainerComponent } from '../container/container.component';
 import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { getDictionary } from '../../../core/i18n/dictionaries';
+import { SiteSettingsService } from '../../../core/services/site-settings.service';
 
 interface NavLink {
   label: string;
@@ -20,8 +22,11 @@ interface NavLink {
 })
 export class FooterComponent {
   private readonly languageService = inject(LanguageService);
+  private readonly siteSettingsService = inject(SiteSettingsService);
 
   readonly year = new Date().getFullYear();
+
+  readonly siteSettings = toSignal(this.siteSettingsService.get(), { initialValue: undefined });
 
   readonly links = computed<NavLink[]>(() => {
     const t = getDictionary(this.languageService.lang()).nav;
@@ -34,9 +39,4 @@ export class FooterComponent {
       { label: t.visit, path: '/visit' },
     ];
   });
-
-  // TODO: OWNER VERIFIED CONTENT REQUIRED — replace with real values via site-settings API.
-  readonly address = 'TODO: OWNER VERIFIED CONTENT REQUIRED — Mae Rim, Chiang Mai, Thailand';
-  readonly email = 'TODO: OWNER VERIFIED CONTENT REQUIRED';
-  readonly phone = 'TODO: OWNER VERIFIED CONTENT REQUIRED';
 }

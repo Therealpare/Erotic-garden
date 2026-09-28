@@ -5,6 +5,8 @@ export interface OpeningHoursEntry {
 
 export interface SiteSettings {
   address: string;
+  latitude: number;
+  longitude: number;
   phone: string;
   email: string;
   instagram: string;

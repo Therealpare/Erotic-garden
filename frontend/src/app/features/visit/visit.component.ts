@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -9,6 +10,7 @@ import { FaqComponent, FaqItem } from '../../shared/components/faq/faq.component
 import { MapComponent } from '../../shared/components/map/map.component';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
 import { buildGoogleMapsDirectionsUrl } from '../../shared/utils/maps.util';
+import { translateHoursDay, translateHoursValue } from '../../shared/utils/hours.util';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
 import { getDictionary } from '../../core/i18n/dictionaries';
@@ -16,7 +18,7 @@ import { getDictionary } from '../../core/i18n/dictionaries';
 @Component({
   selector: 'app-visit',
   standalone: true,
-  imports: [RouterLink, ContainerComponent, SectionHeaderComponent, ButtonComponent, FaqComponent, MapComponent, TranslatePipe],
+  imports: [CommonModule, RouterLink, ContainerComponent, SectionHeaderComponent, ButtonComponent, FaqComponent, MapComponent, TranslatePipe],
   templateUrl: './visit.component.html',
   styleUrl: './visit.component.css',
 })
@@ -25,7 +27,18 @@ export class VisitComponent {
   private readonly languageService = inject(LanguageService);
 
   readonly siteSettings = toSignal(this.siteSettingsService.get(), { initialValue: undefined });
-  readonly directionsUrl = computed(() => buildGoogleMapsDirectionsUrl(this.siteSettings()?.address ?? ''));
+  readonly directionsUrl = computed(() => {
+    const settings = this.siteSettings();
+    return settings ? buildGoogleMapsDirectionsUrl(settings.latitude, settings.longitude) : '';
+  });
+
+  formatHoursDay(days: string): string {
+    return translateHoursDay(this.languageService.lang(), days);
+  }
+
+  formatHoursValue(hours: string): string {
+    return translateHoursValue(this.languageService.lang(), hours);
+  }
 
   readonly faqItems = computed<FaqItem[]>(() => {
     const t = getDictionary(this.languageService.lang()).visit.faq;

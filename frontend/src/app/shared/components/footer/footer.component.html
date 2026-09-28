@@ -32,17 +32,37 @@
       <div>
         <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.visit' | translate }}</p>
         <address class="space-y-3 text-sm not-italic text-cream/80">
-          <p>{{ address }}</p>
-          <p>{{ phone }}</p>
-          <p>{{ email }}</p>
+          <p>{{ siteSettings()?.address }}</p>
+          <p>{{ siteSettings()?.phone }}</p>
+          <p>{{ siteSettings()?.email }}</p>
         </address>
       </div>
 
       <div>
         <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.follow' | translate }}</p>
-        <ul class="space-y-3 text-sm text-cream/80">
-          <li>{{ 'footer.instagram' | translate }}</li>
-          <li>{{ 'footer.facebook' | translate }}</li>
+        <ul class="space-y-4 text-sm text-cream/80">
+          <li>
+            <a
+              [href]="siteSettings()?.instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block transition-colors duration-400 hover:text-ivory"
+            >
+              <span class="block">Instagram</span>
+              <span class="block break-all text-cream/60">&#64;eroticgardenandteahouse</span>
+            </a>
+          </li>
+          <li>
+            <a
+              [href]="siteSettings()?.facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="block transition-colors duration-400 hover:text-ivory"
+            >
+              <span class="block">Facebook</span>
+              <span class="block text-cream/60">Erotic Garden &amp; Teahouse</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>

@@ -10,6 +10,8 @@ export class OpeningHoursEntry {
  */
 export class SiteSettings {
   address: string;
+  latitude: number;
+  longitude: number;
   phone: string;
   email: string;
   instagram: string;

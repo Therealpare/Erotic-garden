@@ -22,6 +22,11 @@ export const EN = {
   todo: {
     ownerVerified: 'TODO: OWNER VERIFIED CONTENT REQUIRED',
   },
+  hours: {
+    mondayTuesday: 'Monday–Tuesday',
+    wednesdaySunday: 'Wednesday–Sunday',
+    closed: 'Closed',
+  },
   home: {
     hero: {
       eyebrow: 'Chiang Mai · Thailand',
@@ -101,7 +106,7 @@ export const EN = {
     hero: {
       eyebrow: 'About',
       headline: 'Our Story',
-      sub: 'How a garden in Mae Rim became a place where art, nature and human expression meet.',
+      sub: 'Erotic Garden & Teahouse is home to beautiful, one-of-a-kind sculptures, exotic flowers and a sensual garden landscape. We offer private tours and host events.',
     },
     story: {
       headline: 'How it began',
@@ -337,8 +342,6 @@ export const EN = {
     explore: 'Explore',
     visit: 'Visit',
     follow: 'Follow',
-    instagram: 'Instagram — TODO: OWNER VERIFIED CONTENT REQUIRED',
-    facebook: 'Facebook — TODO: OWNER VERIFIED CONTENT REQUIRED',
     rights: 'All rights reserved.',
     place: 'Mae Rim, Chiang Mai, Thailand',
   },

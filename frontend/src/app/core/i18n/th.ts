@@ -24,6 +24,11 @@ export const TH: typeof EN = {
   todo: {
     ownerVerified: 'TODO: รอข้อมูลที่เจ้าของยืนยัน',
   },
+  hours: {
+    mondayTuesday: 'จันทร์–อังคาร',
+    wednesdaySunday: 'พุธ–อาทิตย์',
+    closed: 'ปิดทำการ',
+  },
   home: {
     hero: {
       eyebrow: 'เชียงใหม่ · ประเทศไทย',
@@ -103,7 +108,7 @@ export const TH: typeof EN = {
     hero: {
       eyebrow: 'เกี่ยวกับเรา',
       headline: 'เรื่องราวของเรา',
-      sub: 'สวนในแม่ริมกลายเป็นพื้นที่ที่ศิลปะ ธรรมชาติ และการแสดงออกของมนุษย์มาบรรจบกันได้อย่างไร',
+      sub: 'Erotic Garden & Teahouse คือพื้นที่ที่รวบรวมประติมากรรมอันงดงามและมีเอกลักษณ์เฉพาะตัว ดอกไม้แปลกตา และสวนที่เต็มไปด้วยเสน่ห์ทางประสาทสัมผัส เรามีบริการทัวร์ส่วนตัวและรับจัดอีเวนต์',
     },
     story: {
       headline: 'จุดเริ่มต้น',
@@ -339,8 +344,6 @@ export const TH: typeof EN = {
     explore: 'สำรวจ',
     visit: 'การมาเยือน',
     follow: 'ติดตามเรา',
-    instagram: 'Instagram — TODO: รอข้อมูลที่เจ้าของยืนยัน',
-    facebook: 'Facebook — TODO: รอข้อมูลที่เจ้าของยืนยัน',
     rights: 'สงวนลิขสิทธิ์',
     place: 'แม่ริม เชียงใหม่ ประเทศไทย',
   },

@@ -1,11 +1,4 @@
-/** Builds a Google Maps Embed API (Place mode) URL. Requires a Maps Embed API key. */
-export function buildGoogleMapsEmbedUrl(address: string, apiKey: string): string {
-  const query = encodeURIComponent(address);
-  return `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${query}`;
-}
-
-/** Builds a plain "open in Google Maps" directions link. No API key required. */
-export function buildGoogleMapsDirectionsUrl(address: string): string {
-  const query = encodeURIComponent(address);
-  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+/** Builds a Google Maps "get directions" link to a specific coordinate. No API key required. */
+export function buildGoogleMapsDirectionsUrl(latitude: number, longitude: number): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
 }

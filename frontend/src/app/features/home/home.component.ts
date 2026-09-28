@@ -19,6 +19,7 @@ import { ReviewService } from '../../core/services/review.service';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
 import { ArtworkCategory } from '../../core/models/artwork.model';
 import { buildGoogleMapsDirectionsUrl } from '../../shared/utils/maps.util';
+import { translateHoursDay, translateHoursValue } from '../../shared/utils/hours.util';
 import { LanguageService } from '../../core/i18n/language.service';
 import { getDictionary } from '../../core/i18n/dictionaries';
 
@@ -100,6 +101,14 @@ export class HomeComponent {
     this.activeFilter.set(filter);
   }
 
+  formatHoursDay(days: string): string {
+    return translateHoursDay(this.languageService.lang(), days);
+  }
+
+  formatHoursValue(hours: string): string {
+    return translateHoursValue(this.languageService.lang(), hours);
+  }
+
   readonly reviews = toSignal(this.reviewService.getFeatured(), { initialValue: [] });
   readonly hasReviews = computed(() => this.reviews().length > 0);
   readonly reviewSummary = toSignal(this.reviewService.getSummary(), {
@@ -107,5 +116,8 @@ export class HomeComponent {
   });
 
   readonly siteSettings = toSignal(this.siteSettingsService.get(), { initialValue: undefined });
-  readonly directionsUrl = computed(() => buildGoogleMapsDirectionsUrl(this.siteSettings()?.address ?? ''));
+  readonly directionsUrl = computed(() => {
+    const settings = this.siteSettings();
+    return settings ? buildGoogleMapsDirectionsUrl(settings.latitude, settings.longitude) : '';
+  });
 }
