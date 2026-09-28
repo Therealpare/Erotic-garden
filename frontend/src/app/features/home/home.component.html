@@ -1,0 +1,291 @@
+<!-- 9.1 HERO -->
+<section class="relative -mt-20 flex h-screen min-h-[640px] items-end overflow-hidden bg-charcoal">
+  <div class="absolute inset-0">
+    <img
+      src="https://picsum.photos/seed/eg-hero/1920/1280"
+      alt="Demo photograph of the garden at dusk — pending real photography"
+      class="hero-zoom h-full w-full object-cover"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-charcoal/50"></div>
+  </div>
+
+  <app-container>
+    <div class="relative z-10 max-w-2xl pb-24 pt-40 sm:pb-32">
+      <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-cream/90">Chiang Mai &middot; Thailand</p>
+      <h1 class="text-6xl leading-[1.05] text-ivory sm:text-8xl">A Garden Beyond<br />Imagination</h1>
+      <p class="mt-6 max-w-md text-base leading-relaxed text-cream/90">
+        Art, nature and human expression in the hills of Chiang Mai.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <app-button variant="primary" routerLink="/art">Explore the Garden</app-button>
+        <app-button variant="outline-light" routerLink="/booking">Plan Your Visit</app-button>
+      </div>
+    </div>
+  </app-container>
+
+  <div class="absolute inset-x-0 bottom-8 z-10 flex justify-center">
+    <div class="scroll-hint flex flex-col items-center gap-2 text-ivory/70">
+      <span class="text-[10px] uppercase tracking-widest2">Scroll</span>
+      <span class="h-8 w-px bg-ivory/50"></span>
+    </div>
+  </div>
+</section>
+
+<!-- 10. INTRODUCTION -->
+<section id="introduction" class="py-24 sm:py-32">
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-2">
+        <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">More than a garden.{{ '\n' }}More than an art space.</h2>
+        <p class="mt-6 text-base leading-relaxed text-stone">
+          Chiang Mai Erotic Garden &amp; Teahouse brings together contemporary sculpture, tropical planting and a
+          boutique teahouse across a series of quiet, shaded terraces in Mae Rim. Art and nature are not separated
+          here — each installation is placed to be discovered slowly, on foot, among the trees.
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-stone">
+          Visitors are invited to move at their own pace: through the garden, into the gallery spaces, and finally
+          to rest with tea overlooking the hills.
+        </p>
+        <a routerLink="/about" class="mt-8 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta">
+          Our Story →
+        </a>
+      </div>
+      <div class="lg:col-span-3">
+        <div class="aspect-[6/5] w-full">
+          <app-image-reveal
+            src="https://picsum.photos/seed/eg-intro/1400/1150"
+            alt="Demo photograph of a garden path — pending real photography"
+          ></app-image-reveal>
+        </div>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- 11. THE EXPERIENCE -->
+<section class="bg-cream py-24 sm:py-32">
+  <app-container>
+    <app-section-header eyebrow="What Awaits" headline="The Experience" supportingText="Explore a different side of Chiang Mai."></app-section-header>
+
+    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+      <app-experience-card
+        *ngFor="let item of highlights"
+        [title]="item.title"
+        [description]="item.description"
+        [imageUrl]="item.imageUrl"
+        [link]="item.link"
+      ></app-experience-card>
+    </div>
+  </app-container>
+</section>
+
+<!-- 12. GARDEN & ART -->
+<section class="py-24 sm:py-32">
+  <app-container>
+    <app-section-header eyebrow="Where They Meet" headline="Art lives between{{ '\n' }}the trees."></app-section-header>
+
+    <div class="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-5">
+      <div class="lg:col-span-3">
+        <div class="aspect-[4/5] w-full">
+          <app-image-reveal [src]="gardenArtImages[0].src" [alt]="gardenArtImages[0].alt"></app-image-reveal>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-6 lg:col-span-2 lg:grid-cols-1">
+        <div class="aspect-square w-full lg:aspect-[4/5]">
+          <app-image-reveal [src]="gardenArtImages[1].src" [alt]="gardenArtImages[1].alt"></app-image-reveal>
+        </div>
+        <div class="aspect-square w-full lg:aspect-[4/5]">
+          <app-image-reveal [src]="gardenArtImages[2].src" [alt]="gardenArtImages[2].alt"></app-image-reveal>
+        </div>
+      </div>
+    </div>
+
+    <a routerLink="/art" class="mt-10 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta">
+      Explore Art →
+    </a>
+  </app-container>
+</section>
+
+<!-- 13. ARTWORK SHOWCASE -->
+<section class="bg-cream py-24 sm:py-32">
+  <app-container>
+    <div class="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
+      <app-section-header eyebrow="Featured Works" headline="From the Collection"></app-section-header>
+
+      <div class="flex flex-wrap gap-2">
+        <button
+          *ngFor="let filter of filters"
+          type="button"
+          (click)="setFilter(filter)"
+          class="px-4 py-2 text-xs font-medium uppercase tracking-widest2 transition-colors duration-400"
+          [class.bg-forest]="activeFilter() === filter"
+          [class.text-ivory]="activeFilter() === filter"
+          [class.text-stone]="activeFilter() !== filter"
+        >
+          {{ filter }}
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+      <app-artwork-card *ngFor="let artwork of filteredArtworks()" [artwork]="artwork"></app-artwork-card>
+    </div>
+
+    <app-empty-state
+      *ngIf="filteredArtworks().length === 0"
+      title="No artworks in this category yet"
+      message="Check back soon, or explore another filter."
+    ></app-empty-state>
+  </app-container>
+</section>
+
+<!-- 15. TEA HOUSE -->
+<section class="py-24 sm:py-32">
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="order-2 lg:order-1 lg:col-span-2">
+        <div class="aspect-[4/5] w-full">
+          <app-image-reveal
+            src="https://picsum.photos/seed/eg-teahouse/1000/1250"
+            alt="Demo photograph of the tea house terrace — pending real photography"
+          ></app-image-reveal>
+        </div>
+      </div>
+      <div class="order-1 flex flex-col justify-center lg:order-2 lg:col-span-3">
+        <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">Slow down.{{ '\n' }}Have some tea.</h2>
+        <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
+          After the garden, rest a while. The teahouse serves tea, coffee and homemade treats in a quiet room
+          overlooking the planting — a place built for lingering, not rushing.
+        </p>
+        <ul class="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-xs uppercase tracking-widest2 text-stone">
+          <li>Tea</li>
+          <li>Coffee</li>
+          <li>Homemade Treats</li>
+          <li>Atmosphere</li>
+        </ul>
+        <a routerLink="/tea-house" class="mt-8 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta">
+          View Tea House →
+        </a>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- 16. MEET KATAI -->
+<section class="bg-forest py-24 text-ivory sm:py-32">
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-2">
+        <div class="aspect-[4/5] w-full">
+          <app-image-reveal
+            src="https://picsum.photos/seed/eg-katai/1000/1250"
+            alt="Demo portrait placeholder — pending real photograph of Katai"
+          ></app-image-reveal>
+        </div>
+      </div>
+      <div class="flex flex-col justify-center lg:col-span-3">
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Meet Katai</p>
+        <h2 class="whitespace-pre-line text-4xl leading-tight text-ivory sm:text-5xl">The person behind{{ '\n' }}the garden.</h2>
+        <p class="mt-6 max-w-lg text-base leading-relaxed text-cream/80">
+          TODO: OWNER VERIFIED CONTENT REQUIRED — a short biography of Katai and the story of how the garden began
+          will appear here once provided.
+        </p>
+        <blockquote class="mt-6 border-l-2 border-gold pl-4 font-display text-2xl italic text-cream/90">
+          "TODO: OWNER VERIFIED CONTENT REQUIRED — placeholder for Katai's own words."
+        </blockquote>
+        <a routerLink="/about" class="mt-8 inline-block text-xs font-medium uppercase tracking-widest2 text-gold">
+          Read Her Story →
+        </a>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- 18. REVIEWS -->
+<section class="py-24 sm:py-32">
+  <app-container>
+    <div class="flex flex-col items-center text-center">
+      <app-section-header headline="Visitors Say" align="center"></app-section-header>
+      <div class="mt-6 flex items-center gap-3">
+        <span class="font-display text-4xl text-forest">{{ reviewSummary().averageRating || '—' }} / 5</span>
+        <span class="text-sm text-stone">{{ reviewSummary().totalReviews }} Reviews</span>
+      </div>
+      <p class="mt-2 text-xs uppercase tracking-widest2 text-stone/60">Rating pending verification from Tripadvisor &amp; Google</p>
+    </div>
+
+    <div *ngIf="hasReviews(); else noReviews" class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <app-review-card *ngFor="let review of reviews()" [review]="review"></app-review-card>
+    </div>
+    <ng-template #noReviews>
+      <div class="mt-14">
+        <app-empty-state
+          title="Reviews are on their way"
+          message="We only publish verified reviews from Tripadvisor, Google and direct visitors — check back soon."
+        ></app-empty-state>
+      </div>
+    </ng-template>
+  </app-container>
+</section>
+
+<!-- 19 & 20. PLAN YOUR VISIT / LOCATION -->
+<section class="bg-cream py-24 sm:py-32">
+  <app-container>
+    <app-section-header eyebrow="Before You Go" headline="Plan Your Visit"></app-section-header>
+
+    <div class="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-4">
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Opening Hours</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">
+          {{ siteSettings()?.openingHours?.[0]?.days }}: {{ siteSettings()?.openingHours?.[0]?.hours }}
+        </p>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Admission</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.admissionInfo }}</p>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Location</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.address }}</p>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">How to Get Here</p>
+        <ul class="mt-3 space-y-1 text-sm leading-relaxed text-stone">
+          <li>By Car</li>
+          <li>By Taxi</li>
+          <li>By Scooter</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12">
+      <app-map [address]="siteSettings()?.address ?? ''" title="Map showing Chiang Mai Erotic Garden & Teahouse"></app-map>
+    </div>
+
+    <div class="mt-10 flex flex-wrap gap-4">
+      <app-button variant="secondary" [href]="directionsUrl()">Get Directions</app-button>
+      <app-button variant="primary" routerLink="/booking">Book a Visit</app-button>
+    </div>
+  </app-container>
+</section>
+
+<!-- 21. FINAL CTA -->
+<section class="relative flex min-h-[60vh] items-center overflow-hidden bg-charcoal py-24 text-center">
+  <div class="absolute inset-0">
+    <img
+      src="https://picsum.photos/seed/eg-final-cta/1920/1280"
+      alt="Demo photograph of the garden — pending real photography"
+      class="h-full w-full object-cover opacity-40"
+    />
+    <div class="absolute inset-0 bg-charcoal/60"></div>
+  </div>
+
+  <app-container>
+    <div class="relative z-10 mx-auto max-w-2xl">
+      <h2 class="whitespace-pre-line text-4xl leading-tight text-ivory sm:text-5xl">Ready to discover{{ '\n' }}something different?</h2>
+      <p class="mt-6 whitespace-pre-line text-base leading-relaxed text-cream/80">Come curious.{{ '\n' }}Leave inspired.</p>
+      <div class="mt-10 flex justify-center">
+        <app-button variant="primary" routerLink="/booking">Plan Your Visit</app-button>
+      </div>
+    </div>
+  </app-container>
+</section>

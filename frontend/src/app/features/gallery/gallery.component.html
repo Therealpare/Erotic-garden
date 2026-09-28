@@ -1,0 +1,39 @@
+<section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
+  <app-container>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Gallery</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Moments from the Garden</h1>
+  </app-container>
+</section>
+
+<app-container>
+  <div class="flex flex-wrap gap-2 py-14">
+    <button
+      *ngFor="let filter of filters()"
+      type="button"
+      (click)="setCategory(filter)"
+      class="px-4 py-2 text-xs font-medium uppercase tracking-widest2 transition-colors duration-400"
+      [class.bg-forest]="activeCategory() === filter"
+      [class.text-ivory]="activeCategory() === filter"
+      [class.text-stone]="activeCategory() !== filter"
+    >
+      {{ categoryLabel(filter) }}
+    </button>
+  </div>
+
+  <div class="pb-24">
+    <app-gallery-grid [images]="filteredImages()" (imageSelected)="openLightbox($event)"></app-gallery-grid>
+
+    <app-empty-state
+      *ngIf="filteredImages().length === 0"
+      title="No photos in this category yet"
+      message="Check back soon, or explore another category."
+    ></app-empty-state>
+  </div>
+</app-container>
+
+<app-gallery-lightbox
+  [images]="filteredImages()"
+  [activeIndex]="activeIndex()"
+  (closed)="closeLightbox()"
+  (indexChange)="activeIndex.set($event)"
+></app-gallery-lightbox>

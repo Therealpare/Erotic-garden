@@ -1,0 +1,53 @@
+<section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
+  <app-container>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Experience</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Ways to Experience the Garden</h1>
+    <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
+      From a self-guided walk to a private tour — choose the pace that suits your visit.
+    </p>
+  </app-container>
+</section>
+
+<app-container>
+  <div class="divide-y divide-stone/10">
+    <article
+      *ngFor="let experience of experiences(); let i = index"
+      class="grid grid-cols-1 items-center gap-10 py-20 lg:grid-cols-5 lg:gap-16"
+    >
+      <div class="lg:col-span-2" [ngClass]="i % 2 === 1 ? 'lg:order-2' : ''">
+        <div class="aspect-[4/5] w-full">
+          <app-image-reveal [src]="experience.imageUrl" [alt]="experience.title"></app-image-reveal>
+        </div>
+      </div>
+      <div class="lg:col-span-3" [ngClass]="i % 2 === 1 ? 'lg:order-1' : ''">
+        <h2 class="text-4xl leading-tight sm:text-5xl">{{ experience.title }}</h2>
+        <p class="mt-5 max-w-lg text-base leading-relaxed text-stone">{{ experience.shortDescription }}</p>
+        <dl class="mt-6 flex flex-wrap gap-x-10 gap-y-2 text-xs uppercase tracking-widest2 text-stone">
+          <div>
+            <dt class="text-terracotta">Duration</dt>
+            <dd class="mt-1">{{ experience.duration }}</dd>
+          </div>
+          <div>
+            <dt class="text-terracotta">Price</dt>
+            <dd class="mt-1">{{ experience.price }}</dd>
+          </div>
+        </dl>
+        <div class="mt-8">
+          <app-button variant="secondary" routerLink="/booking">Book This Experience</app-button>
+        </div>
+      </div>
+    </article>
+  </div>
+</app-container>
+
+<section class="bg-cream py-24 text-center sm:py-32">
+  <app-container>
+    <div class="mx-auto max-w-xl">
+      <h2 class="text-4xl leading-tight sm:text-5xl">Not sure where to start?</h2>
+      <p class="mt-4 text-base leading-relaxed text-stone">Get in touch and we'll help you plan the right visit.</p>
+      <div class="mt-8 flex justify-center">
+        <app-button variant="primary" routerLink="/contact">Contact Us</app-button>
+      </div>
+    </div>
+  </app-container>
+</section>

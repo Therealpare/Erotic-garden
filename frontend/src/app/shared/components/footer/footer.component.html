@@ -1,0 +1,45 @@
+<footer class="bg-forest text-ivory">
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <p class="font-display text-2xl">Erotic Garden <span class="text-gold">&amp;</span> Teahouse</p>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-cream/80">
+          A garden beyond imagination — where art, nature and human expression meet in the hills of Chiang Mai.
+        </p>
+      </div>
+
+      <div>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Explore</p>
+        <ul class="space-y-3">
+          <li *ngFor="let link of links">
+            <a [routerLink]="link.path" class="text-sm text-cream/80 transition-colors duration-400 hover:text-ivory">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Visit</p>
+        <address class="space-y-3 text-sm not-italic text-cream/80">
+          <p>{{ address }}</p>
+          <p>{{ phone }}</p>
+          <p>{{ email }}</p>
+        </address>
+      </div>
+
+      <div>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Follow</p>
+        <ul class="space-y-3 text-sm text-cream/80">
+          <li>Instagram — TODO: OWNER VERIFIED CONTENT REQUIRED</li>
+          <li>Facebook — TODO: OWNER VERIFIED CONTENT REQUIRED</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2 border-t border-ivory/10 py-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between">
+      <p>&copy; {{ year }} Chiang Mai Erotic Garden &amp; Teahouse. All rights reserved.</p>
+      <p>Mae Rim, Chiang Mai, Thailand</p>
+    </div>
+  </app-container>
+</footer>

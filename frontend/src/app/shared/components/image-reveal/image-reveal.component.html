@@ -1,0 +1,12 @@
+<div class="h-full w-full overflow-hidden">
+  <img
+    [src]="src()"
+    [alt]="alt()"
+    loading="lazy"
+    class="h-full w-full object-cover transition-all duration-[900ms] ease-out"
+    [class.opacity-0]="!isVisible()"
+    [class.scale-105]="!isVisible()"
+    [class.opacity-100]="isVisible()"
+    [class.scale-100]="isVisible()"
+  />
+</div>

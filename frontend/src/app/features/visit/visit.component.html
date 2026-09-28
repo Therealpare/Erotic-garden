@@ -1,0 +1,81 @@
+<section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
+  <app-container>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Visit</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Plan Your Visit</h1>
+  </app-container>
+</section>
+
+<section class="py-24 sm:py-32">
+  <app-container>
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Opening Hours</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">
+          {{ siteSettings()?.openingHours?.[0]?.days }}: {{ siteSettings()?.openingHours?.[0]?.hours }}
+        </p>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Admission</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.admissionInfo }}</p>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Address</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.address }}</p>
+      </div>
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Contact</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.phone }}</p>
+        <p class="text-sm leading-relaxed text-stone">{{ siteSettings()?.email }}</p>
+      </div>
+    </div>
+
+    <div class="mt-12">
+      <app-map [address]="siteSettings()?.address ?? ''" title="Map showing Chiang Mai Erotic Garden & Teahouse"></app-map>
+    </div>
+
+    <div class="mt-10 flex flex-wrap gap-4">
+      <app-button variant="secondary" [href]="directionsUrl()">Get Directions</app-button>
+      <app-button variant="primary" routerLink="/booking">Book a Visit</app-button>
+    </div>
+  </app-container>
+</section>
+
+<section class="bg-cream py-24 sm:py-32">
+  <app-container>
+    <app-section-header eyebrow="Getting Here" headline="How to Get Here"></app-section-header>
+    <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+      <div class="border border-stone/15 p-8">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">By Car</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">TODO: OWNER VERIFIED CONTENT REQUIRED — driving directions.</p>
+      </div>
+      <div class="border border-stone/15 p-8">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">By Taxi</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">TODO: OWNER VERIFIED CONTENT REQUIRED — taxi/ride-hailing guidance.</p>
+      </div>
+      <div class="border border-stone/15 p-8">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">By Scooter</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">TODO: OWNER VERIFIED CONTENT REQUIRED — scooter/parking guidance.</p>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<section class="py-24 sm:py-32">
+  <app-container>
+    <app-section-header eyebrow="Questions" headline="Frequently Asked"></app-section-header>
+    <div class="mt-12 max-w-2xl">
+      <app-faq [items]="faqItems"></app-faq>
+    </div>
+  </app-container>
+</section>
+
+<section class="bg-forest py-24 text-center text-ivory sm:py-32">
+  <app-container>
+    <div class="mx-auto max-w-xl">
+      <h2 class="text-4xl leading-tight text-ivory sm:text-5xl">Ready when you are.</h2>
+      <div class="mt-8 flex justify-center">
+        <app-button variant="outline-light" routerLink="/booking">Book a Visit</app-button>
+      </div>
+    </div>
+  </app-container>
+</section>

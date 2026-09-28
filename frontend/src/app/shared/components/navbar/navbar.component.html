@@ -1,0 +1,73 @@
+<header class="fixed inset-x-0 top-0 z-50 border-b border-stone/10 bg-ivory/95 backdrop-blur-sm">
+  <app-container>
+    <div class="flex h-20 items-center justify-between">
+      <a routerLink="/" class="font-display text-xl tracking-wide text-forest" (click)="closeMenu()">
+        Erotic Garden <span class="text-terracotta">&amp;</span> Teahouse
+      </a>
+
+      <nav class="hidden items-center gap-8 lg:flex" aria-label="Primary">
+        <a
+          *ngFor="let link of links"
+          [routerLink]="link.path"
+          routerLinkActive="text-terracotta"
+          class="text-xs font-medium uppercase tracking-widest2 text-charcoal transition-colors duration-400 hover:text-terracotta"
+        >
+          {{ link.label }}
+        </a>
+      </nav>
+
+      <div class="hidden lg:block">
+        <app-button variant="primary" routerLink="/booking">Plan Your Visit</app-button>
+      </div>
+
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center lg:hidden"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen()"
+        aria-controls="mobile-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="sr-only">Menu</span>
+        <div class="flex flex-col gap-1.5">
+          <span
+            class="block h-px w-6 bg-charcoal transition-transform duration-400"
+            [class.translate-y-2]="isMenuOpen()"
+            [class.rotate-45]="isMenuOpen()"
+          ></span>
+          <span
+            class="block h-px w-6 bg-charcoal transition-opacity duration-400"
+            [class.opacity-0]="isMenuOpen()"
+          ></span>
+          <span
+            class="block h-px w-6 bg-charcoal transition-transform duration-400"
+            [class.-translate-y-2]="isMenuOpen()"
+            [class.-rotate-45]="isMenuOpen()"
+          ></span>
+        </div>
+      </button>
+    </div>
+  </app-container>
+
+  <nav
+    id="mobile-menu"
+    *ngIf="isMenuOpen()"
+    aria-label="Mobile"
+    class="border-t border-stone/10 bg-ivory lg:hidden"
+  >
+    <app-container>
+      <div class="flex flex-col gap-6 py-8">
+        <a
+          *ngFor="let link of links"
+          [routerLink]="link.path"
+          routerLinkActive="text-terracotta"
+          (click)="closeMenu()"
+          class="font-display text-2xl text-forest"
+        >
+          {{ link.label }}
+        </a>
+        <app-button variant="primary" routerLink="/booking" (click)="closeMenu()">Plan Your Visit</app-button>
+      </div>
+    </app-container>
+  </nav>
+</header>

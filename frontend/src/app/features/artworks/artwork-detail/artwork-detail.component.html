@@ -1,0 +1,72 @@
+<ng-container *ngIf="artwork() as art; else notFound">
+  <section class="relative h-[70vh] min-h-[420px] w-full overflow-hidden bg-charcoal">
+    <img [src]="art.coverImageUrl" [alt]="art.images.at(0)?.altText ?? art.title" class="h-full w-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-transparent to-transparent"></div>
+  </section>
+
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 py-20 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ art.category }}</p>
+        <h1 class="text-5xl leading-tight sm:text-6xl">{{ art.title }}</h1>
+        <p class="mt-6 max-w-xl text-base leading-relaxed text-stone">{{ art.description }}</p>
+        <div class="mt-8 max-w-xl border-l-2 border-terracotta pl-6 text-base leading-relaxed text-stone">
+          {{ art.story }}
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <dl class="grid grid-cols-2 gap-6 border border-stone/15 p-8 text-sm">
+          <div>
+            <dt class="text-xs uppercase tracking-widest2 text-terracotta">Material</dt>
+            <dd class="mt-1 text-charcoal">{{ art.material }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-widest2 text-terracotta">Year</dt>
+            <dd class="mt-1 text-charcoal">{{ art.year }}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-widest2 text-terracotta">Location</dt>
+            <dd class="mt-1 text-charcoal">{{ art.location }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <nav class="flex items-center justify-between border-y border-stone/10 py-6 text-xs uppercase tracking-widest2">
+      <a
+        *ngIf="adjacent().previous as prev; else prevSpacer"
+        [routerLink]="['/art', prev.slug]"
+        class="text-forest transition-colors duration-400 hover:text-terracotta"
+      >
+        ← {{ prev.title }}
+      </a>
+      <ng-template #prevSpacer><span></span></ng-template>
+
+      <a
+        *ngIf="adjacent().next as next"
+        [routerLink]="['/art', next.slug]"
+        class="text-forest transition-colors duration-400 hover:text-terracotta"
+      >
+        {{ next.title }} →
+      </a>
+    </nav>
+
+    <section class="py-20" *ngIf="related().length > 0">
+      <h2 class="mb-10 text-3xl">Related Artworks</h2>
+      <div class="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <app-artwork-card *ngFor="let item of related()" [artwork]="item"></app-artwork-card>
+      </div>
+    </section>
+  </app-container>
+</ng-container>
+
+<ng-template #notFound>
+  <app-container>
+    <div class="flex min-h-[50vh] flex-col items-start justify-center py-20">
+      <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">Not Found</p>
+      <h1 class="text-5xl">This artwork couldn't be found</h1>
+      <a routerLink="/art" class="mt-6 text-xs font-medium uppercase tracking-widest2 text-terracotta">← Back to the Collection</a>
+    </div>
+  </app-container>
+</ng-template>

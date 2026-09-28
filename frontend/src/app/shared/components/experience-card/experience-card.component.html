@@ -1,0 +1,17 @@
+<a [routerLink]="link()" class="group block">
+  <div class="relative aspect-[3/4] overflow-hidden bg-cream">
+    <div class="h-full w-full transition-transform duration-[700ms] ease-out group-hover:scale-105">
+      <app-image-reveal [src]="imageUrl()" [alt]="title()"></app-image-reveal>
+    </div>
+    <div class="absolute inset-0 bg-forest/0 transition-colors duration-400 group-hover:bg-forest/10"></div>
+  </div>
+
+  <h3 class="mt-5 text-2xl">{{ title() }}</h3>
+  <p class="mt-2 text-sm leading-relaxed text-stone">{{ description() }}</p>
+  <p *ngIf="meta() as metaText" class="mt-2 text-xs uppercase tracking-widest2 text-terracotta">{{ metaText }}</p>
+  <span
+    class="mt-3 inline-block text-xs uppercase tracking-widest2 text-forest transition-transform duration-400 group-hover:translate-x-1"
+  >
+    Discover →
+  </span>
+</a>

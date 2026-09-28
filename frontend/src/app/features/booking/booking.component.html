@@ -1,0 +1,162 @@
+<section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
+  <app-container>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Booking</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Request Your Visit</h1>
+    <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
+      Tell us when you'd like to come and how many guests are joining — we'll confirm your visit by email.
+    </p>
+  </app-container>
+</section>
+
+<section class="py-24 sm:py-32">
+  <app-container>
+    <div class="mx-auto max-w-xl">
+      <div *ngIf="state() === 'success'; else formBlock" class="border border-forest/20 bg-cream p-10 text-center">
+        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">Request Received</p>
+        <p class="font-display text-3xl text-forest">Thank you</p>
+        <p class="mt-4 text-sm leading-relaxed text-stone">
+          Your visit request has been sent. We'll confirm the details by email — please keep your booking code for reference.
+        </p>
+        <p class="mt-6 border border-dashed border-stone/30 bg-ivory px-6 py-4 font-display text-2xl tracking-widest2 text-forest">
+          {{ confirmation()?.bookingCode }}
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <app-button variant="secondary" (click)="startNewBooking()">Book Another Visit</app-button>
+          <app-button variant="primary" routerLink="/">Back to Home</app-button>
+        </div>
+      </div>
+
+      <ng-template #formBlock>
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6">
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <label for="name" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Name</label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('name')"
+                aria-describedby="name-error"
+              />
+              <p *ngIf="fieldInvalid('name')" id="name-error" class="mt-2 text-xs text-terracotta">Please enter your name.</p>
+            </div>
+
+            <div>
+              <label for="email" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Email</label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('email')"
+                aria-describedby="email-error"
+              />
+              <p *ngIf="fieldInvalid('email')" id="email-error" class="mt-2 text-xs text-terracotta">Please enter a valid email address.</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Phone</label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('phone')"
+              aria-describedby="phone-error"
+            />
+            <p *ngIf="fieldInvalid('phone')" id="phone-error" class="mt-2 text-xs text-terracotta">Please enter a valid phone number.</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <label for="visitDate" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Visit Date</label>
+              <input
+                id="visitDate"
+                type="date"
+                [min]="today"
+                formControlName="visitDate"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('visitDate')"
+                aria-describedby="visitDate-error"
+              />
+              <p *ngIf="fieldInvalid('visitDate')" id="visitDate-error" class="mt-2 text-xs text-terracotta">
+                Please choose a valid date (today or later).
+              </p>
+            </div>
+
+            <div>
+              <label for="preferredTime" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Preferred Time</label>
+              <input
+                id="preferredTime"
+                type="time"
+                formControlName="preferredTime"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('preferredTime')"
+                aria-describedby="preferredTime-error"
+              />
+              <p *ngIf="fieldInvalid('preferredTime')" id="preferredTime-error" class="mt-2 text-xs text-terracotta">
+                Please choose a preferred time.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <label for="guestCount" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Number of Guests</label>
+              <input
+                id="guestCount"
+                type="number"
+                min="1"
+                max="20"
+                formControlName="guestCount"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('guestCount')"
+                aria-describedby="guestCount-error"
+              />
+              <p *ngIf="fieldInvalid('guestCount')" id="guestCount-error" class="mt-2 text-xs text-terracotta">
+                Please enter between 1 and 20 guests.
+              </p>
+            </div>
+
+            <div>
+              <label for="experienceId" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Experience</label>
+              <select
+                id="experienceId"
+                formControlName="experienceId"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('experienceId')"
+                aria-describedby="experienceId-error"
+              >
+                <option [ngValue]="null" disabled>Select an experience</option>
+                <option *ngFor="let experience of experiences()" [ngValue]="experience.id">{{ experience.title }}</option>
+              </select>
+              <p *ngIf="fieldInvalid('experienceId')" id="experienceId-error" class="mt-2 text-xs text-terracotta">
+                Please select an experience.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label for="message" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Message (optional)</label>
+            <textarea
+              id="message"
+              rows="4"
+              formControlName="message"
+              class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+            ></textarea>
+          </div>
+
+          <p *ngIf="state() === 'error'" class="text-sm text-terracotta">
+            Something went wrong sending your request. Please try again.
+          </p>
+
+          <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
+            {{ state() === 'loading' ? 'Sending…' : 'Request Visit' }}
+          </app-button>
+        </form>
+      </ng-template>
+    </div>
+  </app-container>
+</section>

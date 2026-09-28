@@ -1,0 +1,35 @@
+<section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
+  <app-container>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Art</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">The Collection</h1>
+    <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
+      Contemporary sculpture and installations placed throughout the garden.
+    </p>
+  </app-container>
+</section>
+
+<app-container>
+  <div class="flex flex-wrap gap-2 py-14">
+    <button
+      *ngFor="let filter of filters"
+      type="button"
+      (click)="setFilter(filter)"
+      class="px-4 py-2 text-xs font-medium uppercase tracking-widest2 transition-colors duration-400"
+      [class.bg-forest]="activeFilter() === filter"
+      [class.text-ivory]="activeFilter() === filter"
+      [class.text-stone]="activeFilter() !== filter"
+    >
+      {{ filter }}
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-x-8 gap-y-16 pb-24 sm:grid-cols-2 lg:grid-cols-3">
+    <app-artwork-card *ngFor="let artwork of filteredArtworks()" [artwork]="artwork"></app-artwork-card>
+  </div>
+
+  <app-empty-state
+    *ngIf="filteredArtworks().length === 0"
+    title="No artworks in this category yet"
+    message="Check back soon, or explore another filter."
+  ></app-empty-state>
+</app-container>

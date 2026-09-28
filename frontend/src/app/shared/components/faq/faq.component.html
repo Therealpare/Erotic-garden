@@ -1,0 +1,19 @@
+<div class="divide-y divide-stone/15 border-y border-stone/15">
+  <div *ngFor="let item of items(); let i = index">
+    <h3>
+      <button
+        type="button"
+        class="flex w-full items-center justify-between gap-4 py-6 text-left text-lg"
+        [attr.aria-expanded]="openIndex() === i"
+        [attr.aria-controls]="'faq-panel-' + i"
+        (click)="toggle(i)"
+      >
+        <span>{{ item.question }}</span>
+        <span class="shrink-0 text-terracotta" aria-hidden="true">{{ openIndex() === i ? '−' : '+' }}</span>
+      </button>
+    </h3>
+    <div [id]="'faq-panel-' + i" role="region" *ngIf="openIndex() === i" class="pb-6 pr-10 text-sm leading-relaxed text-stone">
+      {{ item.answer }}
+    </div>
+  </div>
+</div>

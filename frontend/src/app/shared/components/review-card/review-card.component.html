@@ -1,0 +1,15 @@
+<div class="flex h-full flex-col justify-between border border-stone/15 p-8">
+  <div>
+    <div class="flex gap-1" aria-hidden="true">
+      <span *ngFor="let star of stars" class="text-sm" [ngClass]="isFilled(star) ? 'text-gold' : 'text-stone/30'">
+        &#9733;
+      </span>
+    </div>
+    <p class="mt-4 text-base leading-relaxed text-charcoal">&ldquo;{{ review().reviewText }}&rdquo;</p>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between text-xs uppercase tracking-widest2 text-stone">
+    <span>{{ review().authorName }}</span>
+    <span>{{ sourceLabels[review().source] }}</span>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="columns-1 gap-6 sm:columns-2 lg:columns-3">
+  <button
+    *ngFor="let image of images(); let i = index"
+    type="button"
+    class="group relative mb-6 block w-full overflow-hidden bg-cream"
+    (click)="imageSelected.emit(i)"
+    [attr.aria-label]="'Open ' + image.title + ' in lightbox'"
+  >
+    <img
+      [src]="image.imageUrl"
+      [alt]="image.altText"
+      loading="lazy"
+      class="w-full object-cover transition-transform duration-[700ms] ease-out group-hover:scale-105"
+    />
+    <span
+      class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal/70 to-transparent px-4 py-3 text-left text-xs uppercase tracking-widest2 text-ivory opacity-0 transition-opacity duration-400 group-hover:opacity-100"
+    >
+      {{ image.title }}
+    </span>
+  </button>
+</div>

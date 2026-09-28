@@ -1,0 +1,16 @@
+<div [class.text-center]="align() === 'center'" [class.mx-auto]="align() === 'center'" class="max-w-2xl">
+  <p
+    *ngIf="eyebrow() as eyebrowText"
+    class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta"
+  >
+    {{ eyebrowText }}
+  </p>
+
+  <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">
+    {{ headline() }}
+  </h2>
+
+  <p *ngIf="supportingText() as text" class="mt-6 text-base leading-relaxed text-stone">
+    {{ text }}
+  </p>
+</div>

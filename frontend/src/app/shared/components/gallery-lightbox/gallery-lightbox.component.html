@@ -1,0 +1,41 @@
+<div
+  *ngIf="activeImage() as image"
+  class="fixed inset-0 z-[100] flex items-center justify-center bg-charcoal/95 p-4 sm:p-10"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="image.title"
+  (click)="close()"
+>
+  <button
+    #closeButton
+    type="button"
+    class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center text-2xl text-ivory transition-opacity duration-400 hover:opacity-70 sm:right-8 sm:top-8"
+    (click)="close()"
+    aria-label="Close lightbox"
+  >
+    &times;
+  </button>
+
+  <button
+    type="button"
+    class="absolute left-4 z-10 text-3xl text-ivory transition-opacity duration-400 hover:opacity-70 sm:left-8"
+    (click)="previous(); $event.stopPropagation()"
+    aria-label="Previous image"
+  >
+    &#8249;
+  </button>
+
+  <figure class="max-h-full max-w-4xl" (click)="$event.stopPropagation()">
+    <img [src]="image.imageUrl" [alt]="image.altText" class="max-h-[80vh] w-full object-contain" />
+    <figcaption class="mt-4 text-center text-sm text-ivory/80">{{ image.title }}</figcaption>
+  </figure>
+
+  <button
+    type="button"
+    class="absolute right-4 z-10 text-3xl text-ivory transition-opacity duration-400 hover:opacity-70 sm:right-8"
+    (click)="next(); $event.stopPropagation()"
+    aria-label="Next image"
+  >
+    &#8250;
+  </button>
+</div>
