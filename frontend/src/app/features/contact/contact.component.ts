@@ -5,13 +5,14 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { ContactService } from '../../core/services/contact.service';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 type SubmitState = 'idle' | 'loading' | 'success' | 'error';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ContainerComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, ContainerComponent, ButtonComponent, TranslatePipe],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.css',
 })

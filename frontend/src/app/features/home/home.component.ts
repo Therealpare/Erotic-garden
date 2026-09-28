@@ -12,12 +12,15 @@ import { ReviewCardComponent } from '../../shared/components/review-card/review-
 import { ImageRevealComponent } from '../../shared/components/image-reveal/image-reveal.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { MapComponent } from '../../shared/components/map/map.component';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 import { ArtworkService } from '../../core/services/artwork.service';
 import { ReviewService } from '../../core/services/review.service';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
 import { ArtworkCategory } from '../../core/models/artwork.model';
 import { buildGoogleMapsDirectionsUrl } from '../../shared/utils/maps.util';
+import { LanguageService } from '../../core/i18n/language.service';
+import { getDictionary } from '../../core/i18n/dictionaries';
 
 type ArtworkFilter = 'ALL' | ArtworkCategory | 'FEATURED';
 
@@ -43,6 +46,7 @@ interface HighlightCard {
     ImageRevealComponent,
     EmptyStateComponent,
     MapComponent,
+    TranslatePipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -51,43 +55,38 @@ export class HomeComponent {
   private readonly artworkService = inject(ArtworkService);
   private readonly reviewService = inject(ReviewService);
   private readonly siteSettingsService = inject(SiteSettingsService);
+  private readonly languageService = inject(LanguageService);
 
-  readonly highlights: HighlightCard[] = [
-    {
-      title: 'Explore the Garden',
-      description: 'Wander tropical planting, quiet paths and shaded terraces.',
-      imageUrl: 'https://picsum.photos/seed/eg-highlight-garden/900/1200',
-      link: '/experience',
-    },
-    {
-      title: 'Discover the Art',
-      description: 'Contemporary sculpture and installations set between the trees.',
-      imageUrl: 'https://picsum.photos/seed/eg-highlight-art/900/1200',
-      link: '/art',
-    },
-    {
-      title: 'Tea House',
-      description: 'Tea, coffee and homemade treats in a slow, unhurried setting.',
-      imageUrl: 'https://picsum.photos/seed/eg-highlight-tea/900/1200',
-      link: '/tea-house',
-    },
-    {
-      title: 'Stories with Katai',
-      description: 'The person behind the garden, and the story of how it grew.',
-      imageUrl: 'https://picsum.photos/seed/eg-highlight-katai/900/1200',
-      link: '/about',
-    },
-  ];
+  readonly highlights = computed<HighlightCard[]>(() => {
+    const t = getDictionary(this.languageService.lang()).home.experience;
+    return [
+      { title: t.card1Title, description: t.card1Desc, imageUrl: 'images/garden/ero1.webp', link: '/experience' },
+      { title: t.card2Title, description: t.card2Desc, imageUrl: 'images/garden/ero3.webp', link: '/art' },
+      { title: t.card3Title, description: t.card3Desc, imageUrl: 'images/garden/ero4.webp', link: '/tea-house' },
+      { title: t.card4Title, description: t.card4Desc, imageUrl: 'images/garden/own.webp', link: '/about' },
+    ];
+  });
 
   readonly gardenArtImages = [
-    { src: 'https://picsum.photos/seed/eg-garden-art-main/1400/1750', alt: 'Demo sculpture set among tall trees' },
-    { src: 'https://picsum.photos/seed/eg-garden-art-2/900/1100', alt: 'Demo detail of an installation' },
-    { src: 'https://picsum.photos/seed/eg-garden-art-3/900/1100', alt: 'Demo garden path at dusk' },
+    { src: 'images/garden/ero7.webp', alt: 'Garden sculpture of two embracing figures among palms and hedges' },
+    { src: 'images/garden/ero6.webp', alt: 'Sculpted planter shaped like a figure, filled with trailing petunias' },
+    { src: 'images/garden/ero2.webp', alt: 'Garden pavilion covered in flowering orange vines' },
   ];
 
   readonly artworks = toSignal(this.artworkService.getAll(), { initialValue: [] });
   readonly activeFilter = signal<ArtworkFilter>('FEATURED');
   readonly filters: ArtworkFilter[] = ['ALL', 'SCULPTURE', 'GARDEN', 'FEATURED'];
+
+  readonly filterLabel = (filter: ArtworkFilter): string => {
+    const t = getDictionary(this.languageService.lang()).art.filters;
+    const map: Record<ArtworkFilter, string> = {
+      ALL: t.all,
+      SCULPTURE: t.sculpture,
+      GARDEN: t.garden,
+      FEATURED: t.featured,
+    };
+    return map[filter];
+  };
 
   readonly filteredArtworks = computed(() => {
     const filter = this.activeFilter();

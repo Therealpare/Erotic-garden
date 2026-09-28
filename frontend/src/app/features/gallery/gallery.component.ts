@@ -8,18 +8,22 @@ import { GalleryLightboxComponent } from '../../shared/components/gallery-lightb
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { GalleryService } from '../../core/services/gallery.service';
 import { GalleryCategorySlug } from '../../core/models/gallery.model';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { LanguageService } from '../../core/i18n/language.service';
+import { getDictionary } from '../../core/i18n/dictionaries';
 
 type CategoryFilter = 'ALL' | GalleryCategorySlug;
 
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [CommonModule, ContainerComponent, GalleryGridComponent, GalleryLightboxComponent, EmptyStateComponent],
+  imports: [CommonModule, ContainerComponent, GalleryGridComponent, GalleryLightboxComponent, EmptyStateComponent, TranslatePipe],
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.css',
 })
 export class GalleryComponent {
   private readonly galleryService = inject(GalleryService);
+  private readonly languageService = inject(LanguageService);
 
   readonly categories = toSignal(this.galleryService.getCategories(), { initialValue: [] });
   readonly images = toSignal(this.galleryService.getAll(), { initialValue: [] });
@@ -49,7 +53,9 @@ export class GalleryComponent {
   }
 
   categoryLabel(slug: CategoryFilter): string {
-    if (slug === 'ALL') return 'All';
-    return this.categories().find((c) => c.slug === slug)?.name ?? slug;
+    const t = getDictionary(this.languageService.lang()).gallery.categories;
+    if (slug === 'ALL') return t.all;
+    if (slug === 'tea-house') return t.teaHouse;
+    return t[slug as 'garden' | 'art' | 'people'];
   }
 }

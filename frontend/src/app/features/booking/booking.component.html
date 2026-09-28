@@ -1,9 +1,9 @@
 <section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
   <app-container>
-    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Booking</p>
-    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Request Your Visit</h1>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'booking.hero.eyebrow' | translate }}</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">{{ 'booking.hero.headline' | translate }}</h1>
     <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
-      Tell us when you'd like to come and how many guests are joining — we'll confirm your visit by email.
+      {{ 'booking.hero.sub' | translate }}
     </p>
   </app-container>
 </section>
@@ -12,17 +12,17 @@
   <app-container>
     <div class="mx-auto max-w-xl">
       <div *ngIf="state() === 'success'; else formBlock" class="border border-forest/20 bg-cream p-10 text-center">
-        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">Request Received</p>
-        <p class="font-display text-3xl text-forest">Thank you</p>
+        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'booking.success.eyebrow' | translate }}</p>
+        <p class="font-display text-3xl text-forest">{{ 'booking.success.title' | translate }}</p>
         <p class="mt-4 text-sm leading-relaxed text-stone">
-          Your visit request has been sent. We'll confirm the details by email — please keep your booking code for reference.
+          {{ 'booking.success.body' | translate }}
         </p>
         <p class="mt-6 border border-dashed border-stone/30 bg-ivory px-6 py-4 font-display text-2xl tracking-widest2 text-forest">
           {{ confirmation()?.bookingCode }}
         </p>
         <div class="mt-8 flex flex-wrap justify-center gap-4">
-          <app-button variant="secondary" (click)="startNewBooking()">Book Another Visit</app-button>
-          <app-button variant="primary" routerLink="/">Back to Home</app-button>
+          <app-button variant="secondary" (click)="startNewBooking()">{{ 'booking.success.bookAnother' | translate }}</app-button>
+          <app-button variant="primary" routerLink="/">{{ 'booking.success.backToHome' | translate }}</app-button>
         </div>
       </div>
 
@@ -30,7 +30,7 @@
         <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6">
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label for="name" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Name</label>
+              <label for="name" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.name' | translate }}</label>
               <input
                 id="name"
                 type="text"
@@ -39,11 +39,11 @@
                 [attr.aria-invalid]="fieldInvalid('name')"
                 aria-describedby="name-error"
               />
-              <p *ngIf="fieldInvalid('name')" id="name-error" class="mt-2 text-xs text-terracotta">Please enter your name.</p>
+              <p *ngIf="fieldInvalid('name')" id="name-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.nameError' | translate }}</p>
             </div>
 
             <div>
-              <label for="email" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Email</label>
+              <label for="email" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.email' | translate }}</label>
               <input
                 id="email"
                 type="email"
@@ -52,12 +52,12 @@
                 [attr.aria-invalid]="fieldInvalid('email')"
                 aria-describedby="email-error"
               />
-              <p *ngIf="fieldInvalid('email')" id="email-error" class="mt-2 text-xs text-terracotta">Please enter a valid email address.</p>
+              <p *ngIf="fieldInvalid('email')" id="email-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.emailError' | translate }}</p>
             </div>
           </div>
 
           <div>
-            <label for="phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Phone</label>
+            <label for="phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.phone' | translate }}</label>
             <input
               id="phone"
               type="tel"
@@ -66,12 +66,12 @@
               [attr.aria-invalid]="fieldInvalid('phone')"
               aria-describedby="phone-error"
             />
-            <p *ngIf="fieldInvalid('phone')" id="phone-error" class="mt-2 text-xs text-terracotta">Please enter a valid phone number.</p>
+            <p *ngIf="fieldInvalid('phone')" id="phone-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.phoneError' | translate }}</p>
           </div>
 
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label for="visitDate" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Visit Date</label>
+              <label for="visitDate" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.visitDate' | translate }}</label>
               <input
                 id="visitDate"
                 type="date"
@@ -82,12 +82,12 @@
                 aria-describedby="visitDate-error"
               />
               <p *ngIf="fieldInvalid('visitDate')" id="visitDate-error" class="mt-2 text-xs text-terracotta">
-                Please choose a valid date (today or later).
+                {{ 'booking.form.visitDateError' | translate }}
               </p>
             </div>
 
             <div>
-              <label for="preferredTime" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Preferred Time</label>
+              <label for="preferredTime" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.preferredTime' | translate }}</label>
               <input
                 id="preferredTime"
                 type="time"
@@ -97,14 +97,14 @@
                 aria-describedby="preferredTime-error"
               />
               <p *ngIf="fieldInvalid('preferredTime')" id="preferredTime-error" class="mt-2 text-xs text-terracotta">
-                Please choose a preferred time.
+                {{ 'booking.form.preferredTimeError' | translate }}
               </p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label for="guestCount" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Number of Guests</label>
+              <label for="guestCount" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.guestCount' | translate }}</label>
               <input
                 id="guestCount"
                 type="number"
@@ -116,12 +116,12 @@
                 aria-describedby="guestCount-error"
               />
               <p *ngIf="fieldInvalid('guestCount')" id="guestCount-error" class="mt-2 text-xs text-terracotta">
-                Please enter between 1 and 20 guests.
+                {{ 'booking.form.guestCountError' | translate }}
               </p>
             </div>
 
             <div>
-              <label for="experienceId" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Experience</label>
+              <label for="experienceId" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.experience' | translate }}</label>
               <select
                 id="experienceId"
                 formControlName="experienceId"
@@ -129,17 +129,17 @@
                 [attr.aria-invalid]="fieldInvalid('experienceId')"
                 aria-describedby="experienceId-error"
               >
-                <option [ngValue]="null" disabled>Select an experience</option>
+                <option [ngValue]="null" disabled>{{ 'booking.form.experiencePlaceholder' | translate }}</option>
                 <option *ngFor="let experience of experiences()" [ngValue]="experience.id">{{ experience.title }}</option>
               </select>
               <p *ngIf="fieldInvalid('experienceId')" id="experienceId-error" class="mt-2 text-xs text-terracotta">
-                Please select an experience.
+                {{ 'booking.form.experienceError' | translate }}
               </p>
             </div>
           </div>
 
           <div>
-            <label for="message" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">Message (optional)</label>
+            <label for="message" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.message' | translate }}</label>
             <textarea
               id="message"
               rows="4"
@@ -149,11 +149,11 @@
           </div>
 
           <p *ngIf="state() === 'error'" class="text-sm text-terracotta">
-            Something went wrong sending your request. Please try again.
+            {{ 'booking.form.errorMessage' | translate }}
           </p>
 
           <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
-            {{ state() === 'loading' ? 'Sending…' : 'Request Visit' }}
+            {{ state() === 'loading' ? ('booking.form.sending' | translate) : ('booking.form.submit' | translate) }}
           </app-button>
         </form>
       </ng-template>

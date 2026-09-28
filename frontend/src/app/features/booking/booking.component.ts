@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -9,6 +9,9 @@ import { ButtonComponent } from '../../shared/components/button/button.component
 import { ExperienceService } from '../../core/services/experience.service';
 import { BookingService } from '../../core/services/booking.service';
 import { BookingConfirmation } from '../../core/models/booking.model';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { LanguageService } from '../../core/i18n/language.service';
+import { getDictionary } from '../../core/i18n/dictionaries';
 
 type SubmitState = 'idle' | 'loading' | 'success' | 'error';
 
@@ -23,7 +26,7 @@ function notPastDateValidator(control: AbstractControl): ValidationErrors | null
 @Component({
   selector: 'app-booking',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, ContainerComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ContainerComponent, ButtonComponent, TranslatePipe],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
 })
@@ -31,8 +34,17 @@ export class BookingComponent {
   private readonly fb = inject(FormBuilder);
   private readonly experienceService = inject(ExperienceService);
   private readonly bookingService = inject(BookingService);
+  private readonly languageService = inject(LanguageService);
 
-  readonly experiences = toSignal(this.experienceService.getAll(), { initialValue: [] });
+  private readonly rawExperiences = toSignal(this.experienceService.getAll(), { initialValue: [] });
+
+  readonly experiences = computed(() => {
+    const items = getDictionary(this.languageService.lang()).experience.items as Record<string, { title: string }>;
+    return this.rawExperiences().map((experience) => {
+      const translated = items[experience.slug];
+      return translated ? { ...experience, title: translated.title } : experience;
+    });
+  });
 
   readonly state = signal<SubmitState>('idle');
   readonly confirmation = signal<BookingConfirmation | undefined>(undefined);

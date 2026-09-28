@@ -1,7 +1,7 @@
 <section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
   <app-container>
-    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Gallery</p>
-    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Moments from the Garden</h1>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'gallery.hero.eyebrow' | translate }}</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">{{ 'gallery.hero.headline' | translate }}</h1>
   </app-container>
 </section>
 
@@ -25,8 +25,8 @@
 
     <app-empty-state
       *ngIf="filteredImages().length === 0"
-      title="No photos in this category yet"
-      message="Check back soon, or explore another category."
+      [title]="'gallery.emptyTitle' | translate"
+      [message]="'gallery.emptyMessage' | translate"
     ></app-empty-state>
   </div>
 </app-container>

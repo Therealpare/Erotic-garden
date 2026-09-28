@@ -1,15 +1,15 @@
 <!-- HERO -->
 <section class="relative flex h-[70vh] min-h-[480px] items-end overflow-hidden bg-charcoal">
   <img
-    src="https://picsum.photos/seed/eg-teahouse-hero/1920/1280"
-    alt="Demo photograph of the tea house — pending real photography"
+    src="images/garden/ero4.webp"
+    alt="A shaded garden pavilion with seating, its curved roofline framed by bougainvillea"
     class="absolute inset-0 h-full w-full object-cover"
   />
   <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-charcoal/40"></div>
   <app-container>
     <div class="relative z-10 max-w-xl pb-20">
-      <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-cream/90">Tea House</p>
-      <h1 class="text-5xl leading-tight text-ivory sm:text-7xl">Slow down.<br />Have some tea.</h1>
+      <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-cream/90">{{ 'teaHouse.hero.label' | translate }}</p>
+      <h1 class="whitespace-pre-line text-5xl leading-tight text-ivory sm:text-7xl">{{ 'teaHouse.hero.headline' | translate }}</h1>
     </div>
   </app-container>
 </section>
@@ -19,18 +19,19 @@
   <app-container>
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
       <div class="lg:col-span-2">
-        <h2 class="text-4xl leading-tight sm:text-5xl">A place to rest</h2>
+        <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'teaHouse.story.headline' | translate }}</h2>
         <p class="mt-6 text-base leading-relaxed text-stone">
-          After walking the garden, the teahouse offers a quiet room to sit with tea, coffee or something sweet.
-          TODO: OWNER VERIFIED CONTENT REQUIRED — further detail on the teahouse's history and design will appear
-          here once provided.
+          {{ 'teaHouse.story.body1' | translate }}
+        </p>
+        <p class="mt-4 text-base leading-relaxed text-stone">
+          {{ 'teaHouse.story.body2' | translate }}
         </p>
       </div>
       <div class="lg:col-span-3">
         <div class="aspect-[6/5] w-full">
           <app-image-reveal
-            src="https://picsum.photos/seed/eg-teahouse-story/1400/1150"
-            alt="Demo photograph of tea being served — pending real photography"
+            src="images/garden/ero2.webp"
+            alt="A garden pavilion draped in flowering orange vines, framed by tropical planting"
           ></app-image-reveal>
         </div>
       </div>
@@ -41,16 +42,20 @@
 <!-- ATMOSPHERE -->
 <section class="bg-cream py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="Atmosphere" headline="Built for lingering"></app-section-header>
+    <app-section-header
+      [eyebrow]="'teaHouse.atmosphere.eyebrow' | translate"
+      [headline]="'teaHouse.atmosphere.headline' | translate"
+      [supportingText]="'teaHouse.atmosphere.sub' | translate"
+    ></app-section-header>
     <div class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-3">
       <div class="aspect-[4/5] w-full">
-        <app-image-reveal src="https://picsum.photos/seed/eg-teahouse-atm-1/700/875" alt="Demo photograph of the tea house terrace"></app-image-reveal>
+        <app-image-reveal src="images/garden/ero1.webp" alt="A flowering pergola shading a garden seating area"></app-image-reveal>
       </div>
       <div class="aspect-[4/5] w-full">
-        <app-image-reveal src="https://picsum.photos/seed/eg-teahouse-atm-2/700/875" alt="Demo photograph of tea being poured"></app-image-reveal>
+        <app-image-reveal src="images/garden/ero7.webp" alt="Garden sculpture of two embracing figures among palms and hedges"></app-image-reveal>
       </div>
       <div class="aspect-[4/5] w-full">
-        <app-image-reveal src="https://picsum.photos/seed/eg-teahouse-atm-3/700/875" alt="Demo photograph of the seating area"></app-image-reveal>
+        <app-image-reveal src="images/garden/ero6.webp" alt="Sculpted planter shaped like a figure, filled with trailing petunias"></app-image-reveal>
       </div>
     </div>
   </app-container>
@@ -59,7 +64,7 @@
 <!-- MENU -->
 <section class="py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="Menu" headline="Tea, Coffee &amp; Treats"></app-section-header>
+    <app-section-header [eyebrow]="'teaHouse.menu.eyebrow' | translate" [headline]="'teaHouse.menu.headline' | translate"></app-section-header>
 
     <div class="mt-10 flex flex-wrap gap-2">
       <button
@@ -71,7 +76,7 @@
         [class.text-ivory]="activeCategory() === category.name"
         [class.text-stone]="activeCategory() !== category.name"
       >
-        {{ category.name }}
+        {{ categoryLabel(category.name) }}
       </button>
     </div>
 
@@ -94,9 +99,9 @@
 <section class="bg-cream py-24 text-center sm:py-32">
   <app-container>
     <div class="mx-auto max-w-xl">
-      <h2 class="text-4xl leading-tight sm:text-5xl">Reserve a seat by the garden.</h2>
+      <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'teaHouse.cta.headline' | translate }}</h2>
       <div class="mt-8 flex justify-center">
-        <app-button variant="primary" routerLink="/booking">Plan Your Visit</app-button>
+        <app-button variant="primary" routerLink="/booking">{{ 'cta.planYourVisit' | translate }}</app-button>
       </div>
     </div>
   </app-container>

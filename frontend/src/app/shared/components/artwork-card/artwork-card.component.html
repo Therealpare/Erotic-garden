@@ -6,7 +6,7 @@
     <span
       class="absolute left-4 top-4 bg-ivory/90 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-forest"
     >
-      {{ artwork().category }}
+      {{ categoryLabel() }}
     </span>
   </div>
 
@@ -18,7 +18,7 @@
     <span
       class="mt-1 shrink-0 text-xs uppercase tracking-widest2 text-terracotta opacity-0 transition-opacity duration-400 group-hover:opacity-100"
     >
-      View →
+      {{ 'cta.view' | translate }}
     </span>
   </div>
 </a>

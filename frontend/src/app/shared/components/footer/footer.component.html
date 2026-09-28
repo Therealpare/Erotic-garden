@@ -2,16 +2,26 @@
   <app-container>
     <div class="grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-4">
       <div>
-        <p class="font-display text-2xl">Erotic Garden <span class="text-gold">&amp;</span> Teahouse</p>
+        <div class="flex items-center gap-3">
+          <img
+            src="images/garden/logo-mark.webp"
+            alt=""
+            aria-hidden="true"
+            width="32"
+            height="32"
+            class="h-8 w-8 rounded-full object-cover"
+          />
+          <p class="font-display text-2xl">Erotic Garden <span class="text-gold">&amp;</span> Teahouse</p>
+        </div>
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-cream/80">
-          A garden beyond imagination — where art, nature and human expression meet in the hills of Chiang Mai.
+          {{ 'footer.tagline' | translate }}
         </p>
       </div>
 
       <div>
-        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Explore</p>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.explore' | translate }}</p>
         <ul class="space-y-3">
-          <li *ngFor="let link of links">
+          <li *ngFor="let link of links()">
             <a [routerLink]="link.path" class="text-sm text-cream/80 transition-colors duration-400 hover:text-ivory">
               {{ link.label }}
             </a>
@@ -20,7 +30,7 @@
       </div>
 
       <div>
-        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Visit</p>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.visit' | translate }}</p>
         <address class="space-y-3 text-sm not-italic text-cream/80">
           <p>{{ address }}</p>
           <p>{{ phone }}</p>
@@ -29,17 +39,17 @@
       </div>
 
       <div>
-        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Follow</p>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.follow' | translate }}</p>
         <ul class="space-y-3 text-sm text-cream/80">
-          <li>Instagram — TODO: OWNER VERIFIED CONTENT REQUIRED</li>
-          <li>Facebook — TODO: OWNER VERIFIED CONTENT REQUIRED</li>
+          <li>{{ 'footer.instagram' | translate }}</li>
+          <li>{{ 'footer.facebook' | translate }}</li>
         </ul>
       </div>
     </div>
 
     <div class="flex flex-col gap-2 border-t border-ivory/10 py-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between">
-      <p>&copy; {{ year }} Chiang Mai Erotic Garden &amp; Teahouse. All rights reserved.</p>
-      <p>Mae Rim, Chiang Mai, Thailand</p>
+      <p>&copy; {{ year }} Chiang Mai Erotic Garden &amp; Teahouse. {{ 'footer.rights' | translate }}</p>
+      <p>{{ 'footer.place' | translate }}</p>
     </div>
   </app-container>
 </footer>

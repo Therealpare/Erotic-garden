@@ -1,0 +1,23 @@
+<div class="flex items-center gap-1 text-xs font-medium uppercase tracking-widest2" role="group" aria-label="Switch language">
+  <button
+    type="button"
+    (click)="languageService.setLang('en')"
+    [attr.aria-pressed]="languageService.lang() === 'en'"
+    class="px-1.5 py-1 transition-colors duration-400"
+    [class.text-terracotta]="languageService.lang() === 'en'"
+    [class.text-stone]="languageService.lang() !== 'en'"
+  >
+    EN
+  </button>
+  <span class="text-stone/40" aria-hidden="true">|</span>
+  <button
+    type="button"
+    (click)="languageService.setLang('th')"
+    [attr.aria-pressed]="languageService.lang() === 'th'"
+    class="px-1.5 py-1 transition-colors duration-400"
+    [class.text-terracotta]="languageService.lang() === 'th'"
+    [class.text-stone]="languageService.lang() !== 'th'"
+  >
+    TH
+  </button>
+</div>

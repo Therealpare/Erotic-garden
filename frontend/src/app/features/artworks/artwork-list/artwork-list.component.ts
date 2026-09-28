@@ -7,22 +7,37 @@ import { ArtworkCardComponent } from '../../../shared/components/artwork-card/ar
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ArtworkService } from '../../../core/services/artwork.service';
 import { ArtworkCategory } from '../../../core/models/artwork.model';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
+import { LanguageService } from '../../../core/i18n/language.service';
+import { getDictionary } from '../../../core/i18n/dictionaries';
 
 type ArtworkFilter = 'ALL' | ArtworkCategory | 'FEATURED';
 
 @Component({
   selector: 'app-artwork-list',
   standalone: true,
-  imports: [CommonModule, ContainerComponent, ArtworkCardComponent, EmptyStateComponent],
+  imports: [CommonModule, ContainerComponent, ArtworkCardComponent, EmptyStateComponent, TranslatePipe],
   templateUrl: './artwork-list.component.html',
   styleUrl: './artwork-list.component.css',
 })
 export class ArtworkListComponent {
   private readonly artworkService = inject(ArtworkService);
+  private readonly languageService = inject(LanguageService);
 
   readonly artworks = toSignal(this.artworkService.getAll(), { initialValue: [] });
   readonly activeFilter = signal<ArtworkFilter>('ALL');
   readonly filters: ArtworkFilter[] = ['ALL', 'SCULPTURE', 'GARDEN', 'FEATURED'];
+
+  readonly filterLabel = (filter: ArtworkFilter): string => {
+    const t = getDictionary(this.languageService.lang()).art.filters;
+    const map: Record<ArtworkFilter, string> = {
+      ALL: t.all,
+      SCULPTURE: t.sculpture,
+      GARDEN: t.garden,
+      FEATURED: t.featured,
+    };
+    return map[filter];
+  };
 
   readonly filteredArtworks = computed(() => {
     const filter = this.activeFilter();

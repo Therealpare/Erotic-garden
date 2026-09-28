@@ -1,9 +1,9 @@
 <section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
   <app-container>
-    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Experience</p>
-    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Ways to Experience the Garden</h1>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'experience.hero.eyebrow' | translate }}</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">{{ 'experience.hero.headline' | translate }}</h1>
     <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
-      From a self-guided walk to a private tour — choose the pace that suits your visit.
+      {{ 'experience.hero.sub' | translate }}
     </p>
   </app-container>
 </section>
@@ -24,16 +24,16 @@
         <p class="mt-5 max-w-lg text-base leading-relaxed text-stone">{{ experience.shortDescription }}</p>
         <dl class="mt-6 flex flex-wrap gap-x-10 gap-y-2 text-xs uppercase tracking-widest2 text-stone">
           <div>
-            <dt class="text-terracotta">Duration</dt>
+            <dt class="text-terracotta">{{ 'experience.duration' | translate }}</dt>
             <dd class="mt-1">{{ experience.duration }}</dd>
           </div>
           <div>
-            <dt class="text-terracotta">Price</dt>
+            <dt class="text-terracotta">{{ 'experience.price' | translate }}</dt>
             <dd class="mt-1">{{ experience.price }}</dd>
           </div>
         </dl>
         <div class="mt-8">
-          <app-button variant="secondary" routerLink="/booking">Book This Experience</app-button>
+          <app-button variant="secondary" routerLink="/booking">{{ 'experience.bookThis' | translate }}</app-button>
         </div>
       </div>
     </article>
@@ -43,10 +43,10 @@
 <section class="bg-cream py-24 text-center sm:py-32">
   <app-container>
     <div class="mx-auto max-w-xl">
-      <h2 class="text-4xl leading-tight sm:text-5xl">Not sure where to start?</h2>
-      <p class="mt-4 text-base leading-relaxed text-stone">Get in touch and we'll help you plan the right visit.</p>
+      <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'experience.notSure.headline' | translate }}</h2>
+      <p class="mt-4 text-base leading-relaxed text-stone">{{ 'experience.notSure.body' | translate }}</p>
       <div class="mt-8 flex justify-center">
-        <app-button variant="primary" routerLink="/contact">Contact Us</app-button>
+        <app-button variant="primary" routerLink="/contact">{{ 'cta.contactUs' | translate }}</app-button>
       </div>
     </div>
   </app-container>

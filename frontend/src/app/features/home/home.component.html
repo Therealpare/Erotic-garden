@@ -2,8 +2,8 @@
 <section class="relative -mt-20 flex h-screen min-h-[640px] items-end overflow-hidden bg-charcoal">
   <div class="absolute inset-0">
     <img
-      src="https://picsum.photos/seed/eg-hero/1920/1280"
-      alt="Demo photograph of the garden at dusk — pending real photography"
+      src="images/garden/ero1.webp"
+      alt="A flowering pergola shading a garden seating area, with sculptures set among the lawn beyond"
       class="hero-zoom h-full w-full object-cover"
     />
     <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-charcoal/50"></div>
@@ -11,21 +11,21 @@
 
   <app-container>
     <div class="relative z-10 max-w-2xl pb-24 pt-40 sm:pb-32">
-      <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-cream/90">Chiang Mai &middot; Thailand</p>
-      <h1 class="text-6xl leading-[1.05] text-ivory sm:text-8xl">A Garden Beyond<br />Imagination</h1>
+      <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-cream/90">{{ 'home.hero.eyebrow' | translate }}</p>
+      <h1 class="text-6xl leading-[1.05] text-ivory sm:text-8xl">{{ 'home.hero.headlineLine1' | translate }}<br />{{ 'home.hero.headlineLine2' | translate }}</h1>
       <p class="mt-6 max-w-md text-base leading-relaxed text-cream/90">
-        Art, nature and human expression in the hills of Chiang Mai.
+        {{ 'home.hero.sub' | translate }}
       </p>
       <div class="mt-10 flex flex-wrap gap-4">
-        <app-button variant="primary" routerLink="/art">Explore the Garden</app-button>
-        <app-button variant="outline-light" routerLink="/booking">Plan Your Visit</app-button>
+        <app-button variant="primary" routerLink="/art">{{ 'home.hero.ctaExplore' | translate }}</app-button>
+        <app-button variant="outline-light" routerLink="/booking">{{ 'home.hero.ctaPlan' | translate }}</app-button>
       </div>
     </div>
   </app-container>
 
   <div class="absolute inset-x-0 bottom-8 z-10 flex justify-center">
     <div class="scroll-hint flex flex-col items-center gap-2 text-ivory/70">
-      <span class="text-[10px] uppercase tracking-widest2">Scroll</span>
+      <span class="text-[10px] uppercase tracking-widest2">{{ 'home.hero.scroll' | translate }}</span>
       <span class="h-8 w-px bg-ivory/50"></span>
     </div>
   </div>
@@ -36,25 +36,22 @@
   <app-container>
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
       <div class="lg:col-span-2">
-        <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">More than a garden.{{ '\n' }}More than an art space.</h2>
+        <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">{{ 'home.intro.headline' | translate }}</h2>
         <p class="mt-6 text-base leading-relaxed text-stone">
-          Chiang Mai Erotic Garden &amp; Teahouse brings together contemporary sculpture, tropical planting and a
-          boutique teahouse across a series of quiet, shaded terraces in Mae Rim. Art and nature are not separated
-          here — each installation is placed to be discovered slowly, on foot, among the trees.
+          {{ 'home.intro.body1' | translate }}
         </p>
         <p class="mt-4 text-base leading-relaxed text-stone">
-          Visitors are invited to move at their own pace: through the garden, into the gallery spaces, and finally
-          to rest with tea overlooking the hills.
+          {{ 'home.intro.body2' | translate }}
         </p>
         <a routerLink="/about" class="mt-8 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta">
-          Our Story →
+          {{ 'cta.ourStory' | translate }}
         </a>
       </div>
       <div class="lg:col-span-3">
         <div class="aspect-[6/5] w-full">
           <app-image-reveal
-            src="https://picsum.photos/seed/eg-intro/1400/1150"
-            alt="Demo photograph of a garden path — pending real photography"
+            src="images/garden/ero2.webp"
+            alt="A garden pavilion draped in flowering orange vines, framed by tropical planting"
           ></app-image-reveal>
         </div>
       </div>
@@ -65,11 +62,15 @@
 <!-- 11. THE EXPERIENCE -->
 <section class="bg-cream py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="What Awaits" headline="The Experience" supportingText="Explore a different side of Chiang Mai."></app-section-header>
+    <app-section-header
+      [eyebrow]="'home.experience.eyebrow' | translate"
+      [headline]="'home.experience.headline' | translate"
+      [supportingText]="'home.experience.sub' | translate"
+    ></app-section-header>
 
     <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
       <app-experience-card
-        *ngFor="let item of highlights"
+        *ngFor="let item of highlights()"
         [title]="item.title"
         [description]="item.description"
         [imageUrl]="item.imageUrl"
@@ -82,7 +83,7 @@
 <!-- 12. GARDEN & ART -->
 <section class="py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="Where They Meet" headline="Art lives between{{ '\n' }}the trees."></app-section-header>
+    <app-section-header [eyebrow]="'home.gardenArt.eyebrow' | translate" [headline]="'home.gardenArt.headline' | translate"></app-section-header>
 
     <div class="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-5">
       <div class="lg:col-span-3">
@@ -101,7 +102,7 @@
     </div>
 
     <a routerLink="/art" class="mt-10 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta">
-      Explore Art →
+      {{ 'cta.exploreArt' | translate }}
     </a>
   </app-container>
 </section>
@@ -110,7 +111,7 @@
 <section class="bg-cream py-24 sm:py-32">
   <app-container>
     <div class="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
-      <app-section-header eyebrow="Featured Works" headline="From the Collection"></app-section-header>
+      <app-section-header [eyebrow]="'home.showcase.eyebrow' | translate" [headline]="'home.showcase.headline' | translate"></app-section-header>
 
       <div class="flex flex-wrap gap-2">
         <button
@@ -122,7 +123,7 @@
           [class.text-ivory]="activeFilter() === filter"
           [class.text-stone]="activeFilter() !== filter"
         >
-          {{ filter }}
+          {{ filterLabel(filter) }}
         </button>
       </div>
     </div>
@@ -133,8 +134,8 @@
 
     <app-empty-state
       *ngIf="filteredArtworks().length === 0"
-      title="No artworks in this category yet"
-      message="Check back soon, or explore another filter."
+      [title]="'home.showcase.emptyTitle' | translate"
+      [message]="'home.showcase.emptyMessage' | translate"
     ></app-empty-state>
   </app-container>
 </section>
@@ -146,25 +147,24 @@
       <div class="order-2 lg:order-1 lg:col-span-2">
         <div class="aspect-[4/5] w-full">
           <app-image-reveal
-            src="https://picsum.photos/seed/eg-teahouse/1000/1250"
-            alt="Demo photograph of the tea house terrace — pending real photography"
+            src="images/garden/ero4.webp"
+            alt="A shaded garden pavilion with seating, its curved roofline framed by bougainvillea"
           ></app-image-reveal>
         </div>
       </div>
       <div class="order-1 flex flex-col justify-center lg:order-2 lg:col-span-3">
-        <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">Slow down.{{ '\n' }}Have some tea.</h2>
+        <h2 class="whitespace-pre-line text-4xl leading-tight sm:text-5xl">{{ 'home.teaHouse.headline' | translate }}</h2>
         <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
-          After the garden, rest a while. The teahouse serves tea, coffee and homemade treats in a quiet room
-          overlooking the planting — a place built for lingering, not rushing.
+          {{ 'home.teaHouse.body' | translate }}
         </p>
         <ul class="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-xs uppercase tracking-widest2 text-stone">
-          <li>Tea</li>
-          <li>Coffee</li>
-          <li>Homemade Treats</li>
-          <li>Atmosphere</li>
+          <li>{{ 'home.teaHouse.tagTea' | translate }}</li>
+          <li>{{ 'home.teaHouse.tagCoffee' | translate }}</li>
+          <li>{{ 'home.teaHouse.tagTreats' | translate }}</li>
+          <li>{{ 'home.teaHouse.tagAtmosphere' | translate }}</li>
         </ul>
         <a routerLink="/tea-house" class="mt-8 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta">
-          View Tea House →
+          {{ 'cta.viewTeaHouse' | translate }}
         </a>
       </div>
     </div>
@@ -177,24 +177,17 @@
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
       <div class="lg:col-span-2">
         <div class="aspect-[4/5] w-full">
-          <app-image-reveal
-            src="https://picsum.photos/seed/eg-katai/1000/1250"
-            alt="Demo portrait placeholder — pending real photograph of Katai"
-          ></app-image-reveal>
+          <app-image-reveal src="images/garden/own.webp" alt="Portrait of Katai at the garden"></app-image-reveal>
         </div>
       </div>
       <div class="flex flex-col justify-center lg:col-span-3">
-        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">Meet Katai</p>
-        <h2 class="whitespace-pre-line text-4xl leading-tight text-ivory sm:text-5xl">The person behind{{ '\n' }}the garden.</h2>
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'home.meetKatai.label' | translate }}</p>
+        <h2 class="whitespace-pre-line text-4xl leading-tight text-ivory sm:text-5xl">{{ 'home.meetKatai.headline' | translate }}</h2>
         <p class="mt-6 max-w-lg text-base leading-relaxed text-cream/80">
-          TODO: OWNER VERIFIED CONTENT REQUIRED — a short biography of Katai and the story of how the garden began
-          will appear here once provided.
+          {{ 'home.meetKatai.bio' | translate }}
         </p>
-        <blockquote class="mt-6 border-l-2 border-gold pl-4 font-display text-2xl italic text-cream/90">
-          "TODO: OWNER VERIFIED CONTENT REQUIRED — placeholder for Katai's own words."
-        </blockquote>
         <a routerLink="/about" class="mt-8 inline-block text-xs font-medium uppercase tracking-widest2 text-gold">
-          Read Her Story →
+          {{ 'cta.readHerStory' | translate }}
         </a>
       </div>
     </div>
@@ -205,12 +198,12 @@
 <section class="py-24 sm:py-32">
   <app-container>
     <div class="flex flex-col items-center text-center">
-      <app-section-header headline="Visitors Say" align="center"></app-section-header>
+      <app-section-header [headline]="'home.reviews.headline' | translate" align="center"></app-section-header>
       <div class="mt-6 flex items-center gap-3">
         <span class="font-display text-4xl text-forest">{{ reviewSummary().averageRating || '—' }} / 5</span>
-        <span class="text-sm text-stone">{{ reviewSummary().totalReviews }} Reviews</span>
+        <span class="text-sm text-stone">{{ reviewSummary().totalReviews }} {{ 'home.reviews.reviewsSuffix' | translate }}</span>
       </div>
-      <p class="mt-2 text-xs uppercase tracking-widest2 text-stone/60">Rating pending verification from Tripadvisor &amp; Google</p>
+      <p class="mt-2 text-xs uppercase tracking-widest2 text-stone/60">{{ 'home.reviews.ratingNote' | translate }}</p>
     </div>
 
     <div *ngIf="hasReviews(); else noReviews" class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -219,8 +212,8 @@
     <ng-template #noReviews>
       <div class="mt-14">
         <app-empty-state
-          title="Reviews are on their way"
-          message="We only publish verified reviews from Tripadvisor, Google and direct visitors — check back soon."
+          [title]="'home.reviews.emptyTitle' | translate"
+          [message]="'home.reviews.emptyMessage' | translate"
         ></app-empty-state>
       </div>
     </ng-template>
@@ -230,29 +223,29 @@
 <!-- 19 & 20. PLAN YOUR VISIT / LOCATION -->
 <section class="bg-cream py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="Before You Go" headline="Plan Your Visit"></app-section-header>
+    <app-section-header [eyebrow]="'home.planVisit.eyebrow' | translate" [headline]="'home.planVisit.headline' | translate"></app-section-header>
 
     <div class="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-4">
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Opening Hours</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.planVisit.openingHours' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">
           {{ siteSettings()?.openingHours?.[0]?.days }}: {{ siteSettings()?.openingHours?.[0]?.hours }}
         </p>
       </div>
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Admission</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.planVisit.admission' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.admissionInfo }}</p>
       </div>
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Location</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.planVisit.location' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.address }}</p>
       </div>
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">How to Get Here</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.planVisit.howToGetHere' | translate }}</p>
         <ul class="mt-3 space-y-1 text-sm leading-relaxed text-stone">
-          <li>By Car</li>
-          <li>By Taxi</li>
-          <li>By Scooter</li>
+          <li>{{ 'home.planVisit.byCar' | translate }}</li>
+          <li>{{ 'home.planVisit.byTaxi' | translate }}</li>
+          <li>{{ 'home.planVisit.byScooter' | translate }}</li>
         </ul>
       </div>
     </div>
@@ -262,8 +255,8 @@
     </div>
 
     <div class="mt-10 flex flex-wrap gap-4">
-      <app-button variant="secondary" [href]="directionsUrl()">Get Directions</app-button>
-      <app-button variant="primary" routerLink="/booking">Book a Visit</app-button>
+      <app-button variant="secondary" [href]="directionsUrl()">{{ 'cta.getDirections' | translate }}</app-button>
+      <app-button variant="primary" routerLink="/booking">{{ 'cta.bookAVisit' | translate }}</app-button>
     </div>
   </app-container>
 </section>
@@ -272,8 +265,8 @@
 <section class="relative flex min-h-[60vh] items-center overflow-hidden bg-charcoal py-24 text-center">
   <div class="absolute inset-0">
     <img
-      src="https://picsum.photos/seed/eg-final-cta/1920/1280"
-      alt="Demo photograph of the garden — pending real photography"
+      src="images/garden/ero7.webp"
+      alt="Garden sculpture of two embracing figures, set among palms and clipped hedges"
       class="h-full w-full object-cover opacity-40"
     />
     <div class="absolute inset-0 bg-charcoal/60"></div>
@@ -281,10 +274,10 @@
 
   <app-container>
     <div class="relative z-10 mx-auto max-w-2xl">
-      <h2 class="whitespace-pre-line text-4xl leading-tight text-ivory sm:text-5xl">Ready to discover{{ '\n' }}something different?</h2>
-      <p class="mt-6 whitespace-pre-line text-base leading-relaxed text-cream/80">Come curious.{{ '\n' }}Leave inspired.</p>
+      <h2 class="whitespace-pre-line text-4xl leading-tight text-ivory sm:text-5xl">{{ 'home.finalCta.headline' | translate }}</h2>
+      <p class="mt-6 whitespace-pre-line text-base leading-relaxed text-cream/80">{{ 'home.finalCta.sub' | translate }}</p>
       <div class="mt-10 flex justify-center">
-        <app-button variant="primary" routerLink="/booking">Plan Your Visit</app-button>
+        <app-button variant="primary" routerLink="/booking">{{ 'cta.planYourVisit' | translate }}</app-button>
       </div>
     </div>
   </app-container>

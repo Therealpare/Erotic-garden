@@ -1,9 +1,9 @@
 <section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
   <app-container>
-    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Art</p>
-    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">The Collection</h1>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'art.list.eyebrow' | translate }}</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">{{ 'art.list.headline' | translate }}</h1>
     <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">
-      Contemporary sculpture and installations placed throughout the garden.
+      {{ 'art.list.sub' | translate }}
     </p>
   </app-container>
 </section>
@@ -19,7 +19,7 @@
       [class.text-ivory]="activeFilter() === filter"
       [class.text-stone]="activeFilter() !== filter"
     >
-      {{ filter }}
+      {{ filterLabel(filter) }}
     </button>
   </div>
 
@@ -29,7 +29,7 @@
 
   <app-empty-state
     *ngIf="filteredArtworks().length === 0"
-    title="No artworks in this category yet"
-    message="Check back soon, or explore another filter."
+    [title]="'art.list.emptyTitle' | translate"
+    [message]="'art.list.emptyMessage' | translate"
   ></app-empty-state>
 </app-container>

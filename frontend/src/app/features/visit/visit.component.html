@@ -1,7 +1,7 @@
 <section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
   <app-container>
-    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">Visit</p>
-    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">Plan Your Visit</h1>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.hero.eyebrow' | translate }}</p>
+    <h1 class="max-w-3xl text-5xl leading-tight sm:text-7xl">{{ 'visit.hero.headline' | translate }}</h1>
   </app-container>
 </section>
 
@@ -9,21 +9,21 @@
   <app-container>
     <div class="grid grid-cols-1 gap-10 lg:grid-cols-4">
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Opening Hours</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.openingHours' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">
           {{ siteSettings()?.openingHours?.[0]?.days }}: {{ siteSettings()?.openingHours?.[0]?.hours }}
         </p>
       </div>
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Admission</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.admission' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.admissionInfo }}</p>
       </div>
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Address</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.address' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.address }}</p>
       </div>
       <div>
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">Contact</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.contact' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.phone }}</p>
         <p class="text-sm leading-relaxed text-stone">{{ siteSettings()?.email }}</p>
       </div>
@@ -34,27 +34,27 @@
     </div>
 
     <div class="mt-10 flex flex-wrap gap-4">
-      <app-button variant="secondary" [href]="directionsUrl()">Get Directions</app-button>
-      <app-button variant="primary" routerLink="/booking">Book a Visit</app-button>
+      <app-button variant="secondary" [href]="directionsUrl()">{{ 'cta.getDirections' | translate }}</app-button>
+      <app-button variant="primary" routerLink="/booking">{{ 'cta.bookAVisit' | translate }}</app-button>
     </div>
   </app-container>
 </section>
 
 <section class="bg-cream py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="Getting Here" headline="How to Get Here"></app-section-header>
+    <app-section-header [eyebrow]="'visit.gettingHere.eyebrow' | translate" [headline]="'visit.gettingHere.headline' | translate"></app-section-header>
     <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
       <div class="border border-stone/15 p-8">
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">By Car</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">TODO: OWNER VERIFIED CONTENT REQUIRED — driving directions.</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.gettingHere.byCar' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'visit.gettingHere.byCarBody' | translate }}</p>
       </div>
       <div class="border border-stone/15 p-8">
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">By Taxi</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">TODO: OWNER VERIFIED CONTENT REQUIRED — taxi/ride-hailing guidance.</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.gettingHere.byTaxi' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'visit.gettingHere.byTaxiBody' | translate }}</p>
       </div>
       <div class="border border-stone/15 p-8">
-        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">By Scooter</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">TODO: OWNER VERIFIED CONTENT REQUIRED — scooter/parking guidance.</p>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.gettingHere.byScooter' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'visit.gettingHere.byScooterBody' | translate }}</p>
       </div>
     </div>
   </app-container>
@@ -62,9 +62,9 @@
 
 <section class="py-24 sm:py-32">
   <app-container>
-    <app-section-header eyebrow="Questions" headline="Frequently Asked"></app-section-header>
+    <app-section-header [eyebrow]="'visit.faq.eyebrow' | translate" [headline]="'visit.faq.headline' | translate"></app-section-header>
     <div class="mt-12 max-w-2xl">
-      <app-faq [items]="faqItems"></app-faq>
+      <app-faq [items]="faqItems()"></app-faq>
     </div>
   </app-container>
 </section>
@@ -72,9 +72,9 @@
 <section class="bg-forest py-24 text-center text-ivory sm:py-32">
   <app-container>
     <div class="mx-auto max-w-xl">
-      <h2 class="text-4xl leading-tight text-ivory sm:text-5xl">Ready when you are.</h2>
+      <h2 class="text-4xl leading-tight text-ivory sm:text-5xl">{{ 'visit.cta.headline' | translate }}</h2>
       <div class="mt-8 flex justify-center">
-        <app-button variant="outline-light" routerLink="/booking">Book a Visit</app-button>
+        <app-button variant="outline-light" routerLink="/booking">{{ 'cta.bookAVisit' | translate }}</app-button>
       </div>
     </div>
   </app-container>
