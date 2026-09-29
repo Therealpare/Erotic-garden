@@ -14,6 +14,8 @@ const ARTWORKS: Artwork[] = [
     'SCULPTURE',
     'Entrance Grove',
     true,
+    'ero10.webp',
+    'A pale sculpture of two figures in embrace, framed by tropical greenery',
   ),
   makeArtwork(
     2,
@@ -22,6 +24,8 @@ const ARTWORKS: Artwork[] = [
     'GARDEN',
     'Upper Terrace',
     true,
+    'ero14.webp',
+    'A wide garden view beneath the tree canopy, a path leading toward a distant pavilion',
   ),
   makeArtwork(
     3,
@@ -30,8 +34,19 @@ const ARTWORKS: Artwork[] = [
     'SCULPTURE',
     'Reflection Pond',
     true,
+    'ero15.webp',
+    'An overhead view of a sculpture reading among clipped hedges',
   ),
-  makeArtwork(4, 'Root Line', 'root-line', 'GARDEN', 'Lower Path', false),
+  makeArtwork(
+    4,
+    'Root Line',
+    'root-line',
+    'GARDEN',
+    'Lower Path',
+    false,
+    'ero18.webp',
+    'A garden path curving past clipped topiary and palms',
+  ),
   makeArtwork(
     5,
     'Woven Silence',
@@ -39,6 +54,8 @@ const ARTWORKS: Artwork[] = [
     'SCULPTURE',
     'Bamboo Corridor',
     false,
+    'ero17.webp',
+    'A sculpture reading a book beneath the tree canopy, other garden figures visible beyond',
   ),
   makeArtwork(
     6,
@@ -47,6 +64,8 @@ const ARTWORKS: Artwork[] = [
     'GARDEN',
     'Tea House Terrace',
     false,
+    'ero8.webp',
+    'A lily pond terrace with red ceramic vessels and a tiled pavilion beyond',
   ),
 ];
 
@@ -57,6 +76,8 @@ function makeArtwork(
   category: Artwork['category'],
   location: string,
   featured: boolean,
+  image: string,
+  altText: string,
 ): Artwork {
   const now = new Date();
   return {
@@ -75,9 +96,9 @@ function makeArtwork(
       {
         id,
         artworkId: id,
-        imageUrl: `https://picsum.photos/seed/eg-artwork-${id}/1200/1500`,
+        imageUrl: `images/garden/${image}`,
         publicId: `eg-artwork-${id}`,
-        altText: `Demo artwork placeholder for ${title}`,
+        altText,
         sortOrder: 0,
       },
     ],

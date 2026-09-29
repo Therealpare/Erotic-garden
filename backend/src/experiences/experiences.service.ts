@@ -7,7 +7,7 @@ function makeExperience(
   title: string,
   slug: string,
   shortDescription: string,
-  seed: string,
+  image: string,
   featured: boolean,
 ): Experience {
   const now = new Date();
@@ -19,7 +19,7 @@ function makeExperience(
     description: 'Demo content — pending owner-verified experience details.',
     duration: '',
     price: '',
-    imageUrl: `https://picsum.photos/seed/${seed}/1000/1250`,
+    imageUrl: `images/garden/${image}`,
     featured,
     status: 'PUBLISHED',
     createdAt: now,
@@ -33,7 +33,7 @@ const EXPERIENCES: Experience[] = [
     'Garden Tour',
     'garden-tour',
     'A guided walk through the garden’s sculptures and planting.',
-    'eg-exp-garden-tour',
+    'ero12.webp',
     true,
   ),
   makeExperience(
@@ -41,7 +41,7 @@ const EXPERIENCES: Experience[] = [
     'Art Exploration',
     'art-exploration',
     'A closer look at the artists and stories behind each installation.',
-    'eg-exp-art',
+    'ero9.webp',
     true,
   ),
   makeExperience(
@@ -49,7 +49,7 @@ const EXPERIENCES: Experience[] = [
     'Tea House',
     'tea-house-experience',
     'Slow down with tea, coffee and homemade treats overlooking the garden.',
-    'eg-exp-tea',
+    'ero16.webp',
     true,
   ),
   makeExperience(
@@ -57,7 +57,7 @@ const EXPERIENCES: Experience[] = [
     'Private / Group Visit',
     'private-group-visit',
     'A tailored visit for private groups and special occasions.',
-    'eg-exp-private',
+    'ero22.webp',
     false,
   ),
 ];

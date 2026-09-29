@@ -20,9 +20,9 @@ const DEMO_ARTWORKS: Artwork[] = [
     location: 'Entrance Grove',
     featured: true,
     status: 'PUBLISHED',
-    coverImageUrl: 'https://picsum.photos/seed/eg-artwork-1/1200/1500',
+    coverImageUrl: 'images/garden/ero10.webp',
     images: [
-      { id: 1, artworkId: 1, imageUrl: 'https://picsum.photos/seed/eg-artwork-1/1200/1500', altText: 'Demo sculpture placed among tropical foliage', sortOrder: 0 },
+      { id: 1, artworkId: 1, imageUrl: 'images/garden/ero10.webp', altText: 'A pale sculpture of two figures in embrace, framed by tropical greenery', sortOrder: 0 },
     ],
   },
   {
@@ -37,9 +37,9 @@ const DEMO_ARTWORKS: Artwork[] = [
     location: 'Upper Terrace',
     featured: true,
     status: 'PUBLISHED',
-    coverImageUrl: 'https://picsum.photos/seed/eg-artwork-2/1200/1500',
+    coverImageUrl: 'images/garden/ero14.webp',
     images: [
-      { id: 2, artworkId: 2, imageUrl: 'https://picsum.photos/seed/eg-artwork-2/1200/1500', altText: 'Demo installation suspended beneath the tree canopy', sortOrder: 0 },
+      { id: 2, artworkId: 2, imageUrl: 'images/garden/ero14.webp', altText: 'A wide garden view beneath the tree canopy, a path leading toward a distant pavilion', sortOrder: 0 },
     ],
   },
   {
@@ -54,9 +54,9 @@ const DEMO_ARTWORKS: Artwork[] = [
     location: 'Reflection Pond',
     featured: true,
     status: 'PUBLISHED',
-    coverImageUrl: 'https://picsum.photos/seed/eg-artwork-3/1200/1500',
+    coverImageUrl: 'images/garden/ero15.webp',
     images: [
-      { id: 3, artworkId: 3, imageUrl: 'https://picsum.photos/seed/eg-artwork-3/1200/1500', altText: 'Demo carved stone form beside still water', sortOrder: 0 },
+      { id: 3, artworkId: 3, imageUrl: 'images/garden/ero15.webp', altText: 'An overhead view of a sculpture reading among clipped hedges', sortOrder: 0 },
     ],
   },
   {
@@ -71,9 +71,9 @@ const DEMO_ARTWORKS: Artwork[] = [
     location: 'Lower Path',
     featured: false,
     status: 'PUBLISHED',
-    coverImageUrl: 'https://picsum.photos/seed/eg-artwork-4/1200/1500',
+    coverImageUrl: 'images/garden/ero18.webp',
     images: [
-      { id: 4, artworkId: 4, imageUrl: 'https://picsum.photos/seed/eg-artwork-4/1200/1500', altText: 'Demo woven form following an exposed root line', sortOrder: 0 },
+      { id: 4, artworkId: 4, imageUrl: 'images/garden/ero18.webp', altText: 'A garden path curving past clipped topiary and palms', sortOrder: 0 },
     ],
   },
   {
@@ -88,9 +88,9 @@ const DEMO_ARTWORKS: Artwork[] = [
     location: 'Bamboo Corridor',
     featured: false,
     status: 'PUBLISHED',
-    coverImageUrl: 'https://picsum.photos/seed/eg-artwork-5/1200/1500',
+    coverImageUrl: 'images/garden/ero17.webp',
     images: [
-      { id: 5, artworkId: 5, imageUrl: 'https://picsum.photos/seed/eg-artwork-5/1200/1500', altText: 'Demo woven installation inside a bamboo corridor', sortOrder: 0 },
+      { id: 5, artworkId: 5, imageUrl: 'images/garden/ero17.webp', altText: 'A sculpture reading a book beneath the tree canopy, other garden figures visible beyond', sortOrder: 0 },
     ],
   },
   {
@@ -105,9 +105,9 @@ const DEMO_ARTWORKS: Artwork[] = [
     location: 'Tea House Terrace',
     featured: false,
     status: 'PUBLISHED',
-    coverImageUrl: 'https://picsum.photos/seed/eg-artwork-6/1200/1500',
+    coverImageUrl: 'images/garden/ero8.webp',
     images: [
-      { id: 6, artworkId: 6, imageUrl: 'https://picsum.photos/seed/eg-artwork-6/1200/1500', altText: 'Demo marker sculpture on the tea house terrace', sortOrder: 0 },
+      { id: 6, artworkId: 6, imageUrl: 'images/garden/ero8.webp', altText: 'A lily pond terrace with red ceramic vessels and a tiled pavilion beyond', sortOrder: 0 },
     ],
   },
 ];

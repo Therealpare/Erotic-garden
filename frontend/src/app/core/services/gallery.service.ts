@@ -59,6 +59,11 @@ const DEMO_IMAGES: GalleryImage[] = [
   realImage(10, 'art', 'Figural planter', 'ero6.webp', 'Sculpted planter shaped like a figure, filled with trailing petunias'),
   realImage(11, 'garden', 'The seating pavilion', 'ero4.webp', 'A shaded garden pavilion with seating, its curved roofline framed by bougainvillea'),
   placeholderImage(12, 'tea-house', 'Homemade treats', '900/700'),
+  realImage(13, 'art', 'Seated figure with a painted bloom', 'ero13.webp', 'A seated sculpture with a painted sunflower motif, framed by tropical leaves'),
+  realImage(14, 'art', 'Study through the leaves', 'ero19.webp', "A sculpture's form seen in close abstract detail through lotus leaves"),
+  realImage(15, 'art', 'Gilded relief', 'ero11.webp', 'A gilded bas-relief sculpture panel with a winged figure, mounted in the garden'),
+  realImage(16, 'art', 'Carved wood, close study', 'ero20.webp', 'A close detail of a carved wooden sculpture beside a garden tree'),
+  realImage(17, 'art', 'The painted wall', 'ero21.webp', "A row of painted folk-art figures along the garden building's exterior wall"),
 ];
 
 @Injectable({ providedIn: 'root' })

@@ -8,6 +8,7 @@ import { SectionHeaderComponent } from '../../shared/components/section-header/s
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { FaqComponent, FaqItem } from '../../shared/components/faq/faq.component';
 import { MapComponent } from '../../shared/components/map/map.component';
+import { ImageRevealComponent } from '../../shared/components/image-reveal/image-reveal.component';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
 import { buildGoogleMapsDirectionsUrl } from '../../shared/utils/maps.util';
 import { translateHoursDay, translateHoursValue } from '../../shared/utils/hours.util';
@@ -18,7 +19,7 @@ import { getDictionary } from '../../core/i18n/dictionaries';
 @Component({
   selector: 'app-visit',
   standalone: true,
-  imports: [CommonModule, RouterLink, ContainerComponent, SectionHeaderComponent, ButtonComponent, FaqComponent, MapComponent, TranslatePipe],
+  imports: [CommonModule, RouterLink, ContainerComponent, SectionHeaderComponent, ButtonComponent, FaqComponent, MapComponent, ImageRevealComponent, TranslatePipe],
   templateUrl: './visit.component.html',
   styleUrl: './visit.component.css',
 })
