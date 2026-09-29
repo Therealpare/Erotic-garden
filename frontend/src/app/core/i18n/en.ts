@@ -223,6 +223,11 @@ export const EN = {
       body1: 'After walking the garden, the teahouse offers a quiet room to sit with tea, coffee or something sweet — a place built for lingering, not rushing.',
       body2: 'The coffee side of the teahouse began as an idea from Katai’s son, but it was Katai who studied it properly — learning where the beans are grown, which varieties matter, how roasting affects quality, and what visitors actually want in a cup. She calls herself the “first gate” of understanding: before any business idea moves forward, she needs to understand it fully herself, not just know what’s for sale.',
     },
+    coffee: {
+      eyebrow: 'Our Coffee',
+      headline: 'Single Origin, 100% Arabica',
+      body: 'The charm of true Thai Arabica, waiting to be discovered — grown across seven provinces of Thailand’s upper north and carefully selected so you can taste real local coffee character in every cup.',
+    },
     atmosphere: {
       eyebrow: 'Atmosphere',
       headline: 'Built for lingering',

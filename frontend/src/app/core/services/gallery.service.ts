@@ -54,7 +54,7 @@ const DEMO_IMAGES: GalleryImage[] = [
   placeholderImage(5, 'people', 'Visitors walking the grounds', '900/650'),
   realImage(6, 'art', 'Two embracing figures', 'ero7.webp', 'Garden sculpture of two embracing figures, set among palms and clipped hedges'),
   placeholderImage(7, 'garden', 'Reflection pond', '900/750'),
-  placeholderImage(8, 'tea-house', 'Tea service', '900/1000'),
+  realImage(8, 'tea-house', 'Erotic Garden coffee, now stocking', 'cof3.webp', 'Three bags of Erotic Garden single origin arabica coffee lined up outdoors'),
   realImage(9, 'people', 'Katai in the garden', 'own.webp', 'Portrait of Katai at the garden'),
   realImage(10, 'art', 'Figural planter', 'ero6.webp', 'Sculpted planter shaped like a figure, filled with trailing petunias'),
   realImage(11, 'garden', 'The seating pavilion', 'ero4.webp', 'A shaded garden pavilion with seating, its curved roofline framed by bougainvillea'),
@@ -64,6 +64,19 @@ const DEMO_IMAGES: GalleryImage[] = [
   realImage(15, 'art', 'Gilded relief', 'ero11.webp', 'A gilded bas-relief sculpture panel with a winged figure, mounted in the garden'),
   realImage(16, 'art', 'Carved wood, close study', 'ero20.webp', 'A close detail of a carved wooden sculpture beside a garden tree'),
   realImage(17, 'art', 'The painted wall', 'ero21.webp', "A row of painted folk-art figures along the garden building's exterior wall"),
+  realImage(18, 'art', 'Carved form among the palms', 'ero23.webp', 'A tall carved garden sculpture in gold and copper tones, set against palms'),
+  realImage(19, 'art', 'The flowering planter', 'ero24.webp', 'A bent figural planter sculpture with petunias blooming from its back, on the lawn'),
+  realImage(20, 'art', 'Planter in the morning light', 'ero25.webp', 'The same figural planter sculpture seen from a wider angle across the lawn'),
+  realImage(21, 'art', 'Garden embrace', 'ero26.webp', 'A pale sculpture of two figures in embrace, seated on a garden path'),
+  realImage(22, 'art', 'Reading in the hedge', 'ero27.webp', 'A sculpture of a seated figure reading, framed within a clipped hedge'),
+  realImage(23, 'art', 'The kiss', 'ero28.webp', 'A pale sculpture of two seated figures embracing, framed by tropical leaves'),
+  realImage(24, 'art', 'Seated figure with painted detail', 'ero29.webp', 'A seated sculpture with a painted design along its side, before flowering shrubs'),
+  realImage(25, 'garden', 'Orchid in bloom', 'ero30.webp', 'A cluster of pink and white orchids in the garden, backlit by the afternoon sun'),
+  realImage(26, 'garden', 'Lotus at first light', 'ero31.webp', 'A large pink lotus flower in full bloom above the pond'),
+  realImage(27, 'garden', 'Flowering vine, close', 'ero32.webp', 'A close view of a small red trumpet-shaped flower among veined leaves'),
+  realImage(28, 'garden', 'Beneath the flowering pergola', 'ero33.webp', 'A pergola draped in pink blossoms, with a garden sculpture standing beneath'),
+  realImage(29, 'tea-house', 'Erotic Garden coffee, red bag', 'cof1-3.webp', 'A red bag of Erotic Garden single origin arabica coffee'),
+  realImage(30, 'tea-house', 'Erotic Garden coffee, black bag', "cof2.webp", 'A dark bag of Erotic Garden single origin arabica coffee, standing on a wooden table'),
 ];
 
 @Injectable({ providedIn: 'root' })
