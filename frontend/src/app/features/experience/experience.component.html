@@ -22,12 +22,15 @@
       <div class="lg:col-span-3" [ngClass]="i % 2 === 1 ? 'lg:order-1' : ''">
         <h2 class="text-4xl leading-tight sm:text-5xl">{{ experience.title }}</h2>
         <p class="mt-5 max-w-lg text-base leading-relaxed text-stone">{{ experience.shortDescription }}</p>
-        <dl class="mt-6 flex flex-wrap gap-x-10 gap-y-2 text-xs uppercase tracking-widest2 text-stone">
-          <div>
+        <dl
+          *ngIf="experience.duration || experience.price"
+          class="mt-6 flex flex-wrap gap-x-10 gap-y-2 text-xs uppercase tracking-widest2 text-stone"
+        >
+          <div *ngIf="experience.duration">
             <dt class="text-terracotta">{{ 'experience.duration' | translate }}</dt>
             <dd class="mt-1">{{ experience.duration }}</dd>
           </div>
-          <div>
+          <div *ngIf="experience.price">
             <dt class="text-terracotta">{{ 'experience.price' | translate }}</dt>
             <dd class="mt-1">{{ experience.price }}</dd>
           </div>

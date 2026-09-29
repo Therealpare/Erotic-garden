@@ -47,6 +47,11 @@ export class VisitComponent {
       { question: t.q2, answer: t.a2 },
       { question: t.q3, answer: t.a3 },
       { question: t.q4, answer: t.a4 },
-    ];
+    ].filter((item) => item.answer);
+  });
+
+  readonly hasGettingHereInfo = computed(() => {
+    const t = getDictionary(this.languageService.lang()).visit.gettingHere;
+    return !!(t.byCarBody || t.byTaxiBody || t.byScooterBody);
   });
 }

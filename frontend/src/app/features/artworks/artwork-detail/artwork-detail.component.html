@@ -17,11 +17,11 @@
 
       <div class="lg:col-span-2">
         <dl class="grid grid-cols-2 gap-6 border border-stone/15 p-8 text-sm">
-          <div>
+          <div *ngIf="art.material">
             <dt class="text-xs uppercase tracking-widest2 text-terracotta">{{ 'art.detail.material' | translate }}</dt>
             <dd class="mt-1 text-charcoal">{{ art.material }}</dd>
           </div>
-          <div>
+          <div *ngIf="art.year">
             <dt class="text-xs uppercase tracking-widest2 text-terracotta">{{ 'art.detail.year' | translate }}</dt>
             <dd class="mt-1 text-charcoal">{{ art.year }}</dd>
           </div>

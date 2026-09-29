@@ -33,8 +33,8 @@
         <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.visit' | translate }}</p>
         <address class="space-y-3 text-sm not-italic text-cream/80">
           <p>{{ siteSettings()?.address }}</p>
-          <p>{{ siteSettings()?.phone }}</p>
-          <p>{{ siteSettings()?.email }}</p>
+          <p *ngIf="siteSettings()?.phone">{{ siteSettings()?.phone }}</p>
+          <p *ngIf="siteSettings()?.email">{{ siteSettings()?.email }}</p>
         </address>
       </div>
 

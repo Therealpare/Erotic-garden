@@ -14,7 +14,7 @@
           {{ formatHoursDay(entry.days) }}: {{ formatHoursValue(entry.hours) }}
         </p>
       </div>
-      <div>
+      <div *ngIf="siteSettings()?.admissionInfo">
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.admission' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.admissionInfo }}</p>
       </div>
@@ -22,10 +22,10 @@
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.address' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.address }}</p>
       </div>
-      <div>
+      <div *ngIf="siteSettings()?.phone || siteSettings()?.email">
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.contact' | translate }}</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.phone }}</p>
-        <p class="text-sm leading-relaxed text-stone">{{ siteSettings()?.email }}</p>
+        <p *ngIf="siteSettings()?.phone" class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.phone }}</p>
+        <p *ngIf="siteSettings()?.email" class="text-sm leading-relaxed text-stone">{{ siteSettings()?.email }}</p>
       </div>
     </div>
 
@@ -40,27 +40,27 @@
   </app-container>
 </section>
 
-<section class="bg-cream py-24 sm:py-32">
+<section class="bg-cream py-24 sm:py-32" *ngIf="hasGettingHereInfo()">
   <app-container>
     <app-section-header [eyebrow]="'visit.gettingHere.eyebrow' | translate" [headline]="'visit.gettingHere.headline' | translate"></app-section-header>
     <div class="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
-      <div class="border border-stone/15 p-8">
+      <div class="border border-stone/15 p-8" *ngIf="'visit.gettingHere.byCarBody' | translate as byCarBody">
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.gettingHere.byCar' | translate }}</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'visit.gettingHere.byCarBody' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ byCarBody }}</p>
       </div>
-      <div class="border border-stone/15 p-8">
+      <div class="border border-stone/15 p-8" *ngIf="'visit.gettingHere.byTaxiBody' | translate as byTaxiBody">
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.gettingHere.byTaxi' | translate }}</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'visit.gettingHere.byTaxiBody' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ byTaxiBody }}</p>
       </div>
-      <div class="border border-stone/15 p-8">
+      <div class="border border-stone/15 p-8" *ngIf="'visit.gettingHere.byScooterBody' | translate as byScooterBody">
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'visit.gettingHere.byScooter' | translate }}</p>
-        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'visit.gettingHere.byScooterBody' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ byScooterBody }}</p>
       </div>
     </div>
   </app-container>
 </section>
 
-<section class="py-24 sm:py-32">
+<section class="py-24 sm:py-32" *ngIf="faqItems().length > 0">
   <app-container>
     <app-section-header [eyebrow]="'visit.faq.eyebrow' | translate" [headline]="'visit.faq.headline' | translate"></app-section-header>
     <div class="mt-12 max-w-2xl">

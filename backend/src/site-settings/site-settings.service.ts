@@ -11,17 +11,17 @@ const SETTINGS: SiteSettings = {
   address: '46/3 Moo 3, Soi 5, Huay Sai, Mae Rim, Chiang Mai 50180, Thailand',
   latitude: 18.97812,
   longitude: 98.916107,
-  phone: 'TODO: OWNER VERIFIED CONTENT REQUIRED',
-  email: 'TODO: OWNER VERIFIED CONTENT REQUIRED',
+  phone: '',
+  email: '',
   instagram: 'https://www.instagram.com/eroticgardenandteahouse/',
   facebook: 'https://www.facebook.com/eroticgarden/?locale=th_TH',
-  tripadvisorUrl: 'TODO: OWNER VERIFIED CONTENT REQUIRED',
-  googleMapsUrl: 'TODO: OWNER VERIFIED CONTENT REQUIRED',
+  tripadvisorUrl: '',
+  googleMapsUrl: '',
   openingHours: [
     { days: 'Monday–Tuesday', hours: 'Closed' },
     { days: 'Wednesday–Sunday', hours: '10:00–16:00' },
   ],
-  admissionInfo: 'TODO: OWNER VERIFIED CONTENT REQUIRED',
+  admissionInfo: '',
   isVerified: false,
 };
 

@@ -232,7 +232,7 @@
           {{ formatHoursDay(entry.days) }}: {{ formatHoursValue(entry.hours) }}
         </p>
       </div>
-      <div>
+      <div *ngIf="siteSettings()?.admissionInfo">
         <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.planVisit.admission' | translate }}</p>
         <p class="mt-3 text-sm leading-relaxed text-stone">{{ siteSettings()?.admissionInfo }}</p>
       </div>
