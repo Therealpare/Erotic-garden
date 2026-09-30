@@ -41,6 +41,7 @@ export class NavbarComponent {
       { label: t.art, path: '/art' },
       { label: t.gallery, path: '/gallery' },
       { label: t.teaHouse, path: '/tea-house' },
+      { label: t.coffee, path: '/coffee' },
       { label: t.visit, path: '/visit' },
     ];
   });

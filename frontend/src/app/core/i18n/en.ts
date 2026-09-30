@@ -5,6 +5,7 @@ export const EN = {
     art: 'Art',
     gallery: 'Gallery',
     teaHouse: 'Tea House',
+    coffee: 'Coffee',
     visit: 'Visit',
   },
   cta: {

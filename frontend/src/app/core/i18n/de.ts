@@ -7,6 +7,7 @@ export const DE: typeof EN = {
     art: 'Kunst',
     gallery: 'Galerie',
     teaHouse: 'Teehaus',
+    coffee: 'Kaffee',
     visit: 'Besuch',
   },
   cta: {

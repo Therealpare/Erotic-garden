@@ -7,6 +7,7 @@ export const TH: typeof EN = {
     art: 'งานศิลปะ',
     gallery: 'แกลเลอรี',
     teaHouse: 'เรือนชา',
+    coffee: 'กาแฟ',
     visit: 'แผนการมาเยือน',
   },
   cta: {
