@@ -7,6 +7,7 @@ export interface TeaCategory {
 
 export interface TeaMenuItem {
   id: number;
+  slug: string;
   category: TeaCategoryName;
   name: string;
   description: string;

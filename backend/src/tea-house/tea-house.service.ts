@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { TeaCategory, TeaMenuItem } from './entities/tea-menu.entity';
 
-/** Demo tea menu. Prices are placeholders pending owner-verified content (spec §25/§48). */
+/**
+ * Real tea house menu (spec §25/§48). Tea and coffee are included in admission — no
+ * fixed price to fabricate. Dessert has no fixed lineup (it changes day to day) so it
+ * carries no items here. "Special" has no real content yet, so it stays empty until
+ * the owner provides one.
+ */
 const CATEGORIES: TeaCategory[] = [
   { id: 1, name: 'Tea' },
   { id: 2, name: 'Coffee' },
@@ -9,78 +14,41 @@ const CATEGORIES: TeaCategory[] = [
   { id: 4, name: 'Special' },
 ];
 
+function makeItem(
+  id: number,
+  slug: string,
+  category: TeaCategoryName,
+  name: string,
+  sortOrder: number,
+): TeaMenuItem {
+  return {
+    id,
+    slug,
+    category,
+    name,
+    description: '',
+    price: 'Free',
+    imageUrl: `https://picsum.photos/seed/eg-menu-${slug}/600/600`,
+    available: true,
+    sortOrder,
+  };
+}
+
 const MENU: TeaMenuItem[] = [
-  {
-    id: 1,
-    category: 'Tea',
-    name: 'Northern Thai Oolong',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-tea-1/600/600',
-    available: true,
-    sortOrder: 0,
-  },
-  {
-    id: 2,
-    category: 'Tea',
-    name: 'Jasmine Green Tea',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-tea-2/600/600',
-    available: true,
-    sortOrder: 1,
-  },
-  {
-    id: 3,
-    category: 'Coffee',
-    name: 'Doi Chang Espresso',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-coffee-1/600/600',
-    available: true,
-    sortOrder: 0,
-  },
-  {
-    id: 4,
-    category: 'Coffee',
-    name: 'Iced Cold Brew',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-coffee-2/600/600',
-    available: true,
-    sortOrder: 1,
-  },
-  {
-    id: 5,
-    category: 'Dessert',
-    name: 'Coconut Sticky Rice',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-dessert-1/600/600',
-    available: true,
-    sortOrder: 0,
-  },
-  {
-    id: 6,
-    category: 'Dessert',
-    name: 'Butterfly Pea Cake',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-dessert-2/600/600',
-    available: true,
-    sortOrder: 1,
-  },
-  {
-    id: 7,
-    category: 'Special',
-    name: 'Garden Tasting Set',
-    description: 'Demo content — pending owner-verified menu details.',
-    price: 'TODO',
-    imageUrl: 'https://picsum.photos/seed/eg-menu-special-1/600/600',
-    available: true,
-    sortOrder: 0,
-  },
+  makeItem(1, 'hot-tea', 'Tea', 'Hot Tea', 0),
+  makeItem(2, 'green-tea', 'Tea', 'Green Tea', 1),
+  makeItem(3, 'iced-tea', 'Tea', 'Iced Tea', 2),
+  makeItem(4, 'lemon-tea', 'Tea', 'Lemon Tea', 3),
+  makeItem(5, 'black-tea', 'Tea', 'Black Tea', 4),
+  makeItem(6, 'americano', 'Coffee', 'Americano', 0),
+  makeItem(7, 'espresso', 'Coffee', 'Espresso', 1),
+  makeItem(8, 'latte', 'Coffee', 'Latte', 2),
+  makeItem(9, 'cappuccino', 'Coffee', 'Cappuccino', 3),
+  makeItem(10, 'mocha', 'Coffee', 'Mocha', 4),
+  makeItem(11, 'macchiato', 'Coffee', 'Macchiato', 5),
 ];
+
+type TeaCategoryName = TeaCategory['name'];
 
 @Injectable()
 export class TeaHouseService {

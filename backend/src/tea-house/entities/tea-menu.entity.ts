@@ -7,6 +7,7 @@ export class TeaCategory {
 
 export class TeaMenuItem {
   id: number;
+  slug: string;
   category: TeaCategoryName;
   name: string;
   description: string;
