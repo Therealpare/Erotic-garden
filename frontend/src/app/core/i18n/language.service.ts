@@ -1,8 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 
-export type Lang = 'en' | 'th';
+export type Lang = 'en' | 'th' | 'de';
 
 const STORAGE_KEY = 'eg-lang';
+const VALID_LANGS: Lang[] = ['en', 'th', 'de'];
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
@@ -14,13 +15,15 @@ export class LanguageService {
   }
 
   toggle(): void {
-    this.setLang(this.lang() === 'en' ? 'th' : 'en');
+    const order: Lang[] = ['en', 'th', 'de'];
+    const next = order[(order.indexOf(this.lang()) + 1) % order.length];
+    this.setLang(next);
   }
 
   private readInitialLang(): Lang {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
-      return stored === 'th' ? 'th' : 'en';
+      return VALID_LANGS.includes(stored as Lang) ? (stored as Lang) : 'en';
     } catch {
       return 'en';
     }

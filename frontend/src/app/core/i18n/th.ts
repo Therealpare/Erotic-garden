@@ -402,6 +402,7 @@ export const TH: typeof EN = {
   language: {
     en: 'EN',
     th: 'TH',
+    de: 'DE',
     toggleLabel: 'เปลี่ยนภาษา',
   },
 };

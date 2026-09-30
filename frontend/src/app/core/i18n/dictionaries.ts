@@ -1,11 +1,12 @@
 import { Lang } from './language.service';
 import { EN } from './en';
 import { TH } from './th';
+import { DE } from './de';
 
-export { EN, TH };
+export { EN, TH, DE };
 export type Dictionary = typeof EN;
 
-const DICTIONARIES: Record<Lang, Dictionary> = { en: EN, th: TH };
+const DICTIONARIES: Record<Lang, Dictionary> = { en: EN, th: TH, de: DE };
 
 function lookup(dict: Dictionary, key: string): unknown {
   return key.split('.').reduce<unknown>((acc, part) => {

@@ -20,4 +20,15 @@
   >
     TH
   </button>
+  <span class="text-stone/40" aria-hidden="true">|</span>
+  <button
+    type="button"
+    (click)="languageService.setLang('de')"
+    [attr.aria-pressed]="languageService.lang() === 'de'"
+    class="px-1.5 py-1 transition-colors duration-400"
+    [class.text-terracotta]="languageService.lang() === 'de'"
+    [class.text-stone]="languageService.lang() !== 'de'"
+  >
+    DE
+  </button>
 </div>

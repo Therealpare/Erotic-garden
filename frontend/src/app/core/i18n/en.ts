@@ -400,6 +400,7 @@ export const EN = {
   language: {
     en: 'EN',
     th: 'TH',
+    de: 'DE',
     toggleLabel: 'Switch language',
   },
 };
