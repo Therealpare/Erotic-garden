@@ -1,0 +1,143 @@
+<!-- HERO -->
+<section class="relative flex h-[70vh] min-h-[480px] items-end overflow-hidden bg-charcoal">
+  <img
+    src="images/garden/cof3.webp"
+    alt="Three bags of Erotic Garden single origin arabica coffee lined up outdoors"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+  <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-charcoal/40"></div>
+  <app-container>
+    <div class="relative z-10 max-w-xl pb-20">
+      <div class="mb-5 flex flex-wrap gap-2">
+        <span class="border border-ivory/40 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory/90">{{
+          'coffee.hero.badge1' | translate
+        }}</span>
+        <span class="border border-ivory/40 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory/90">{{
+          'coffee.hero.badge2' | translate
+        }}</span>
+        <span class="border border-ivory/40 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory/90">{{
+          'coffee.hero.badge3' | translate
+        }}</span>
+      </div>
+      <h1 class="text-5xl leading-tight text-ivory sm:text-7xl">{{ 'coffee.hero.headline' | translate }}</h1>
+    </div>
+  </app-container>
+</section>
+
+<!-- COFFEE STORY -->
+<section class="py-24 sm:py-32">
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-2">
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'coffee.story.eyebrow' | translate }}</p>
+        <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'coffee.story.headline' | translate }}</h2>
+        <p class="mt-6 text-base leading-relaxed text-stone">{{ 'coffee.story.body' | translate }}</p>
+      </div>
+      <div class="lg:col-span-3">
+        <div class="aspect-[6/5] w-full">
+          <app-image-reveal src="images/garden/cof1.webp" alt="A top-down view of a freshly poured espresso"></app-image-reveal>
+        </div>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- ORIGIN -->
+<section class="bg-cream py-24 sm:py-32">
+  <app-container>
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="order-2 lg:order-1 lg:col-span-3">
+        <div class="aspect-[6/5] w-full">
+          <app-image-reveal src="images/garden/cof1-2.webp" alt="Ripe red coffee cherries on the branch"></app-image-reveal>
+        </div>
+      </div>
+      <div class="order-1 flex flex-col justify-center lg:order-2 lg:col-span-2">
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'coffee.origin.eyebrow' | translate }}</p>
+        <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'coffee.origin.headline' | translate }}</h2>
+        <p class="mt-6 text-base leading-relaxed text-stone">{{ 'coffee.origin.body' | translate }}</p>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- FROM MOUNTAIN TO CUP -->
+<section class="bg-forest py-24 text-ivory sm:py-32">
+  <app-container>
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'coffee.process.eyebrow' | translate }}</p>
+      <h2 class="text-4xl leading-tight text-ivory sm:text-5xl">{{ 'coffee.process.headline' | translate }}</h2>
+      <p class="mt-6 text-base leading-relaxed text-cream/80">{{ 'coffee.process.body' | translate }}</p>
+    </div>
+    <div class="mx-auto mt-14 grid max-w-3xl grid-cols-1 gap-6 sm:grid-cols-2">
+      <div class="aspect-[4/5] w-full">
+        <app-image-reveal src="images/garden/cof1-2.webp" alt="Ripe red coffee cherries on the branch"></app-image-reveal>
+      </div>
+      <div class="aspect-[4/5] w-full">
+        <app-image-reveal src="images/garden/cof1.webp" alt="A top-down view of a freshly poured espresso"></app-image-reveal>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- TASTE PROFILE (hidden until owner-verified per-batch details exist) -->
+<section class="py-24 sm:py-32" *ngIf="hasTasteProfile()">
+  <app-container>
+    <app-section-header [eyebrow]="'coffee.tasteProfile.eyebrow' | translate" [headline]="'coffee.tasteProfile.headline' | translate"></app-section-header>
+    <div class="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div *ngFor="let product of products()" class="border border-stone/15 p-8">
+        <h3 class="text-xl">{{ product.name }}</h3>
+        <dl class="mt-4 space-y-2 text-sm">
+          <div *ngIf="product.origin" class="flex justify-between gap-4">
+            <dt class="text-stone">{{ 'coffee.tasteProfile.labelOrigin' | translate }}</dt>
+            <dd class="text-charcoal">{{ product.origin }}</dd>
+          </div>
+          <div *ngIf="product.process" class="flex justify-between gap-4">
+            <dt class="text-stone">{{ 'coffee.tasteProfile.labelProcess' | translate }}</dt>
+            <dd class="text-charcoal">{{ product.process }}</dd>
+          </div>
+          <div *ngIf="product.roastLevel" class="flex justify-between gap-4">
+            <dt class="text-stone">{{ 'coffee.tasteProfile.labelRoast' | translate }}</dt>
+            <dd class="text-charcoal">{{ product.roastLevel }}</dd>
+          </div>
+          <div *ngIf="product.tastingNotes" class="flex justify-between gap-4">
+            <dt class="text-stone">{{ 'coffee.tasteProfile.labelNotes' | translate }}</dt>
+            <dd class="text-charcoal">{{ product.tastingNotes }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- COFFEE COLLECTION -->
+<section class="bg-cream py-24 sm:py-32">
+  <app-container>
+    <app-section-header
+      [eyebrow]="'coffee.collection.eyebrow' | translate"
+      [headline]="'coffee.collection.headline' | translate"
+      [supportingText]="'coffee.collection.sub' | translate"
+    ></app-section-header>
+    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3">
+      <div *ngFor="let product of products()">
+        <div class="aspect-[3/4] w-full bg-ivory">
+          <app-image-reveal [src]="product.imageUrl" [alt]="product.altText"></app-image-reveal>
+        </div>
+        <h3 class="mt-5 text-xl">{{ product.name }}</h3>
+        <p *ngIf="product.weight" class="mt-1 text-xs uppercase tracking-widest2 text-terracotta">{{ product.weight }}</p>
+        <p *ngIf="product.price" class="mt-1 text-sm text-stone">{{ product.price }}</p>
+      </div>
+    </div>
+  </app-container>
+</section>
+
+<!-- CTA -->
+<section class="bg-forest py-24 text-center text-ivory sm:py-32">
+  <app-container>
+    <div class="mx-auto max-w-xl">
+      <h2 class="text-4xl leading-tight text-ivory sm:text-5xl">{{ 'coffee.cta.headline' | translate }}</h2>
+      <div class="mt-8 flex justify-center">
+        <app-button variant="outline-light" routerLink="/booking">{{ 'cta.bookAVisit' | translate }}</app-button>
+      </div>
+    </div>
+  </app-container>
+</section>

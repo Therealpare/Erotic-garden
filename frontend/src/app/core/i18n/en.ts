@@ -18,6 +18,7 @@ export const EN = {
     readHerStory: 'Read Her Story →',
     discover: 'Discover →',
     view: 'View →',
+    viewCoffee: 'View Coffee →',
   },
   hours: {
     mondayTuesday: 'Monday–Tuesday',
@@ -69,6 +70,11 @@ export const EN = {
       tagCoffee: 'Coffee',
       tagTreats: 'Homemade Treats',
       tagAtmosphere: 'Atmosphere',
+    },
+    coffee: {
+      eyebrow: 'Our Coffee',
+      headline: 'Single Origin, 100% Arabica',
+      body: 'Grown across seven provinces of Thailand’s upper north. Explore our coffee story and collection.',
     },
     meetKatai: {
       label: 'Meet Katai',
@@ -243,6 +249,46 @@ export const EN = {
     },
     cta: {
       headline: 'Reserve a seat by the garden.',
+    },
+  },
+  coffee: {
+    hero: {
+      badge1: '100% Arabica',
+      badge2: 'Single Origin',
+      badge3: 'Northern Thailand',
+      headline: 'A Taste of Northern Thailand',
+    },
+    story: {
+      eyebrow: 'Coffee Story',
+      headline: 'Katai’s First Gate',
+      body: 'The coffee side of the teahouse began as an idea from Katai’s son, but it was Katai who studied it properly — learning where the beans are grown, which varieties matter, how roasting affects quality, and what visitors actually want in a cup. She calls herself the “first gate” of understanding: before any business idea moves forward, she needs to understand it fully herself, not just know what’s for sale.',
+    },
+    origin: {
+      eyebrow: 'Origin',
+      headline: 'Grown in Thailand’s Upper North',
+      body: 'The charm of true Thai Arabica, waiting to be discovered — grown across seven provinces of Thailand’s upper north and carefully selected so you can taste real local coffee character in every cup.',
+    },
+    process: {
+      eyebrow: 'From Mountain to Cup',
+      headline: 'Every Step, Considered',
+      body: 'From the growing regions to the roast, Katai treats every step with the same care — studying how roasting affects quality and what visitors actually want in a cup, before anything is served.',
+    },
+    tasteProfile: {
+      eyebrow: 'Taste Profile',
+      headline: 'Notes From the Cup',
+      labelOrigin: 'Origin',
+      labelProcess: 'Process',
+      labelRoast: 'Roast',
+      labelNotes: 'Tasting Notes',
+    },
+    collection: {
+      eyebrow: 'Coffee Collection',
+      headline: 'Single Origin, 100% Arabica',
+      sub: 'Available to enjoy at the tea house.',
+    },
+    productName: 'Erotic Garden Single Origin Arabica Coffee',
+    cta: {
+      headline: 'Taste it for yourself at the garden.',
     },
   },
   visit: {
