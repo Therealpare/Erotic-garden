@@ -91,7 +91,7 @@ export const DE: typeof EN = {
       emptyTitle: 'Bewertungen sind unterwegs',
       emptyMessage: 'Wir veröffentlichen ausschließlich verifizierte Bewertungen von Tripadvisor, Google und direkten Besuchern — schauen Sie bald wieder vorbei.',
       reviewsSuffix: 'Bewertungen',
-      readAll: 'Alle Bewertungen lesen →',
+      more: 'Mehr →',
     },
     planVisit: {
       eyebrow: 'Bevor Sie kommen',

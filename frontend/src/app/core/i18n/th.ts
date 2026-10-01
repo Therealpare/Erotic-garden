@@ -91,7 +91,7 @@ export const TH: typeof EN = {
       emptyTitle: 'รีวิวกำลังจะมาเร็วๆ นี้',
       emptyMessage: 'เราเผยแพร่เฉพาะรีวิวที่ยืนยันแล้วจาก Tripadvisor, Google และผู้มาเยือนโดยตรง — แวะกลับมาดูใหม่',
       reviewsSuffix: 'รีวิว',
-      readAll: 'อ่านรีวิวทั้งหมด →',
+      more: 'เพิ่มเติม →',
     },
     planVisit: {
       eyebrow: 'ก่อนออกเดินทาง',

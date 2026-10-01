@@ -17,16 +17,17 @@ export interface ReviewSummary {
 }
 
 /**
- * Real, API-sourced rating summary for a single review platform (spec §18/§48).
- * Google's summary comes from /api/reviews-google (a Vercel serverless function
- * proxying the Google Places API — see frontend/api/reviews-google.ts). Never
- * populate averageRating/totalReviews by scraping or by hand; they stay at 0
- * until the real API call returns verified numbers, and the UI hides the card
- * accordingly. Tripadvisor has no equivalent self-serve API — it is shown via
- * Tripadvisor's own official embeddable widget instead (see
- * TripadvisorWidgetComponent), not this summary shape.
+ * Per-platform rating summary (spec §18/§48) — no live API integration for now, by
+ * design. averageRating/totalReviews must only ever be the owner-confirmed numbers
+ * read directly from the business's real Google Maps and Tripadvisor listings (never
+ * scraped, never estimated), and profileUrl is that listing's real URL. Both stay at
+ * their zero/empty defaults — and the card for that platform stays hidden — until the
+ * owner provides the confirmed values.
  */
+export type ReviewPlatform = 'GOOGLE' | 'TRIPADVISOR';
+
 export interface ReviewSourceSummary {
+  platform: ReviewPlatform;
   averageRating: number;
   totalReviews: number;
   profileUrl: string;

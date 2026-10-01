@@ -89,7 +89,7 @@ export const EN = {
       emptyTitle: 'Reviews are on their way',
       emptyMessage: 'We only publish verified reviews from Tripadvisor, Google and direct visitors — check back soon.',
       reviewsSuffix: 'Reviews',
-      readAll: 'Read all reviews →',
+      more: 'More →',
     },
     planVisit: {
       eyebrow: 'Before You Go',
