@@ -222,24 +222,39 @@
   <app-container>
     <div class="flex flex-col items-center text-center">
       <app-section-header [headline]="'home.reviews.headline' | translate" align="center"></app-section-header>
-      <div class="mt-6 flex items-center gap-3">
-        <span class="font-display text-4xl text-forest">{{ reviewSummary().averageRating || '—' }} / 5</span>
-        <span class="text-sm text-stone">{{ reviewSummary().totalReviews }} {{ 'home.reviews.reviewsSuffix' | translate }}</span>
-      </div>
-      <p class="mt-2 text-xs uppercase tracking-widest2 text-stone/60">{{ 'home.reviews.ratingNote' | translate }}</p>
+      <p *ngIf="!hasReviewSources()" class="mt-2 text-xs uppercase tracking-widest2 text-stone/60">{{ 'home.reviews.ratingNote' | translate }}</p>
     </div>
 
-    <div *ngIf="hasReviews(); else noReviews" class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Per-platform rating summaries (Google / Tripadvisor) — hidden until real, verified numbers are connected -->
+    <div *ngIf="hasReviewSources()" class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
+      <div *ngFor="let summary of visibleReviewSources()" class="border border-stone/15 p-8 text-center">
+        <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ platformLabels[summary.platform] }}</p>
+        <div class="mt-3 flex items-center justify-center gap-2">
+          <span class="font-display text-4xl text-forest">{{ summary.averageRating }}</span>
+          <span class="text-sm text-stone">/ 5</span>
+        </div>
+        <p class="mt-1 text-sm text-stone">{{ summary.totalReviews }} {{ 'home.reviews.reviewsSuffix' | translate }}</p>
+        <a
+          *ngIf="summary.profileUrl"
+          [href]="summary.profileUrl"
+          target="_blank"
+          rel="noopener"
+          class="mt-4 inline-block text-xs font-medium uppercase tracking-widest2 text-terracotta"
+        >
+          {{ 'home.reviews.readAll' | translate }}
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="hasReviews()" class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <app-review-card *ngFor="let review of reviews()" [review]="review"></app-review-card>
     </div>
-    <ng-template #noReviews>
-      <div class="mt-14">
-        <app-empty-state
-          [title]="'home.reviews.emptyTitle' | translate"
-          [message]="'home.reviews.emptyMessage' | translate"
-        ></app-empty-state>
-      </div>
-    </ng-template>
+    <div *ngIf="!hasReviews() && !hasReviewSources()" class="mt-14">
+      <app-empty-state
+        [title]="'home.reviews.emptyTitle' | translate"
+        [message]="'home.reviews.emptyMessage' | translate"
+      ></app-empty-state>
+    </div>
   </app-container>
 </section>
 

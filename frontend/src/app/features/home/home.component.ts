@@ -18,6 +18,7 @@ import { ArtworkService } from '../../core/services/artwork.service';
 import { ReviewService } from '../../core/services/review.service';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
 import { ArtworkCategory } from '../../core/models/artwork.model';
+import { ReviewPlatform } from '../../core/models/review.model';
 import { buildGoogleMapsDirectionsUrl } from '../../shared/utils/maps.util';
 import { translateHoursDay, translateHoursValue } from '../../shared/utils/hours.util';
 import { LanguageService } from '../../core/i18n/language.service';
@@ -114,6 +115,17 @@ export class HomeComponent {
   readonly reviewSummary = toSignal(this.reviewService.getSummary(), {
     initialValue: { averageRating: 0, totalReviews: 0 },
   });
+
+  private readonly reviewSourceSummaries = toSignal(this.reviewService.getSourceSummaries(), { initialValue: [] });
+  readonly visibleReviewSources = computed(() =>
+    this.reviewSourceSummaries().filter((summary) => summary.averageRating > 0 && summary.totalReviews > 0),
+  );
+  readonly hasReviewSources = computed(() => this.visibleReviewSources().length > 0);
+
+  readonly platformLabels: Record<ReviewPlatform, string> = {
+    GOOGLE: 'Google',
+    TRIPADVISOR: 'Tripadvisor',
+  };
 
   readonly siteSettings = toSignal(this.siteSettingsService.get(), { initialValue: undefined });
   readonly directionsUrl = computed(() => {
