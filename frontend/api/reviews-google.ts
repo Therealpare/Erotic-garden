@@ -15,8 +15,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const EMPTY_RESULT = { averageRating: 0, totalReviews: 0, profileUrl: '' };
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-  const placeId = process.env.GOOGLE_PLACE_ID;
+  const apiKey = process.env['GOOGLE_PLACES_API_KEY'];
+  const placeId = process.env['GOOGLE_PLACE_ID'];
 
   if (!apiKey || !placeId) {
     res.setHeader('Cache-Control', 'no-store');
