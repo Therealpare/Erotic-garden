@@ -12,6 +12,8 @@ import { EventsModule } from './events/events.module';
 import { SiteSettingsModule } from './site-settings/site-settings.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { ContactModule } from './contact/contact.module';
+import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { ContactModule } from './contact/contact.module';
     SiteSettingsModule,
     BookingsModule,
     ContactModule,
+    ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

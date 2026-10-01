@@ -45,6 +45,11 @@ export const routes: Routes = [
     title: 'Coffee — Erotic Garden & Teahouse',
   },
   {
+    path: 'checkout',
+    loadComponent: () => import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
+    title: 'Checkout — Erotic Garden & Teahouse',
+  },
+  {
     path: 'visit',
     loadComponent: () => import('./features/visit/visit.component').then((m) => m.VisitComponent),
     title: 'Plan Your Visit — Erotic Garden & Teahouse',
