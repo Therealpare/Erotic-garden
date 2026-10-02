@@ -22,8 +22,13 @@ export const EN = {
     viewCoffee: 'View Coffee →',
   },
   hours: {
-    mondayTuesday: 'Monday–Tuesday',
-    wednesdaySunday: 'Wednesday–Sunday',
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday',
+    sunday: 'Sunday',
     closed: 'Closed',
   },
   home: {
@@ -98,6 +103,7 @@ export const EN = {
       openingHours: 'Opening Hours',
       admission: 'Admission',
       location: 'Location',
+      phone: 'Phone',
       howToGetHere: 'How to Get Here',
       byCar: 'By Car',
       byTaxi: 'By Taxi',

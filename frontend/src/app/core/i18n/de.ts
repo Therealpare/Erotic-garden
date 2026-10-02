@@ -24,8 +24,13 @@ export const DE: typeof EN = {
     viewCoffee: 'Kaffee ansehen →',
   },
   hours: {
-    mondayTuesday: 'Montag–Dienstag',
-    wednesdaySunday: 'Mittwoch–Sonntag',
+    monday: 'Montag',
+    tuesday: 'Dienstag',
+    wednesday: 'Mittwoch',
+    thursday: 'Donnerstag',
+    friday: 'Freitag',
+    saturday: 'Samstag',
+    sunday: 'Sonntag',
     closed: 'Geschlossen',
   },
   home: {
@@ -100,6 +105,7 @@ export const DE: typeof EN = {
       openingHours: 'Öffnungszeiten',
       admission: 'Eintritt',
       location: 'Lage',
+      phone: 'Telefon',
       howToGetHere: 'Anfahrt',
       byCar: 'Mit dem Auto',
       byTaxi: 'Mit dem Taxi',
