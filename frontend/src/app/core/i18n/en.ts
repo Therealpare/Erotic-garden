@@ -98,6 +98,7 @@ export const EN = {
       openingHours: 'Opening Hours',
       admission: 'Admission',
       location: 'Location',
+      phone: 'Phone',
       howToGetHere: 'How to Get Here',
       byCar: 'By Car',
       byTaxi: 'By Taxi',

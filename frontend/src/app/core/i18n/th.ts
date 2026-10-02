@@ -100,6 +100,7 @@ export const TH: typeof EN = {
       openingHours: 'เวลาเปิดทำการ',
       admission: 'ค่าเข้าชม',
       location: 'ที่ตั้ง',
+      phone: 'โทร',
       howToGetHere: 'วิธีเดินทางมา',
       byCar: 'โดยรถยนต์',
       byTaxi: 'โดยแท็กซี่',

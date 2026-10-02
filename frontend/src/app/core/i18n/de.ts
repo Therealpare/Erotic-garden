@@ -100,6 +100,7 @@ export const DE: typeof EN = {
       openingHours: 'Öffnungszeiten',
       admission: 'Eintritt',
       location: 'Lage',
+      phone: 'Telefon',
       howToGetHere: 'Anfahrt',
       byCar: 'Mit dem Auto',
       byTaxi: 'Mit dem Taxi',
