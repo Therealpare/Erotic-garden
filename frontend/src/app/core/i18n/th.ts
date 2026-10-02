@@ -24,13 +24,8 @@ export const TH: typeof EN = {
     viewCoffee: 'ดูกาแฟ →',
   },
   hours: {
-    monday: 'จันทร์',
-    tuesday: 'อังคาร',
-    wednesday: 'พุธ',
-    thursday: 'พฤหัสบดี',
-    friday: 'ศุกร์',
-    saturday: 'เสาร์',
-    sunday: 'อาทิตย์',
+    mondayTuesday: 'จันทร์–อังคาร',
+    wednesdaySunday: 'พุธ–อาทิตย์',
     closed: 'ปิดทำการ',
   },
   home: {
@@ -105,7 +100,6 @@ export const TH: typeof EN = {
       openingHours: 'เวลาเปิดทำการ',
       admission: 'ค่าเข้าชม',
       location: 'ที่ตั้ง',
-      phone: 'โทร',
       howToGetHere: 'วิธีเดินทางมา',
       byCar: 'โดยรถยนต์',
       byTaxi: 'โดยแท็กซี่',
