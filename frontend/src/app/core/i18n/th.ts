@@ -92,6 +92,7 @@ export const TH: typeof EN = {
       emptyMessage: 'เราเผยแพร่เฉพาะรีวิวที่ยืนยันแล้วจาก Tripadvisor, Google และผู้มาเยือนโดยตรง — แวะกลับมาดูใหม่',
       reviewsSuffix: 'รีวิว',
       more: 'เพิ่มเติม →',
+      poweredByGoogle: 'รีวิวจาก Google',
     },
     planVisit: {
       eyebrow: 'ก่อนออกเดินทาง',

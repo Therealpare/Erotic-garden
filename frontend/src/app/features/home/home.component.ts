@@ -12,6 +12,7 @@ import { ReviewCardComponent } from '../../shared/components/review-card/review-
 import { ImageRevealComponent } from '../../shared/components/image-reveal/image-reveal.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { MapComponent } from '../../shared/components/map/map.component';
+import { TripadvisorWidgetComponent } from '../../shared/components/tripadvisor-widget/tripadvisor-widget.component';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 import { ArtworkService } from '../../core/services/artwork.service';
@@ -19,6 +20,7 @@ import { ReviewService } from '../../core/services/review.service';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
 import { ArtworkCategory } from '../../core/models/artwork.model';
 import { ReviewPlatform } from '../../core/models/review.model';
+import { TRIPADVISOR_WIDGET_EMBED_HTML } from '../../core/config/tripadvisor.config';
 import { buildGoogleMapsDirectionsUrl } from '../../shared/utils/maps.util';
 import { translateHoursDay, translateHoursValue } from '../../shared/utils/hours.util';
 import { LanguageService } from '../../core/i18n/language.service';
@@ -48,6 +50,7 @@ interface HighlightCard {
     ImageRevealComponent,
     EmptyStateComponent,
     MapComponent,
+    TripadvisorWidgetComponent,
     TranslatePipe,
   ],
   templateUrl: './home.component.html',
@@ -110,12 +113,6 @@ export class HomeComponent {
     return translateHoursValue(this.languageService.lang(), hours);
   }
 
-  readonly reviews = toSignal(this.reviewService.getFeatured(), { initialValue: [] });
-  readonly hasReviews = computed(() => this.reviews().length > 0);
-  readonly reviewSummary = toSignal(this.reviewService.getSummary(), {
-    initialValue: { averageRating: 0, totalReviews: 0 },
-  });
-
   private readonly reviewSourceSummaries = toSignal(this.reviewService.getSourceSummaries(), { initialValue: [] });
   readonly visibleReviewSources = computed(() =>
     this.reviewSourceSummaries().filter((summary) => summary.averageRating > 0 && summary.totalReviews > 0),
@@ -126,6 +123,14 @@ export class HomeComponent {
     GOOGLE: 'Google',
     TRIPADVISOR: 'Tripadvisor',
   };
+
+  readonly googleReviews = toSignal(this.reviewService.getGoogleReviews(), { initialValue: [] });
+  readonly hasGoogleReviews = computed(() => this.googleReviews().length > 0);
+
+  readonly tripadvisorEmbedHtml = TRIPADVISOR_WIDGET_EMBED_HTML;
+  readonly hasTripadvisorWidget = computed(() => this.tripadvisorEmbedHtml.length > 0);
+
+  readonly hasAnyReviewContent = computed(() => this.hasReviewSources() || this.hasGoogleReviews() || this.hasTripadvisorWidget());
 
   readonly siteSettings = toSignal(this.siteSettingsService.get(), { initialValue: undefined });
   readonly directionsUrl = computed(() => {

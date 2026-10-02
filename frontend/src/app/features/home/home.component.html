@@ -246,10 +246,20 @@
       </div>
     </div>
 
-    <div *ngIf="hasReviews()" class="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <app-review-card *ngFor="let review of reviews()" [review]="review"></app-review-card>
+    <!-- Google review quotes — live from the Places API, capped at Google's own 5-review limit -->
+    <div *ngIf="hasGoogleReviews()" class="mt-16">
+      <p class="text-center text-xs uppercase tracking-widest2 text-stone/60">{{ 'home.reviews.poweredByGoogle' | translate }}</p>
+      <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <app-review-card *ngFor="let review of googleReviews()" [review]="review"></app-review-card>
+      </div>
     </div>
-    <div *ngIf="!hasReviews() && !hasReviewSources()" class="mt-14">
+
+    <!-- Tripadvisor review quotes — official Tripadvisor widget embed, hidden until configured -->
+    <div *ngIf="hasTripadvisorWidget()" class="mt-16">
+      <app-tripadvisor-widget [embedHtml]="tripadvisorEmbedHtml"></app-tripadvisor-widget>
+    </div>
+
+    <div *ngIf="!hasAnyReviewContent()" class="mt-14">
       <app-empty-state
         [title]="'home.reviews.emptyTitle' | translate"
         [message]="'home.reviews.emptyMessage' | translate"

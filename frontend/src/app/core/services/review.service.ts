@@ -1,21 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Review, ReviewSourceSummary, ReviewSummary } from '../models/review.model';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, of } from 'rxjs';
+import { Review, ReviewSourceSummary } from '../models/review.model';
 
 /**
- * Spec §18/§48: reviews must never be fabricated or scraped. No live API integration —
- * averageRating/totalReviews/profileUrl below are the owner-confirmed numbers and real
- * listing URLs, checked directly on Google Maps and Tripadvisor. Update only with
- * owner-confirmed values; never estimate or scrape. Individual review quotes are
- * intentionally still not collected/stored — DEMO_REVIEWS stays empty.
+ * Spec §18/§48: reviews must never be fabricated or scraped.
+ *
+ * getSourceSummaries() — the Google/Tripadvisor rating + review-count cards — stays
+ * static: averageRating/totalReviews/profileUrl are the owner-confirmed numbers and
+ * real listing URLs, checked directly on Google Maps and Tripadvisor. Update only with
+ * owner-confirmed values.
+ *
+ * getGoogleReviews() calls the real Google Places API via a Vercel serverless function
+ * (frontend/api/reviews-google.ts), which returns an empty array until
+ * GOOGLE_PLACES_API_KEY and GOOGLE_PLACE_ID are configured — see that file's comment
+ * for exact setup steps. Individual review text is never hard-coded here; it is always
+ * whatever the live API call returns, capped at Google's own 5-review limit.
+ *
+ * Tripadvisor has no equivalent self-serve review API — individual review content for
+ * that platform is shown via Tripadvisor's own official embeddable widget instead (see
+ * TripadvisorWidgetComponent + core/config/tripadvisor.config.ts), not this service.
  */
-const DEMO_REVIEWS: Review[] = [];
-
-const DEMO_SUMMARY: ReviewSummary = {
-  averageRating: 0,
-  totalReviews: 0,
-};
-
 const DEMO_SOURCE_SUMMARIES: ReviewSourceSummary[] = [
   {
     platform: 'GOOGLE',
@@ -34,15 +39,13 @@ const DEMO_SOURCE_SUMMARIES: ReviewSourceSummary[] = [
 
 @Injectable({ providedIn: 'root' })
 export class ReviewService {
-  getFeatured(): Observable<Review[]> {
-    return of(DEMO_REVIEWS);
-  }
-
-  getSummary(): Observable<ReviewSummary> {
-    return of(DEMO_SUMMARY);
-  }
+  private readonly http = inject(HttpClient);
 
   getSourceSummaries(): Observable<ReviewSourceSummary[]> {
     return of(DEMO_SOURCE_SUMMARIES);
+  }
+
+  getGoogleReviews(): Observable<Review[]> {
+    return this.http.get<Review[]>('/api/reviews-google').pipe(catchError(() => of([])));
   }
 }

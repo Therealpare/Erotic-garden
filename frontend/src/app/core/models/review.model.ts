@@ -1,5 +1,13 @@
 export type ReviewSource = 'TRIPADVISOR' | 'GOOGLE' | 'DIRECT';
 
+/**
+ * A single review quote. Google reviews (source: 'GOOGLE') are fetched live from
+ * /api/reviews-google (a Vercel serverless function proxying the Google Places API
+ * "reviews" field — see frontend/api/reviews-google.ts) and must never be hard-coded,
+ * fabricated, or scraped. reviewDate holds Google's own human-readable
+ * relative_time_description (e.g. "a month ago") rather than a raw timestamp we'd have
+ * to format ourselves.
+ */
 export interface Review {
   id: number;
   authorName: string;
@@ -9,11 +17,6 @@ export interface Review {
   reviewDate: string;
   featured: boolean;
   status: 'PUBLISHED' | 'HIDDEN';
-}
-
-export interface ReviewSummary {
-  averageRating: number;
-  totalReviews: number;
 }
 
 /**
