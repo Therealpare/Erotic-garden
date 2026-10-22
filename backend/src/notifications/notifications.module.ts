@@ -1,9 +1,11 @@
 import { Global, Module } from '@nestjs/common';
-import { LineMessagingService } from './line-messaging.service';
+import { AdminNotificationsController } from './admin-notifications.controller';
+import { LineService } from './line.service';
 
 @Global()
 @Module({
-  providers: [LineMessagingService],
-  exports: [LineMessagingService],
+  controllers: [AdminNotificationsController],
+  providers: [LineService],
+  exports: [LineService],
 })
 export class NotificationsModule {}

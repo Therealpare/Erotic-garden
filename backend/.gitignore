@@ -33,3 +33,6 @@ npm-debug.log*
 # Environment
 .env
 .env.local
+# Any environment-specific variant (.env.production, .env.staging, …); only the template is tracked.
+.env.*
+!.env.example

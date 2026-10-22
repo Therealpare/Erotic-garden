@@ -58,6 +58,26 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## LINE alerts (staff notifications)
+
+New event inquiries are pushed to the garden's LINE Official Account through the
+Messaging API. Credentials are backend-only environment variables (never in Angular,
+never committed — `.env` and `.env.*` are git-ignored).
+
+1. In `backend/.env`, fill in:
+   - `LINE_CHANNEL_ACCESS_TOKEN` — LINE Developers console → your OA's Messaging API
+     channel → **Messaging API** tab → *Channel access token (long-lived)* → **Issue**.
+   - `LINE_ADMIN_USER_ID` — same channel → **Basic settings** tab → *Your user ID*
+     (starts with `U`). Can be left empty for now; alerts are simply skipped.
+   - The account that receives alerts must have added the OA as a friend.
+2. Check without sending anything: `npm run line:check`
+3. Send one test message: `npm run line:test`
+4. On a host (Render, Railway…), set the same two variables in its dashboard instead of a file.
+
+With the API running, admins can also call `GET /api/v1/admin/notifications/line/status`
+(no message sent) and `POST /api/v1/admin/notifications/line/test`. Responses never
+include the token or user id.
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).

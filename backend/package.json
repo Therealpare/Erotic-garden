@@ -21,7 +21,9 @@
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts",
     "migration:run:prod": "typeorm migration:run -d dist/database/data-source.js",
-    "seed:admin": "ts-node src/database/seeds/create-admin.ts"
+    "seed:admin": "ts-node src/database/seeds/create-admin.ts",
+    "line:check": "ts-node src/scripts/line-check.ts",
+    "line:test": "ts-node src/scripts/line-check.ts --send"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

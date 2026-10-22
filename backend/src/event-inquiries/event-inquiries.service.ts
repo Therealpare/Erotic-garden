@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomBytes } from 'crypto';
 import { Brackets, Repository } from 'typeorm';
-import { LineMessagingService } from '../notifications/line-messaging.service';
+import { LineService } from '../notifications/line.service';
 import { CreateEventInquiryDto } from './dto/create-event-inquiry.dto';
 import { QueryEventInquiriesDto } from './dto/query-event-inquiries.dto';
 import { UpdateEventInquiryDto } from './dto/update-event-inquiry.dto';
@@ -33,7 +33,7 @@ export class EventInquiriesService {
   constructor(
     @InjectRepository(EventInquiry)
     private readonly inquiries: Repository<EventInquiry>,
-    private readonly line: LineMessagingService,
+    private readonly line: LineService,
     private readonly config: ConfigService,
   ) {}
 
@@ -140,7 +140,7 @@ export class EventInquiriesService {
         `${adminUrl.replace(/\/$/, '')}/admin/events/${inquiry.id}`,
       );
 
-    if (await this.line.pushText(lines.join('\n'))) {
+    if (await this.line.pushToAdmin(lines.join('\n'))) {
       await this.inquiries
         .update(inquiry.id, { lineNotifiedAt: new Date() })
         .catch((error) =>
