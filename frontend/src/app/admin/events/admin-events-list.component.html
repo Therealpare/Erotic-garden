@@ -1,0 +1,60 @@
+<h1 class="font-display text-3xl text-forest">Event inquiries</h1>
+<p class="mt-1 text-sm text-stone">Requests submitted from the /events page, newest first.</p>
+
+<form class="mt-6 flex flex-wrap items-end gap-4" (ngSubmit)="applyFilters()" role="search">
+  <div class="w-full sm:w-72">
+    <label for="inq-search" [class]="labelClass">Search</label>
+    <input id="inq-search" name="search" type="search" [(ngModel)]="search" placeholder="Name, email, phone or EV- code" [class]="inputClass" />
+  </div>
+  <div>
+    <label for="inq-status" [class]="labelClass">Status</label>
+    <select id="inq-status" name="status" [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()" [class]="inputClass">
+      <option value="">All statuses</option>
+      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+    </select>
+  </div>
+  <button type="submit" class="border border-forest px-4 py-2 text-sm text-forest hover:bg-forest hover:text-ivory">Search</button>
+</form>
+
+<p *ngIf="error()" class="mt-6 border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta" role="alert">{{ error() }}</p>
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+
+<ng-container *ngIf="!loading() && !error()">
+  <div class="relative mt-6 overflow-x-auto border border-stone/20 bg-white">
+    <table class="w-full min-w-[820px] text-left text-sm">
+      <thead class="border-b border-stone/20 bg-cream/60 text-xs uppercase tracking-wider text-stone">
+        <tr>
+          <th scope="col" class="px-4 py-3">Reference</th>
+          <th scope="col" class="px-4 py-3">Received</th>
+          <th scope="col" class="px-4 py-3">Name</th>
+          <th scope="col" class="px-4 py-3">Event</th>
+          <th scope="col" class="px-4 py-3">Date</th>
+          <th scope="col" class="px-4 py-3">Guests</th>
+          <th scope="col" class="px-4 py-3">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="items().length === 0">
+          <td colspan="7" class="px-4 py-10 text-center text-stone">No inquiries match.</td>
+        </tr>
+        <tr *ngFor="let inquiry of items()" class="border-b border-stone/10 last:border-0 hover:bg-cream/30">
+          <td class="px-4 py-3">
+            <a [routerLink]="['/admin/events', inquiry.id]" class="font-medium text-forest hover:underline">{{ inquiry.referenceCode }}</a>
+          </td>
+          <td class="whitespace-nowrap px-4 py-3 text-stone">{{ inquiry.createdAt | date: 'd MMM y, HH:mm' }}</td>
+          <td class="px-4 py-3">{{ inquiry.name }}</td>
+          <td class="px-4 py-3">{{ inquiry.eventType }}</td>
+          <td class="whitespace-nowrap px-4 py-3">{{ inquiry.preferredDate }}<span *ngIf="inquiry.flexibleDate" class="text-stone"> (flex)</span></td>
+          <td class="px-4 py-3">{{ inquiry.guestCount }}</td>
+          <td class="px-4 py-3"><span class="px-2 py-0.5 text-xs" [ngClass]="badge[inquiry.status]">{{ inquiry.status }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav *ngIf="pageCount() > 1" class="mt-4 flex items-center gap-3 text-sm" aria-label="Pagination">
+    <button type="button" [disabled]="page() === 1" (click)="goToPage(page() - 1)" class="border border-stone/30 px-3 py-1 disabled:opacity-40">Previous</button>
+    <span class="text-stone">Page {{ page() }} of {{ pageCount() }} · {{ total() }} total</span>
+    <button type="button" [disabled]="page() >= pageCount()" (click)="goToPage(page() + 1)" class="border border-stone/30 px-3 py-1 disabled:opacity-40">Next</button>
+  </nav>
+</ng-container>

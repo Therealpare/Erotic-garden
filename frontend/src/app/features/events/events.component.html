@@ -1,0 +1,201 @@
+<section class="border-b border-stone/10 bg-cream py-24 sm:py-32">
+  <app-container>
+    <p class="mb-5 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'events.hero.eyebrow' | translate }}</p>
+    <h1 class="max-w-3xl whitespace-pre-line text-5xl leading-tight sm:text-7xl">{{ 'events.hero.headline' | translate }}</h1>
+    <p class="mt-6 max-w-lg text-base leading-relaxed text-stone">{{ 'events.hero.sub' | translate }}</p>
+  </app-container>
+</section>
+
+<section class="py-24 sm:py-32">
+  <app-container>
+    <app-section-header [eyebrow]="'events.steps.eyebrow' | translate" [headline]="'events.steps.headline' | translate"></app-section-header>
+    <ol class="mt-14 grid grid-cols-1 gap-10 md:grid-cols-3">
+      <li *ngFor="let step of steps" class="border-t border-stone/20 pt-6">
+        <p class="font-display text-4xl text-gold" aria-hidden="true">0{{ step }}</p>
+        <h3 class="mt-4 font-display text-2xl text-forest">{{ 'events.steps.step' + step + 'Title' | translate }}</h3>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'events.steps.step' + step + 'Body' | translate }}</p>
+      </li>
+    </ol>
+  </app-container>
+</section>
+
+<section id="inquiry" class="bg-cream py-24 sm:py-32" aria-labelledby="inquiry-title">
+  <app-container>
+    <div class="mx-auto max-w-2xl">
+      <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'events.form.eyebrow' | translate }}</p>
+      <h2 id="inquiry-title" class="text-4xl leading-tight sm:text-5xl">{{ 'events.form.headline' | translate }}</h2>
+
+      <!-- No API configured for this build: be honest and route visitors to Contact. -->
+      <div *ngIf="!isAvailable" class="mt-10 border border-stone/30 p-8">
+        <p class="text-sm leading-relaxed text-stone">{{ 'events.form.unavailable' | translate }}</p>
+        <app-button class="mt-6 inline-block" variant="secondary" routerLink="/contact">{{ 'events.form.contactLink' | translate }}</app-button>
+      </div>
+
+      <div
+        *ngIf="isAvailable && state() === 'success'"
+        id="inquiry-success"
+        tabindex="-1"
+        class="mt-10 scroll-mt-28 border border-forest/20 bg-ivory p-10 text-center focus:outline-none"
+        role="status"
+      >
+        <p class="font-display text-3xl text-forest">{{ 'events.success.title' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'events.success.body' | translate }}</p>
+        <p class="mt-4 font-display text-3xl tracking-wide text-terracotta">{{ referenceCode() }}</p>
+        <button
+          type="button"
+          (click)="startOver()"
+          class="mt-8 text-xs font-medium uppercase tracking-widest2 text-forest underline-offset-4 hover:text-terracotta hover:underline"
+        >
+          {{ 'events.success.another' | translate }}
+        </button>
+      </div>
+
+      <form
+        *ngIf="isAvailable && state() !== 'success'"
+        id="event-inquiry-form"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+        class="mt-10 space-y-6"
+      >
+        <p class="text-xs text-stone"><span class="text-terracotta" aria-hidden="true">*</span> {{ 'events.form.required' | translate }}</p>
+
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div class="sm:col-span-2">
+            <label for="ev-name" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.name' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input id="ev-name" type="text" formControlName="name" autocomplete="name" required
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('name')" [attr.aria-describedby]="fieldInvalid('name') ? 'ev-name-error' : null" />
+            <p *ngIf="fieldInvalid('name')" id="ev-name-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.nameError' | translate }}</p>
+          </div>
+
+          <div>
+            <label for="ev-email" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.email' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input id="ev-email" type="email" formControlName="email" autocomplete="email" required
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('email')" [attr.aria-describedby]="fieldInvalid('email') ? 'ev-email-error' : null" />
+            <p *ngIf="fieldInvalid('email')" id="ev-email-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.emailError' | translate }}</p>
+          </div>
+
+          <div>
+            <label for="ev-phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.phone' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input id="ev-phone" type="tel" formControlName="phone" autocomplete="tel" required
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('phone')" [attr.aria-describedby]="fieldInvalid('phone') ? 'ev-phone-error' : null" />
+            <p *ngIf="fieldInvalid('phone')" id="ev-phone-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.phoneError' | translate }}</p>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="ev-org" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.organization' | translate }} <span class="normal-case tracking-normal text-stone/70">({{ 'events.form.optional' | translate }})</span>
+            </label>
+            <input id="ev-org" type="text" formControlName="organization" autocomplete="organization"
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none" />
+          </div>
+
+          <div class="sm:col-span-2">
+            <label for="ev-type" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.eventType' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <select id="ev-type" formControlName="eventType" required
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('eventType')" [attr.aria-describedby]="fieldInvalid('eventType') ? 'ev-type-error' : null">
+              <option value="" disabled>—</option>
+              <option *ngFor="let type of eventTypes" [value]="type">{{ 'events.form.eventTypes.' + type | translate }}</option>
+            </select>
+            <p *ngIf="fieldInvalid('eventType')" id="ev-type-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.eventTypeError' | translate }}</p>
+          </div>
+
+          <div>
+            <label for="ev-date" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.preferredDate' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input id="ev-date" type="date" formControlName="preferredDate" [min]="minDate" required
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('preferredDate')" [attr.aria-describedby]="fieldInvalid('preferredDate') ? 'ev-date-error' : null" />
+            <p *ngIf="fieldInvalid('preferredDate')" id="ev-date-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.dateError' | translate }}</p>
+            <label class="mt-3 flex items-center gap-3 text-sm text-stone">
+              <input type="checkbox" formControlName="flexibleDate" class="h-4 w-4 accent-forest" />
+              {{ 'events.form.flexibleDate' | translate }}
+            </label>
+          </div>
+
+          <div>
+            <label for="ev-guests" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+              {{ 'events.form.guestCount' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+            </label>
+            <input id="ev-guests" type="number" inputmode="numeric" min="1" max="1000" formControlName="guestCount" required
+              class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('guestCount')" [attr.aria-describedby]="fieldInvalid('guestCount') ? 'ev-guests-error' : null" />
+            <p *ngIf="fieldInvalid('guestCount')" id="ev-guests-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.guestError' | translate }}</p>
+          </div>
+        </div>
+
+        <fieldset>
+          <legend class="mb-3 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'events.form.contactPreference' | translate }}</legend>
+          <div class="flex flex-wrap gap-6">
+            <label *ngFor="let option of contactPreferences" class="flex items-center gap-2 text-sm text-charcoal">
+              <input type="radio" formControlName="contactPreference" [value]="option" class="h-4 w-4 accent-forest" />
+              {{ 'events.form.contactOptions.' + option | translate }}
+            </label>
+          </div>
+        </fieldset>
+
+        <div *ngIf="form.controls.contactPreference.value === 'LINE'">
+          <label for="ev-line" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+            {{ 'events.form.lineId' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+          </label>
+          <input id="ev-line" type="text" formControlName="lineId" autocomplete="off" required
+            class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+            [attr.aria-invalid]="fieldInvalid('lineId')" [attr.aria-describedby]="fieldInvalid('lineId') ? 'ev-line-error' : null" />
+          <p *ngIf="fieldInvalid('lineId')" id="ev-line-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.lineIdError' | translate }}</p>
+        </div>
+
+        <div>
+          <label for="ev-message" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">
+            {{ 'events.form.message' | translate }} <span class="text-terracotta" aria-hidden="true">*</span>
+          </label>
+          <textarea id="ev-message" rows="6" formControlName="message" required
+            class="w-full border border-stone/30 bg-ivory px-4 py-3 text-sm focus:border-forest focus:outline-none"
+            [attr.aria-invalid]="fieldInvalid('message')"
+            [attr.aria-describedby]="fieldInvalid('message') ? 'ev-message-hint ev-message-error' : 'ev-message-hint'"></textarea>
+          <p id="ev-message-hint" class="mt-2 text-xs text-stone/80">{{ 'events.form.messageHint' | translate }}</p>
+          <p *ngIf="fieldInvalid('message')" id="ev-message-error" class="mt-1 text-xs text-terracotta">{{ 'events.form.messageError' | translate }}</p>
+        </div>
+
+        <!-- Honeypot: invisible and unreachable for people; bots that fill it are dropped server-side. -->
+        <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <label for="ev-website">Website</label>
+          <input id="ev-website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div>
+          <label class="flex items-start gap-3 text-sm leading-relaxed text-charcoal">
+            <input type="checkbox" formControlName="consent" required class="mt-1 h-4 w-4 shrink-0 accent-forest"
+              [attr.aria-invalid]="fieldInvalid('consent')" [attr.aria-describedby]="fieldInvalid('consent') ? 'ev-consent-error' : null" />
+            <span>{{ 'events.form.consent' | translate }} <span class="text-terracotta" aria-hidden="true">*</span></span>
+          </label>
+          <p *ngIf="fieldInvalid('consent')" id="ev-consent-error" class="mt-2 text-xs text-terracotta">{{ 'events.form.consentError' | translate }}</p>
+        </div>
+
+        <div aria-live="polite">
+          <p *ngIf="state() === 'error'" class="text-sm text-terracotta">
+            {{ 'events.form.errorMessage' | translate }}
+            <a routerLink="/contact" class="underline underline-offset-4">{{ 'events.form.contactLink' | translate }}</a>
+          </p>
+          <p *ngIf="state() === 'rate-limited'" class="text-sm text-terracotta">{{ 'events.form.rateLimited' | translate }}</p>
+        </div>
+
+        <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
+          {{ state() === 'loading' ? ('events.form.sending' | translate) : ('events.form.submit' | translate) }}
+        </app-button>
+      </form>
+    </div>
+  </app-container>
+</section>

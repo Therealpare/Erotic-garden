@@ -1,0 +1,71 @@
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="font-display text-3xl text-forest">Media</h1>
+    <p class="mt-1 text-sm text-stone">Videos, articles, magazines, TV and reels shown on /media. One featured YouTube video appears on the Home page.</p>
+  </div>
+  <a routerLink="/admin/media/new" class="bg-forest px-4 py-2 text-sm text-ivory hover:bg-charcoal">+ Add media</a>
+</div>
+
+<form class="mt-6 flex flex-wrap items-end gap-4" (ngSubmit)="load()">
+  <div>
+    <label for="media-type-filter" [class]="labelClass">Type</label>
+    <select id="media-type-filter" name="type" [(ngModel)]="typeFilter" (ngModelChange)="load()" [class]="inputClass">
+      <option value="">All types</option>
+      <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="media-status-filter" [class]="labelClass">Status</label>
+    <select id="media-status-filter" name="status" [(ngModel)]="statusFilter" (ngModelChange)="load()" [class]="inputClass">
+      <option value="">All statuses</option>
+      <option value="PUBLISHED">Published</option>
+      <option value="DRAFT">Draft</option>
+    </select>
+  </div>
+</form>
+
+<p *ngIf="error()" class="mt-6 border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta" role="alert">{{ error() }}</p>
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+
+<div *ngIf="!loading() && !error()" class="relative mt-6 overflow-x-auto border border-stone/20 bg-white">
+  <table class="w-full min-w-[720px] text-left text-sm">
+    <thead class="border-b border-stone/20 bg-cream/60 text-xs uppercase tracking-wider text-stone">
+      <tr>
+        <th scope="col" class="px-4 py-3">Title</th>
+        <th scope="col" class="px-4 py-3">Type</th>
+        <th scope="col" class="px-4 py-3">Source</th>
+        <th scope="col" class="px-4 py-3">Status</th>
+        <th scope="col" class="px-4 py-3">Order</th>
+        <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="items().length === 0">
+        <td colspan="6" class="px-4 py-10 text-center text-stone">No media yet. Add the first item.</td>
+      </tr>
+      <tr *ngFor="let item of items()" class="border-b border-stone/10 last:border-0">
+        <td class="px-4 py-3">
+          <a [routerLink]="['/admin/media', item.id]" class="font-medium text-forest hover:underline">{{ item.title }}</a>
+          <span *ngIf="item.isFeatured" class="ml-2 bg-gold/25 px-2 py-0.5 text-xs text-charcoal">★ Featured on Home</span>
+        </td>
+        <td class="px-4 py-3">{{ item.type }}</td>
+        <td class="px-4 py-3">{{ item.source }}</td>
+        <td class="px-4 py-3"><span class="px-2 py-0.5 text-xs" [ngClass]="badge[item.status]">{{ item.status }}</span></td>
+        <td class="px-4 py-3">{{ item.sortOrder }}</td>
+        <td class="whitespace-nowrap px-4 py-3 text-right">
+          <a [routerLink]="['/admin/media', item.id]" class="text-forest hover:underline">Edit</a>
+          <ng-container *ngIf="canDelete()">
+            <button *ngIf="pendingDeleteId() !== item.id" type="button" (click)="pendingDeleteId.set(item.id)" class="ml-4 text-terracotta hover:underline">
+              Delete
+            </button>
+            <span *ngIf="pendingDeleteId() === item.id" class="ml-4">
+              <span class="text-stone">Delete permanently?</span>
+              <button type="button" (click)="confirmDelete(item)" class="ml-2 font-medium text-terracotta hover:underline">Yes, delete</button>
+              <button type="button" (click)="pendingDeleteId.set(null)" class="ml-2 text-stone hover:underline">Cancel</button>
+            </span>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

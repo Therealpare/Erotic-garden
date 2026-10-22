@@ -1,29 +1,29 @@
 <header class="fixed inset-x-0 top-0 z-50 border-b border-stone/10 bg-ivory/95 backdrop-blur-sm">
   <app-container>
-    <div class="flex h-20 items-center justify-between">
-      <a routerLink="/" class="font-display text-xl tracking-wide text-forest" (click)="closeMenu()">
+    <div class="flex h-20 items-center justify-between gap-8">
+      <a routerLink="/" class="whitespace-nowrap font-display text-xl tracking-wide text-forest" (click)="closeMenu()">
         Erotic Garden <span class="text-terracotta">&amp;</span> Teahouse
       </a>
 
-      <nav class="hidden items-center gap-8 lg:flex" aria-label="Primary">
+      <nav class="hidden items-center gap-5 min-[1440px]:flex 2xl:gap-8" aria-label="Primary">
         <a
           *ngFor="let link of links()"
           [routerLink]="link.path"
           routerLinkActive="text-terracotta"
-          class="text-xs font-medium uppercase tracking-widest2 text-charcoal transition-colors duration-400 hover:text-terracotta"
+          class="whitespace-nowrap text-xs font-medium uppercase tracking-widest2 text-charcoal transition-colors duration-400 hover:text-terracotta"
         >
           {{ link.label }}
         </a>
       </nav>
 
-      <div class="hidden items-center gap-6 lg:flex">
+      <div class="hidden items-center gap-6 min-[1440px]:flex">
         <app-language-switcher></app-language-switcher>
         <app-button variant="primary" routerLink="/booking">{{ 'cta.planYourVisit' | translate }}</app-button>
       </div>
 
       <button
         type="button"
-        class="flex h-10 w-10 items-center justify-center lg:hidden"
+        class="flex h-10 w-10 items-center justify-center min-[1440px]:hidden"
         (click)="toggleMenu()"
         [attr.aria-expanded]="isMenuOpen()"
         aria-controls="mobile-menu"
@@ -54,7 +54,7 @@
     id="mobile-menu"
     *ngIf="isMenuOpen()"
     aria-label="Mobile"
-    class="border-t border-stone/10 bg-ivory lg:hidden"
+    class="border-t border-stone/10 bg-ivory min-[1440px]:hidden"
   >
     <app-container>
       <div class="flex flex-col gap-6 py-8">

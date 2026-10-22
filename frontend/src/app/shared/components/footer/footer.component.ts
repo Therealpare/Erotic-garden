@@ -36,6 +36,8 @@ export class FooterComponent {
       { label: t.art, path: '/art' },
       { label: t.gallery, path: '/gallery' },
       { label: t.teaHouse, path: '/tea-house' },
+      { label: t.media, path: '/media' },
+      { label: t.events, path: '/events' },
       { label: t.visit, path: '/visit' },
     ];
   });

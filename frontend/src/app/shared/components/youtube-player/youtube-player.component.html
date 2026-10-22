@@ -1,0 +1,35 @@
+<div class="relative aspect-video w-full overflow-hidden bg-charcoal">
+  <iframe
+    *ngIf="playing(); else poster"
+    class="absolute inset-0 h-full w-full"
+    [src]="embedUrl()"
+    [title]="title()"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
+
+  <ng-template #poster>
+    <button
+      type="button"
+      class="group absolute inset-0 h-full w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+      (click)="play()"
+      [attr.aria-label]="playLabel() + ' ' + title()"
+    >
+      <img
+        [src]="thumbnail()"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover transition-transform duration-800 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+      />
+      <span class="absolute inset-0 bg-charcoal/25 transition-colors duration-400 group-hover:bg-charcoal/40" aria-hidden="true"></span>
+      <span
+        class="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ivory/90 text-forest transition-transform duration-400 group-hover:scale-110 motion-reduce:transition-none"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 24 24" class="ml-1 h-6 w-6" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+      </span>
+    </button>
+  </ng-template>
+</div>

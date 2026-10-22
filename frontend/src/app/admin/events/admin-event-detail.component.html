@@ -1,0 +1,53 @@
+<a routerLink="/admin/events" class="text-sm text-forest hover:underline">← Back to inquiries</a>
+
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+<p *ngIf="error() && !inquiry()" class="mt-6 border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta" role="alert">{{ error() }}</p>
+
+<ng-container *ngIf="inquiry() as inq">
+  <div class="mt-4 flex flex-wrap items-center gap-3">
+    <h1 class="font-display text-3xl text-forest">{{ inq.referenceCode }}</h1>
+    <span class="px-2 py-0.5 text-xs" [ngClass]="badge[inq.status]">{{ inq.status }}</span>
+  </div>
+  <p class="mt-1 text-sm text-stone">
+    Received {{ inq.createdAt | date: 'd MMM y, HH:mm' }}
+    · LINE alert: {{ inq.lineNotifiedAt ? 'sent ' + (inq.lineNotifiedAt | date: 'd MMM, HH:mm') : 'not sent' }}
+  </p>
+
+  <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <section class="border border-stone/20 bg-white p-6 lg:col-span-2" aria-labelledby="inq-details">
+      <h2 id="inq-details" class="text-xs font-medium uppercase tracking-wider text-stone">Details</h2>
+      <dl class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 text-sm sm:grid-cols-2">
+        <div><dt class="text-stone">Name</dt><dd class="font-medium">{{ inq.name }}</dd></div>
+        <div *ngIf="inq.organization"><dt class="text-stone">Organisation</dt><dd>{{ inq.organization }}</dd></div>
+        <div><dt class="text-stone">Email</dt><dd><a [href]="'mailto:' + inq.email" class="text-forest hover:underline">{{ inq.email }}</a></dd></div>
+        <div><dt class="text-stone">Phone</dt><dd><a [href]="'tel:' + inq.phone" class="text-forest hover:underline">{{ inq.phone }}</a></dd></div>
+        <div><dt class="text-stone">Prefers</dt><dd>{{ inq.contactPreference }}<span *ngIf="inq.lineId"> — LINE ID: {{ inq.lineId }}</span></dd></div>
+        <div><dt class="text-stone">Event type</dt><dd>{{ inq.eventType }}</dd></div>
+        <div><dt class="text-stone">Preferred date</dt><dd>{{ inq.preferredDate }}<span *ngIf="inq.flexibleDate"> (flexible)</span></dd></div>
+        <div><dt class="text-stone">Guests</dt><dd>{{ inq.guestCount }}</dd></div>
+        <div class="sm:col-span-2"><dt class="text-stone">Message</dt><dd class="mt-1 whitespace-pre-line">{{ inq.message }}</dd></div>
+      </dl>
+    </section>
+
+    <section class="border border-stone/20 bg-white p-6" aria-labelledby="inq-manage">
+      <h2 id="inq-manage" class="text-xs font-medium uppercase tracking-wider text-stone">Manage</h2>
+      <form class="mt-4 space-y-4" (ngSubmit)="save()">
+        <div>
+          <label for="inq-status-edit" [class]="labelClass">Status</label>
+          <select id="inq-status-edit" name="status" [(ngModel)]="status" [class]="inputClass">
+            <option *ngFor="let option of statuses" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+        <div>
+          <label for="inq-notes" [class]="labelClass">Internal notes</label>
+          <textarea id="inq-notes" name="adminNotes" rows="6" [(ngModel)]="adminNotes" [class]="inputClass" placeholder="Visible to admins only"></textarea>
+        </div>
+        <p *ngIf="error()" class="text-sm text-terracotta" role="alert">{{ error() }}</p>
+        <p *ngIf="saved()" class="text-sm text-forest" role="status">Saved.</p>
+        <button type="submit" [disabled]="saving()" class="w-full bg-forest px-4 py-2 text-sm text-ivory hover:bg-charcoal disabled:opacity-50">
+          {{ saving() ? 'Saving…' : 'Save changes' }}
+        </button>
+      </form>
+    </section>
+  </div>
+</ng-container>

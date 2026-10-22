@@ -13,11 +13,13 @@ import { ImageRevealComponent } from '../../shared/components/image-reveal/image
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { MapComponent } from '../../shared/components/map/map.component';
 import { TripadvisorWidgetComponent } from '../../shared/components/tripadvisor-widget/tripadvisor-widget.component';
+import { YoutubePlayerComponent } from '../../shared/components/youtube-player/youtube-player.component';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 import { ArtworkService } from '../../core/services/artwork.service';
 import { ReviewService } from '../../core/services/review.service';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
+import { MediaService } from '../../core/services/media.service';
 import { ArtworkCategory } from '../../core/models/artwork.model';
 import { ReviewPlatform } from '../../core/models/review.model';
 import { TRIPADVISOR_WIDGET_EMBED_HTML } from '../../core/config/tripadvisor.config';
@@ -51,6 +53,7 @@ interface HighlightCard {
     EmptyStateComponent,
     MapComponent,
     TripadvisorWidgetComponent,
+    YoutubePlayerComponent,
     TranslatePipe,
   ],
   templateUrl: './home.component.html',
@@ -61,6 +64,7 @@ export class HomeComponent {
   private readonly reviewService = inject(ReviewService);
   private readonly siteSettingsService = inject(SiteSettingsService);
   private readonly languageService = inject(LanguageService);
+  private readonly mediaService = inject(MediaService);
 
   readonly highlights = computed<HighlightCard[]>(() => {
     const t = getDictionary(this.languageService.lang()).home.experience;
@@ -131,6 +135,10 @@ export class HomeComponent {
   readonly hasTripadvisorWidget = computed(() => this.tripadvisorEmbedHtml.length > 0);
 
   readonly hasAnyReviewContent = computed(() => this.hasReviewSources() || this.hasGoogleReviews() || this.hasTripadvisorWidget());
+
+  /** Hidden entirely until a featured YouTube video is published through /admin/media. */
+  readonly featuredVideo = toSignal(this.mediaService.getFeaturedVideo(), { initialValue: null });
+  readonly featuredVideoPlaying = signal(false);
 
   readonly siteSettings = toSignal(this.siteSettingsService.get(), { initialValue: undefined });
   readonly directionsUrl = computed(() => {

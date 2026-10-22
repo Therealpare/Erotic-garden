@@ -217,6 +217,37 @@
   </app-container>
 </section>
 
+<!-- FEATURED VIDEO — rendered only when the CMS has a published, featured YouTube video -->
+<section *ngIf="featuredVideo() as video" class="bg-cream py-24 sm:py-32" aria-labelledby="featured-video-title">
+  <app-container>
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
+        <app-youtube-player
+          [videoId]="video.youtubeVideoId!"
+          [title]="video.title"
+          [thumbnailUrl]="video.thumbnailUrl"
+          [playLabel]="'home.featuredVideo.playLabel' | translate"
+          [(playing)]="featuredVideoPlaying"
+        ></app-youtube-player>
+      </div>
+
+      <div class="lg:col-span-2">
+        <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'home.featuredVideo.eyebrow' | translate }}</p>
+        <h2 id="featured-video-title" class="text-4xl leading-tight sm:text-5xl">{{ video.title }}</h2>
+        <p class="mt-4 text-xs uppercase tracking-widest2 text-stone">{{ video.source }}</p>
+        <p *ngIf="video.summary" class="mt-6 text-base leading-relaxed text-stone">{{ video.summary }}</p>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <app-button variant="primary" (click)="featuredVideoPlaying.set(true)">{{ 'home.featuredVideo.watch' | translate }}</app-button>
+          <a routerLink="/media" class="text-xs font-medium uppercase tracking-widest2 text-forest transition-colors duration-400 hover:text-terracotta">
+            {{ 'home.featuredVideo.moreMedia' | translate }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </app-container>
+</section>
+
 <!-- 18. REVIEWS -->
 <section class="py-24 sm:py-32">
   <app-container>

@@ -1,0 +1,35 @@
+<div class="min-h-screen bg-ivory">
+  <a href="#admin-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2">
+    Skip to content
+  </a>
+
+  <header class="border-b border-stone/20 bg-forest text-ivory">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <div class="flex flex-wrap items-center gap-6">
+        <a routerLink="/admin/events" class="font-display text-xl">EG Admin</a>
+        <nav aria-label="Admin" class="flex flex-wrap gap-1">
+          <a
+            *ngFor="let link of links"
+            [routerLink]="link.path"
+            routerLinkActive="bg-ivory/15"
+            class="px-3 py-1.5 text-sm text-ivory/90 hover:bg-ivory/10"
+          >
+            {{ link.label }}
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-4 text-sm">
+        <span *ngIf="auth.user() as user" class="text-ivory/80">{{ user.name }} · {{ user.role }}</span>
+        <a routerLink="/" class="text-ivory/80 hover:text-ivory">View site</a>
+        <button type="button" (click)="auth.logout()" class="border border-ivory/40 px-3 py-1.5 hover:bg-ivory hover:text-forest">
+          Sign out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="admin-content" class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+    <router-outlet></router-outlet>
+  </div>
+</div>
