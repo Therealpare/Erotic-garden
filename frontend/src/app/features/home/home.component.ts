@@ -8,7 +8,6 @@ import { SectionHeaderComponent } from '../../shared/components/section-header/s
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { ExperienceCardComponent } from '../../shared/components/experience-card/experience-card.component';
 import { ArtworkCardComponent } from '../../shared/components/artwork-card/artwork-card.component';
-import { ReviewCardComponent } from '../../shared/components/review-card/review-card.component';
 import { ImageRevealComponent } from '../../shared/components/image-reveal/image-reveal.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 import { MapComponent } from '../../shared/components/map/map.component';
@@ -48,7 +47,6 @@ interface HighlightCard {
     ButtonComponent,
     ExperienceCardComponent,
     ArtworkCardComponent,
-    ReviewCardComponent,
     ImageRevealComponent,
     EmptyStateComponent,
     MapComponent,
@@ -128,13 +126,10 @@ export class HomeComponent {
     TRIPADVISOR: 'Tripadvisor',
   };
 
-  readonly googleReviews = toSignal(this.reviewService.getGoogleReviews(), { initialValue: [] });
-  readonly hasGoogleReviews = computed(() => this.googleReviews().length > 0);
-
   readonly tripadvisorEmbedHtml = TRIPADVISOR_WIDGET_EMBED_HTML;
   readonly hasTripadvisorWidget = computed(() => this.tripadvisorEmbedHtml.length > 0);
 
-  readonly hasAnyReviewContent = computed(() => this.hasReviewSources() || this.hasGoogleReviews() || this.hasTripadvisorWidget());
+  readonly hasAnyReviewContent = computed(() => this.hasReviewSources() || this.hasTripadvisorWidget());
 
   /** Hidden entirely until a featured YouTube video is published through /admin/media. */
   readonly featuredVideo = toSignal(this.mediaService.getFeaturedVideo(), { initialValue: null });

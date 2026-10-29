@@ -99,7 +99,6 @@ export const EN = {
       emptyMessage: 'We only publish verified reviews from Tripadvisor, Google and direct visitors — check back soon.',
       reviewsSuffix: 'Reviews',
       more: 'More →',
-      poweredByGoogle: 'Reviews powered by Google',
     },
     planVisit: {
       eyebrow: 'Before You Go',
