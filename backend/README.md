@@ -91,3 +91,15 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Production deployment (Render + Neon + Cloudinary)
+
+1. **Neon** → create a project (region: Singapore) → copy the pooled connection string.
+2. **Cloudinary** → Dashboard → API Keys: cloud name, API key, API secret.
+3. **Render** → New → Blueprint → this repository. `render.yaml` defines the service; Render
+   asks for the secrets marked `sync: false` (`DATABASE_URL`, LINE and Cloudinary keys) and
+   generates `JWT_SECRET` / `JWT_REFRESH_SECRET` itself. Migrations run on every start.
+4. Create the first admin from the Render service's **Shell** tab:
+   `ADMIN_EMAIL=… ADMIN_PASSWORD=… node dist/database/seeds/create-admin.js`
+5. Set `apiBaseUrl` in `frontend/src/environments/environment.prod.ts` to
+   `https://<service>.onrender.com/api/v1` and push; Vercel redeploys the site.
