@@ -1,34 +1,49 @@
-<div class="flex items-center gap-1 text-xs font-medium uppercase tracking-widest2" role="group" aria-label="Switch language">
+<div class="relative inline-block">
   <button
     type="button"
-    (click)="languageService.setLang('en')"
-    [attr.aria-pressed]="languageService.lang() === 'en'"
-    class="px-1.5 py-1 transition-colors duration-400"
-    [class.text-terracotta]="languageService.lang() === 'en'"
-    [class.text-stone]="languageService.lang() !== 'en'"
+    data-lang-trigger
+    (click)="toggle()"
+    (keydown)="onTriggerKeydown($event)"
+    aria-haspopup="menu"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-label]="menuLabel() + ': ' + current().label"
+    class="flex items-center gap-1.5 py-1 text-xs font-medium uppercase tracking-widest2 text-charcoal transition-colors duration-400 hover:text-terracotta focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-forest"
+    [class.text-terracotta]="isOpen()"
   >
-    EN
+    {{ current().short }}
+    <svg
+      class="h-2.5 w-2.5 transition-transform duration-400"
+      [class.rotate-180]="isOpen()"
+      viewBox="0 0 10 6"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
   </button>
-  <span class="text-stone/40" aria-hidden="true">|</span>
-  <button
-    type="button"
-    (click)="languageService.setLang('th')"
-    [attr.aria-pressed]="languageService.lang() === 'th'"
-    class="px-1.5 py-1 transition-colors duration-400"
-    [class.text-terracotta]="languageService.lang() === 'th'"
-    [class.text-stone]="languageService.lang() !== 'th'"
+
+  <div
+    *ngIf="isOpen()"
+    role="menu"
+    [attr.aria-label]="menuLabel()"
+    (keydown)="onMenuKeydown($event)"
+    class="absolute top-full z-50 mt-3 min-w-[10rem] border border-stone/15 bg-ivory py-2 shadow-[0_12px_32px_-12px_rgba(39,38,34,0.25)]"
+    [class.right-0]="align === 'right'"
+    [class.left-0]="align === 'left'"
   >
-    TH
-  </button>
-  <span class="text-stone/40" aria-hidden="true">|</span>
-  <button
-    type="button"
-    (click)="languageService.setLang('de')"
-    [attr.aria-pressed]="languageService.lang() === 'de'"
-    class="px-1.5 py-1 transition-colors duration-400"
-    [class.text-terracotta]="languageService.lang() === 'de'"
-    [class.text-stone]="languageService.lang() !== 'de'"
-  >
-    DE
-  </button>
+    <button
+      *ngFor="let option of languages"
+      type="button"
+      role="menuitemradio"
+      [attr.aria-checked]="option.code === current().code"
+      [attr.lang]="option.code"
+      (click)="select(option.code)"
+      class="flex w-full items-center justify-between gap-6 px-5 py-2.5 text-left text-sm transition-colors duration-400 hover:bg-cream focus:bg-cream focus:outline-none"
+      [class.text-terracotta]="option.code === current().code"
+      [class.text-charcoal]="option.code !== current().code"
+    >
+      <span>{{ option.label }}</span>
+      <span class="text-[10px] font-medium uppercase tracking-widest2 text-stone">{{ option.short }}</span>
+    </button>
+  </div>
 </div>
