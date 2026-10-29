@@ -1,25 +1,30 @@
-<!-- HERO -->
-<section class="relative flex h-[70vh] min-h-[480px] items-end overflow-hidden bg-charcoal">
-  <img
-    src="images/garden/cof3.webp"
-    alt="Three bags of Erotic Garden single origin arabica coffee lined up outdoors"
-    class="absolute inset-0 h-full w-full object-cover"
-  />
-  <div class="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-charcoal/40"></div>
+<!-- HERO: the cover photo is shown whole from tablet up (no bag or label cropped);
+     on phones it is framed on the three bags, leaving out the lettering baked into the photo. -->
+<section class="bg-forest text-ivory">
+  <div class="relative aspect-[3/2] w-full overflow-hidden bg-forest sm:aspect-[12/5]">
+    <img
+      src="images/coffee/coverpage.webp"
+      [alt]="'coffee.hero.coverAlt' | translate"
+      width="1920"
+      height="800"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover object-right sm:object-contain sm:object-center"
+    />
+  </div>
   <app-container>
-    <div class="relative z-10 max-w-xl pb-20">
-      <div class="mb-5 flex flex-wrap gap-2">
-        <span class="border border-ivory/40 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory/90">{{
+    <div class="flex flex-col gap-6 border-t border-gold/30 py-12 sm:py-16 lg:flex-row lg:items-end lg:justify-between">
+      <h1 class="max-w-2xl text-5xl leading-tight text-ivory sm:text-6xl">{{ 'coffee.hero.headline' | translate }}</h1>
+      <div class="flex flex-wrap gap-2 lg:justify-end">
+        <span class="border border-ivory/30 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-cream/90">{{
           'coffee.hero.badge1' | translate
         }}</span>
-        <span class="border border-ivory/40 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory/90">{{
+        <span class="border border-ivory/30 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-cream/90">{{
           'coffee.hero.badge2' | translate
         }}</span>
-        <span class="border border-ivory/40 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory/90">{{
+        <span class="border border-ivory/30 px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-cream/90">{{
           'coffee.hero.badge3' | translate
         }}</span>
       </div>
-      <h1 class="text-5xl leading-tight text-ivory sm:text-7xl">{{ 'coffee.hero.headline' | translate }}</h1>
     </div>
   </app-container>
 </section>
@@ -79,56 +84,206 @@
   </app-container>
 </section>
 
-<!-- TASTE PROFILE (hidden until owner-verified per-batch details exist) -->
-<section class="py-24 sm:py-32" *ngIf="hasTasteProfile()">
+<!-- OUR COFFEES: one card per bag, details as printed on its label (managed in /admin/coffee) -->
+<section *ngIf="shop().status !== 'ready' || beans().length" id="our-coffees" class="scroll-mt-20 py-24 sm:py-32">
   <app-container>
-    <app-section-header [eyebrow]="'coffee.tasteProfile.eyebrow' | translate" [headline]="'coffee.tasteProfile.headline' | translate"></app-section-header>
-    <div class="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      <div *ngFor="let product of products()" class="border border-stone/15 p-8">
-        <h3 class="text-xl">{{ (product.localizedName ?? product.name) | localized }}</h3>
-        <dl class="mt-4 space-y-2 text-sm">
-          <div *ngIf="product.origin" class="flex justify-between gap-4">
-            <dt class="text-stone">{{ 'coffee.tasteProfile.labelOrigin' | translate }}</dt>
-            <dd class="text-charcoal">{{ product.origin }}</dd>
+    <app-section-header
+      [eyebrow]="'coffee.beans.eyebrow' | translate"
+      [headline]="'coffee.beans.headline' | translate"
+      [supportingText]="'coffee.beans.sub' | translate"
+    ></app-section-header>
+    <p *ngIf="shop().status === 'loading'" class="mt-14 text-sm text-stone" role="status">{{ 'states.loading' | translate }}</p>
+    <p *ngIf="shop().status === 'error'" class="mt-14 border border-terracotta/30 p-6 text-sm text-terracotta" role="alert">{{ 'states.error' | translate }}</p>
+
+    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-3">
+      <article *ngFor="let bean of beans()" class="flex flex-col">
+        <div class="aspect-[3/4] w-full bg-cream">
+          <app-image-reveal *ngIf="bean.product.images[0] as image" [src]="image.imageUrl" [alt]="image.altText"></app-image-reveal>
+        </div>
+        <h3 class="mt-6 text-3xl">{{ bean.product.name | localized }}</h3>
+        <p *ngIf="bean.product.description | localized as description" class="mt-2 text-sm leading-relaxed text-stone">{{ description }}</p>
+
+        <dl class="mt-5 divide-y divide-stone/15 border-y border-stone/15 text-sm">
+          <div *ngIf="bean.product.origin && bean.product.origin !== bean.product.name.en" class="grid grid-cols-[6.5rem_1fr] gap-4 py-3">
+            <dt class="text-xs uppercase tracking-widest2 text-stone">{{ 'coffee.beans.labelOrigin' | translate }}</dt>
+            <dd class="text-charcoal">{{ bean.product.origin }}</dd>
           </div>
-          <div *ngIf="product.process" class="flex justify-between gap-4">
-            <dt class="text-stone">{{ 'coffee.tasteProfile.labelProcess' | translate }}</dt>
-            <dd class="text-charcoal">{{ product.process }}</dd>
+          <div *ngIf="bean.product.process" class="grid grid-cols-[6.5rem_1fr] gap-4 py-3">
+            <dt class="text-xs uppercase tracking-widest2 text-stone">{{ 'coffee.beans.labelProcess' | translate }}</dt>
+            <dd class="text-charcoal">{{ bean.process ? (bean.process.name | localized) : bean.product.process }}</dd>
           </div>
-          <div *ngIf="product.roastLevel" class="flex justify-between gap-4">
-            <dt class="text-stone">{{ 'coffee.tasteProfile.labelRoast' | translate }}</dt>
-            <dd class="text-charcoal">{{ product.roastLevel }}</dd>
+          <div *ngIf="bean.product.roastLevel" class="grid grid-cols-[6.5rem_1fr] gap-4 py-3">
+            <dt class="text-xs uppercase tracking-widest2 text-stone">{{ 'coffee.beans.labelRoast' | translate }}</dt>
+            <dd class="text-charcoal">
+              {{ bean.roastLabel }}
+              <span
+                *ngIf="bean.roastStep !== null"
+                class="mt-2 grid max-w-[11rem] grid-cols-5 gap-1"
+                role="img"
+                [attr.aria-label]="('coffee.beans.roastScale' | translate) + ': ' + bean.roastLabel"
+              >
+                <span
+                  *ngFor="let step of roastSteps"
+                  class="block transition-all duration-400"
+                  [class.h-2]="step === bean.roastStep"
+                  [class.h-1]="step !== bean.roastStep"
+                  [style.background-color]="roastColors[step]"
+                  [style.opacity]="step === bean.roastStep ? 1 : 0.2"
+                ></span>
+              </span>
+            </dd>
           </div>
-          <div *ngIf="product.tastingNotes" class="flex justify-between gap-4">
-            <dt class="text-stone">{{ 'coffee.tasteProfile.labelNotes' | translate }}</dt>
-            <dd class="text-charcoal">{{ product.tastingNotes }}</dd>
+          <div *ngIf="bean.product.altitude" class="grid grid-cols-[6.5rem_1fr] gap-4 py-3">
+            <dt class="text-xs uppercase tracking-widest2 text-stone">{{ 'coffee.beans.labelAltitude' | translate }}</dt>
+            <dd class="text-charcoal">{{ bean.product.altitude }}</dd>
+          </div>
+          <div *ngIf="bean.product.tastingNotes" class="grid grid-cols-[6.5rem_1fr] gap-4 py-3">
+            <dt class="text-xs uppercase tracking-widest2 text-stone">{{ 'coffee.beans.labelNotes' | translate }}</dt>
+            <dd class="text-charcoal">{{ bean.product.tastingNotes }}</dd>
+          </div>
+          <div *ngIf="bean.product.body" class="grid grid-cols-[6.5rem_1fr] gap-4 py-3">
+            <dt class="text-xs uppercase tracking-widest2 text-stone">{{ 'coffee.beans.labelBody' | translate }}</dt>
+            <dd class="text-charcoal">{{ bean.product.body }}</dd>
           </div>
         </dl>
-      </div>
+
+        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+          <button
+            *ngIf="bean.roastStep !== null && guide().data.roastLevels.length"
+            type="button"
+            (click)="scrollTo('roast-levels')"
+            class="text-xs font-medium uppercase tracking-widest2 text-forest underline-offset-4 transition-colors duration-400 hover:text-terracotta hover:underline"
+          >
+            {{ 'coffee.beans.aboutRoast' | translate }} →
+          </button>
+          <button
+            *ngIf="bean.process"
+            type="button"
+            (click)="scrollTo('processing')"
+            class="text-xs font-medium uppercase tracking-widest2 text-forest underline-offset-4 transition-colors duration-400 hover:text-terracotta hover:underline"
+          >
+            {{ 'coffee.beans.aboutProcess' | translate }} →
+          </button>
+        </div>
+      </article>
     </div>
   </app-container>
 </section>
 
-<!-- COFFEE COLLECTION -->
-<section class="bg-cream py-24 sm:py-32">
+<!-- ROAST LEVELS: general explainers (managed in /admin/coffee-guide) -->
+<section *ngIf="guide().data.roastLevels.length" id="roast-levels" class="scroll-mt-20 bg-cream py-24 sm:py-32">
   <app-container>
     <app-section-header
-      [eyebrow]="'coffee.collection.eyebrow' | translate"
-      [headline]="'coffee.collection.headline' | translate"
-      [supportingText]="'coffee.collection.sub' | translate"
+      [eyebrow]="'coffee.roast.eyebrow' | translate"
+      [headline]="'coffee.roast.headline' | translate"
+      [supportingText]="'coffee.roast.sub' | translate"
     ></app-section-header>
-    <p *ngIf="collection().status === 'loading'" class="mt-14 text-sm text-stone" role="status">{{ 'states.loading' | translate }}</p>
-    <p *ngIf="collection().status === 'error'" class="mt-14 border border-terracotta/30 p-6 text-sm text-terracotta" role="alert">{{ 'states.error' | translate }}</p>
-    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3">
-      <div *ngFor="let product of products()">
-        <div class="aspect-[3/4] w-full bg-ivory">
-          <app-image-reveal [src]="product.imageUrl" [alt]="product.altText"></app-image-reveal>
+
+    <div class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
+      <article *ngFor="let entry of guide().data.roastLevels; let i = index" class="flex flex-col border border-stone/15 bg-ivory">
+        <div class="aspect-[4/3] w-full">
+          <app-image-reveal *ngIf="entry.imageUrl; else beanArt" [src]="entry.imageUrl" [alt]="entry.imageAlt || (entry.name | localized)"></app-image-reveal>
+          <ng-template #beanArt>
+            <div class="flex h-full w-full items-center justify-center bg-gradient-to-b from-ivory to-cream/70" aria-hidden="true">
+              <svg viewBox="0 0 160 100" class="h-24 w-40 sm:h-28 sm:w-44">
+                <g [attr.fill]="roastColor(entry.key)">
+                  <ellipse cx="46" cy="54" rx="22" ry="31" transform="rotate(-28 46 54)" />
+                  <ellipse cx="82" cy="46" rx="22" ry="31" transform="rotate(8 82 46)" />
+                  <ellipse cx="118" cy="56" rx="22" ry="31" transform="rotate(34 118 56)" />
+                </g>
+                <g fill="none" stroke="#F4EFE5" stroke-opacity="0.55" stroke-width="2.4" stroke-linecap="round">
+                  <path d="M46 25 C 38 42, 54 64, 46 83" transform="rotate(-28 46 54)" />
+                  <path d="M82 17 C 74 34, 90 56, 82 75" transform="rotate(8 82 46)" />
+                  <path d="M118 27 C 110 44, 126 66, 118 85" transform="rotate(34 118 56)" />
+                </g>
+              </svg>
+            </div>
+          </ng-template>
         </div>
-        <h3 class="mt-5 text-xl">{{ (product.localizedName ?? product.name) | localized }}</h3>
-        <p *ngIf="product.weight" class="mt-1 text-xs uppercase tracking-widest2 text-terracotta">{{ product.weight }}</p>
-        <p *ngIf="product.price" class="mt-1 text-sm text-stone">{{ product.price }}</p>
-      </div>
+        <div class="flex flex-1 flex-col p-8">
+          <p class="text-xs font-medium uppercase tracking-widest2 text-terracotta">0{{ i + 1 }}</p>
+          <h3 class="mt-2 text-3xl">{{ entry.name | localized }}</h3>
+          <dl class="mb-6 mt-6 space-y-5 text-sm leading-relaxed">
+            <div *ngIf="entry.summary | localized as text">
+              <dt class="text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'coffee.roast.labelAppearance' | translate }}</dt>
+              <dd class="mt-1 text-charcoal">{{ text }}</dd>
+            </div>
+            <div *ngIf="entry.flavor | localized as text">
+              <dt class="text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'coffee.roast.labelFlavor' | translate }}</dt>
+              <dd class="mt-1 text-charcoal">{{ text }}</dd>
+            </div>
+            <div *ngIf="entry.brewing | localized as text">
+              <dt class="text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'coffee.roast.labelBrewing' | translate }}</dt>
+              <dd class="mt-1 text-charcoal">{{ text }}</dd>
+            </div>
+          </dl>
+          <p *ngIf="beansAtRoast(entry.key) as matches" [hidden]="!matches.length" class="mt-auto border-t border-stone/15 pt-5 text-xs leading-relaxed text-stone">
+            <span class="font-medium uppercase tracking-widest2 text-forest">{{ 'coffee.roast.inRange' | translate }}</span><br />
+            {{ beanNames(matches) }}
+          </p>
+        </div>
+      </article>
     </div>
+    <p class="mt-10 max-w-3xl text-xs leading-relaxed text-stone">{{ 'coffee.roast.note' | translate }}</p>
+  </app-container>
+</section>
+
+<!-- PROCESSING METHODS: general explainers (managed in /admin/coffee-guide) -->
+<section *ngIf="guide().data.processes.length" id="processing" class="scroll-mt-20 bg-forest py-24 text-ivory sm:py-32">
+  <app-container>
+    <div class="max-w-2xl">
+      <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'coffee.processing.eyebrow' | translate }}</p>
+      <h2 class="text-4xl leading-tight text-ivory sm:text-5xl">{{ 'coffee.processing.headline' | translate }}</h2>
+      <p class="mt-6 text-base leading-relaxed text-cream/80">{{ 'coffee.processing.sub' | translate }}</p>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-0 md:divide-x md:divide-ivory/15">
+      <article *ngFor="let entry of guide().data.processes; let i = index" class="flex flex-col md:px-8 md:first:pl-0 md:last:pr-0">
+        <div *ngIf="entry.imageUrl; else processIcon" class="mb-8 aspect-[4/3] w-full">
+          <app-image-reveal [src]="entry.imageUrl" [alt]="entry.imageAlt || (entry.name | localized)"></app-image-reveal>
+        </div>
+        <ng-template #processIcon>
+          <div class="mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-gold/50 text-gold" aria-hidden="true">
+            <svg viewBox="0 0 32 32" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" [ngSwitch]="entry.key">
+              <g *ngSwitchCase="'washed'">
+                <path d="M11 5c3 4.5 5 7.6 5 10a5 5 0 0 1-10 0c0-2.4 2-5.5 5-10z" />
+                <path d="M22 13c2.4 3.6 4 6 4 7.8a4 4 0 0 1-8 0c0-1.8 1.6-4.2 4-7.8z" />
+                <path d="M4 27c2-1.3 4-1.3 6 0s4 1.3 6 0 4-1.3 6 0 4 1.3 6 0" />
+              </g>
+              <g *ngSwitchCase="'natural'">
+                <circle cx="16" cy="16" r="5.5" />
+                <path d="M16 3v3.5M16 25.5V29M3 16h3.5M25.5 16H29M6.8 6.8l2.5 2.5M22.7 22.7l2.5 2.5M6.8 25.2l2.5-2.5M22.7 9.3l2.5-2.5" />
+              </g>
+              <g *ngSwitchCase="'honey'">
+                <path d="M16 4l9.5 5.5v11L16 26l-9.5-5.5v-11z" />
+                <path d="M16 11c2.6 3.4 4 5.4 4 7a4 4 0 0 1-8 0c0-1.6 1.4-3.6 4-7z" />
+              </g>
+              <g *ngSwitchDefault>
+                <ellipse cx="16" cy="16" rx="7" ry="10" transform="rotate(-20 16 16)" />
+                <path d="M16 6.5c-2.5 5 2.5 13-0.5 19" transform="rotate(-20 16 16)" />
+              </g>
+            </svg>
+          </div>
+        </ng-template>
+        <p class="text-xs font-medium uppercase tracking-widest2 text-gold">0{{ i + 1 }}</p>
+        <h3 class="mt-2 text-3xl text-ivory">{{ entry.name | localized }}</h3>
+        <dl class="mb-6 mt-6 space-y-5 text-sm leading-relaxed">
+          <div *ngIf="entry.summary | localized as text">
+            <dt class="text-xs font-medium uppercase tracking-widest2 text-gold/90">{{ 'coffee.processing.labelMethod' | translate }}</dt>
+            <dd class="mt-1 text-cream/85">{{ text }}</dd>
+          </div>
+          <div *ngIf="entry.flavor | localized as text">
+            <dt class="text-xs font-medium uppercase tracking-widest2 text-gold/90">{{ 'coffee.processing.labelFlavor' | translate }}</dt>
+            <dd class="mt-1 text-cream/85">{{ text }}</dd>
+          </div>
+        </dl>
+        <p *ngIf="beansWithProcess(entry.key) as matches" [hidden]="!matches.length" class="mt-auto border-t border-ivory/15 pt-5 text-xs leading-relaxed text-cream/70">
+          <span class="font-medium uppercase tracking-widest2 text-ivory">{{ 'coffee.processing.inRange' | translate }}</span><br />
+          {{ beanNames(matches) }}
+        </p>
+      </article>
+    </div>
+    <p class="mt-12 max-w-3xl text-xs leading-relaxed text-cream/60">{{ 'coffee.processing.note' | translate }}</p>
   </app-container>
 </section>
 

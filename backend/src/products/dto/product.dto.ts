@@ -122,6 +122,16 @@ export class CreateProductDto {
   @IsOptional()
   @ValidateIf((_, v) => v !== null)
   @IsString()
+  @MaxLength(80)
+  altitude?: string | null;
+  @IsOptional()
+  @ValidateIf((_, v) => v !== null)
+  @IsString()
+  @MaxLength(80)
+  body?: string | null;
+  @IsOptional()
+  @ValidateIf((_, v) => v !== null)
+  @IsString()
   @MaxLength(300)
   tastingNotes?: string | null;
 

@@ -150,6 +150,18 @@ export const routes: Routes = [
             title: 'Edit product — EG Admin',
           },
           {
+            path: 'coffee-guide',
+            loadComponent: () =>
+              import('./admin/coffee-guide/admin-coffee-guide-list.component').then((m) => m.AdminCoffeeGuideListComponent),
+            title: 'Coffee guide — EG Admin',
+          },
+          {
+            path: 'coffee-guide/:id',
+            loadComponent: () =>
+              import('./admin/coffee-guide/admin-coffee-guide-form.component').then((m) => m.AdminCoffeeGuideFormComponent),
+            title: 'Edit coffee guide — EG Admin',
+          },
+          {
             path: 'media',
             loadComponent: () =>
               import('./admin/media/admin-media-list.component').then((m) => m.AdminMediaListComponent),

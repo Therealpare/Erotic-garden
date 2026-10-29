@@ -27,10 +27,26 @@
       </select>
     </div>
     <div><label for="coffee-origin" [class]="labelClass">Origin</label><input id="coffee-origin" type="text" formControlName="origin" [class]="inputClass" /></div>
-    <div><label for="coffee-process" [class]="labelClass">Process</label><input id="coffee-process" type="text" formControlName="process" [class]="inputClass" /></div>
-    <div><label for="coffee-roast" [class]="labelClass">Roast level</label><input id="coffee-roast" type="text" formControlName="roastLevel" [class]="inputClass" /></div>
+    <div>
+      <label for="coffee-process" [class]="labelClass">Process</label>
+      <input id="coffee-process" type="text" formControlName="process" list="coffee-process-options" [class]="inputClass" />
+      <datalist id="coffee-process-options"><option value="Washed"></option><option value="Natural"></option><option value="Honey"></option></datalist>
+    </div>
+    <div>
+      <label for="coffee-roast" [class]="labelClass">Roast level</label>
+      <input id="coffee-roast" type="text" formControlName="roastLevel" list="coffee-roast-options" [class]="inputClass" />
+      <datalist id="coffee-roast-options">
+        <option value="Light"></option><option value="Light-Medium"></option><option value="Medium"></option><option value="Medium-Dark"></option><option value="Dark"></option>
+      </datalist>
+    </div>
+    <div><label for="coffee-altitude" [class]="labelClass">Altitude</label><input id="coffee-altitude" type="text" formControlName="altitude" [class]="inputClass" placeholder="e.g. 1,300 MASL" /></div>
     <div><label for="coffee-notes" [class]="labelClass">Tasting notes</label><input id="coffee-notes" type="text" formControlName="tastingNotes" [class]="inputClass" /></div>
-    <p class="text-xs text-stone sm:col-span-2">Origin, process, roast and tasting notes stay hidden on the site while empty — only fill in confirmed details.</p>
+    <div><label for="coffee-body" [class]="labelClass">Body</label><input id="coffee-body" type="text" formControlName="body" [class]="inputClass" placeholder="e.g. Full body" /></div>
+    <p class="text-xs text-stone sm:col-span-2">
+      Copy these from the bag's label. Empty fields stay hidden on the site — only fill in confirmed details.
+      A coffee with a roast or process appears under "Our coffees" on /coffee; process (Washed / Natural / Honey) and roast (Light … Dark) link it to the explainers.
+      It is only offered in the shop once it has at least one size.
+    </p>
     <div>
       <label for="coffee-order" [class]="labelClass">Display order</label>
       <input id="coffee-order" type="number" min="0" formControlName="sortOrder" [class]="inputClass" />

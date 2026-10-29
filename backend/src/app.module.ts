@@ -22,6 +22,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { MediaModule } from './media/media.module';
 import { EventInquiriesModule } from './event-inquiries/event-inquiries.module';
 import { StorageModule } from './storage/storage.module';
+import { CoffeeGuideModule } from './coffee-guide/coffee-guide.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { StorageModule } from './storage/storage.module';
     OrdersModule,
     MediaModule,
     EventInquiriesModule,
+    CoffeeGuideModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],

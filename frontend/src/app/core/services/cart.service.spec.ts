@@ -19,6 +19,8 @@ const product = (variants: ProductVariant[]): Product => ({
   origin: null,
   process: null,
   roastLevel: null,
+  altitude: null,
+  body: null,
   tastingNotes: null,
   images: [{ imageUrl: 'images/garden/cof2.webp', altText: 'bag', sortOrder: 0 }],
   variants,

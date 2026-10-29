@@ -34,6 +34,14 @@ export class Product {
   @Column({ name: 'roast_level', type: 'varchar', length: 80, nullable: true })
   roastLevel: string | null;
 
+  /** Growing altitude as printed on the label, e.g. "1,200 - 1,400 MASL". */
+  @Column({ type: 'varchar', length: 80, nullable: true })
+  altitude: string | null;
+
+  /** Body as printed on the label, e.g. "Full body". */
+  @Column({ type: 'varchar', length: 80, nullable: true })
+  body: string | null;
+
   @Column({
     name: 'tasting_notes',
     type: 'varchar',

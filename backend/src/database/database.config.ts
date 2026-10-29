@@ -11,6 +11,7 @@ import { ProductImage } from '../products/entities/product-image.entity';
 import { ProductVariant } from '../products/entities/product-variant.entity';
 import { Order } from '../orders/entities/order.entity';
 import { OrderItem } from '../orders/entities/order-item.entity';
+import { CoffeeGuideEntry } from '../coffee-guide/entities/coffee-guide-entry.entity';
 
 export const ENTITIES = [
   User,
@@ -25,6 +26,7 @@ export const ENTITIES = [
   ProductVariant,
   Order,
   OrderItem,
+  CoffeeGuideEntry,
 ];
 
 /**

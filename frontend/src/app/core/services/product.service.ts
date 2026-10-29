@@ -19,6 +19,8 @@ const FALLBACK_PRODUCTS: Product[] = [
     origin: null,
     process: null,
     roastLevel: null,
+    altitude: null,
+    body: null,
     tastingNotes: null,
     images: [
       {
@@ -29,7 +31,54 @@ const FALLBACK_PRODUCTS: Product[] = [
     ],
     variants: [{ id: 0, label: '100g', price: 350, currency: 'THB', stock: 0, soldOut: true }],
   },
+  // The three bags in the owner's photos, with details exactly as printed on each label.
+  // No sizes or prices have been confirmed for them, so they are not offered in the shop.
+  labelProfile(2, 'khun-chang-khian-honey', { en: 'Khun Chang Khian', th: 'ขุนช่างเคี่ยน', de: 'Khun Chang Khian' }, {
+    origin: 'Khun Chang Khian',
+    process: 'Honey',
+    altitude: '1,200 – 1,400 MASL',
+    roastLevel: 'Light',
+    tastingNotes: 'White floral, lemon, apple, honey',
+    body: 'Smooth body',
+    altText: 'Yellow bag of Erotic Garden single origin coffee from Khun Chang Khian, honey process, light roast',
+  }),
+  labelProfile(3, 'pangkhum-natural', { en: 'Pangkhum', th: 'ปางขุม', de: 'Pangkhum' }, {
+    origin: 'Pangkhum',
+    process: 'Natural',
+    altitude: '1,400 MASL',
+    roastLevel: 'Light-Medium',
+    tastingNotes: 'Berry, floral, rosé wine, stone fruit, chocolate',
+    body: 'Full body',
+    altText: 'Red bag of Erotic Garden single origin coffee from Pangkhum, natural process, light-medium roast',
+  }),
+  labelProfile(4, 'mae-poon-luang-washed', { en: 'Mae Poon Luang', th: 'แม่พูนหลวง', de: 'Mae Poon Luang' }, {
+    origin: 'Mae Poon Luang',
+    process: 'Washed',
+    altitude: '1,300 MASL',
+    roastLevel: 'Medium-Dark',
+    tastingNotes: 'White flowers, honey, oolong tea',
+    body: 'Full body',
+    altText: 'Blue bag of Erotic Garden single origin coffee from Mae Poon Luang, washed process, medium-dark roast',
+  }),
 ];
+
+function labelProfile(
+  id: number,
+  slug: string,
+  name: Product['name'],
+  label: Pick<Product, 'origin' | 'process' | 'altitude' | 'roastLevel' | 'tastingNotes' | 'body'> & { altText: string },
+): Product {
+  const { altText, ...details } = label;
+  return {
+    id,
+    slug,
+    name,
+    description: {},
+    ...details,
+    images: [{ imageUrl: `images/coffee/${slug}.webp`, altText, sortOrder: 0 }],
+    variants: [],
+  };
+}
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {

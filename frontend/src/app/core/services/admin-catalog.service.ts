@@ -5,8 +5,9 @@ import { API_BASE_URL } from '../config/api.config';
 import { AdminGalleryImage, GalleryCategory, GalleryImageInput } from '../models/gallery.model';
 import { ApiTeaCategory, ApiTeaMenuItem, TeaMenuItemInput } from '../models/tea-menu.model';
 import { AdminProduct, AdminProductVariant, ProductInput } from '../models/product.model';
+import { AdminCoffeeGuideEntry, CoffeeGuideEntryInput } from '../models/coffee-guide.model';
 
-/** Admin API for images, gallery, tea house menu and coffee products (auth added by the interceptor). */
+/** Admin API for images, gallery, tea house menu, coffee products and the coffee guide (auth added by the interceptor). */
 @Injectable({ providedIn: 'root' })
 export class AdminCatalogService {
   private readonly http = inject(HttpClient);
@@ -76,5 +77,16 @@ export class AdminCatalogService {
   }
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/products/${id}`);
+  }
+
+  // Coffee guide (roast levels and processing methods)
+  coffeeGuideEntries(): Observable<AdminCoffeeGuideEntry[]> {
+    return this.http.get<AdminCoffeeGuideEntry[]>(`${this.api}/coffee-guide`);
+  }
+  coffeeGuideEntry(id: number): Observable<AdminCoffeeGuideEntry> {
+    return this.http.get<AdminCoffeeGuideEntry>(`${this.api}/coffee-guide/${id}`);
+  }
+  updateCoffeeGuideEntry(id: number, input: CoffeeGuideEntryInput): Observable<AdminCoffeeGuideEntry> {
+    return this.http.patch<AdminCoffeeGuideEntry>(`${this.api}/coffee-guide/${id}`, input);
   }
 }

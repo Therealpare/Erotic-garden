@@ -17,6 +17,7 @@ export class AdminLayoutComponent {
     { label: 'Gallery', path: '/admin/gallery' },
     { label: 'Tea House', path: '/admin/tea' },
     { label: 'Coffee & stock', path: '/admin/coffee' },
+    { label: 'Coffee guide', path: '/admin/coffee-guide' },
     { label: 'Media', path: '/admin/media' },
   ];
 }

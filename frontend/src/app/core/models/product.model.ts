@@ -25,6 +25,9 @@ export interface Product {
   origin: string | null;
   process: string | null;
   roastLevel: string | null;
+  /** Label fields: growing altitude and body, as printed on the bag. */
+  altitude: string | null;
+  body: string | null;
   tastingNotes: string | null;
   images: ProductImage[];
   variants: ProductVariant[];
@@ -65,6 +68,8 @@ export interface ProductInput {
   origin: string | null;
   process: string | null;
   roastLevel: string | null;
+  altitude: string | null;
+  body: string | null;
   tastingNotes: string | null;
   status: ProductStatus;
   sortOrder: number;

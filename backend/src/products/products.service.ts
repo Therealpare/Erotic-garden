@@ -64,6 +64,8 @@ export class ProductsService {
       origin: product.origin,
       process: product.process,
       roastLevel: product.roastLevel,
+      altitude: product.altitude,
+      body: product.body,
       tastingNotes: product.tastingNotes,
       sortOrder: product.sortOrder,
       images: product.images,
@@ -180,6 +182,8 @@ export class ProductsService {
       'origin',
       'process',
       'roastLevel',
+      'altitude',
+      'body',
       'tastingNotes',
     ] as const) {
       if (dto[key] !== undefined) fields[key] = dto[key]?.trim() || null;
