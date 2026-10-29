@@ -1,0 +1,70 @@
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="font-display text-3xl text-forest">Tea House menu</h1>
+    <p class="mt-1 text-sm text-stone">Tea, coffee, drinks and desserts on the /tea-house page. "Sold out" stays visible with a label; "Hidden" removes it from the site.</p>
+  </div>
+  <a routerLink="/admin/tea/new" class="bg-forest px-4 py-2 text-sm text-ivory hover:bg-charcoal">+ Add menu item</a>
+</div>
+
+<p *ngIf="error()" class="mt-6 border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta" role="alert">
+  {{ error() }} <button type="button" class="ml-2 underline" (click)="load()">Retry</button>
+</p>
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+
+<section *ngFor="let group of groups()" class="mt-8" [attr.aria-labelledby]="'tea-group-' + group.category.id">
+  <h2 [id]="'tea-group-' + group.category.id" class="text-xs font-medium uppercase tracking-wider text-stone">{{ group.category.name }} · {{ group.items.length }}</h2>
+  <p *ngIf="group.items.length === 0" class="mt-2 border border-dashed border-stone/30 bg-white px-4 py-6 text-sm text-stone">No items in this category.</p>
+  <div *ngIf="group.items.length > 0" class="mt-2 overflow-x-auto border border-stone/20 bg-white">
+    <table class="w-full min-w-[720px] text-left text-sm">
+      <thead class="border-b border-stone/20 bg-cream/60 text-xs uppercase tracking-wider text-stone">
+        <tr>
+          <th scope="col" class="px-4 py-2">Item</th>
+          <th scope="col" class="px-4 py-2">Price</th>
+          <th scope="col" class="px-4 py-2">Availability</th>
+          <th scope="col" class="px-4 py-2">Order</th>
+          <th scope="col" class="px-4 py-2"><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of group.items" class="border-b border-stone/10 last:border-0">
+          <td class="px-4 py-2">
+            <div class="flex items-center gap-3">
+              <img *ngIf="item.imageUrl" [src]="resolve(item.imageUrl)" alt="" class="h-10 w-10 object-cover" loading="lazy" />
+              <div>
+                <a [routerLink]="['/admin/tea', item.id]" class="font-medium text-forest hover:underline">{{ item.name.en }}</a>
+                <p class="text-xs text-stone">{{ item.name.th || '—' }}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-2">{{ priceLabel(item) }}</td>
+          <td class="px-4 py-2">
+            <div class="inline-flex border border-stone/30" role="group" [attr.aria-label]="'Availability of ' + item.name.en">
+              <button
+                *ngFor="let status of statuses"
+                type="button"
+                class="px-2 py-1 text-xs disabled:opacity-50"
+                [ngClass]="item.status === status ? (status === 'AVAILABLE' ? 'bg-forest text-ivory' : status === 'SOLD_OUT' ? 'bg-terracotta text-ivory' : 'bg-stone text-ivory') : 'text-charcoal hover:bg-cream'"
+                [attr.aria-pressed]="item.status === status"
+                [disabled]="savingId() === item.id"
+                (click)="setStatus(item, status)"
+              >
+                {{ statusLabel[status] }}
+              </button>
+            </div>
+          </td>
+          <td class="px-4 py-2">{{ item.sortOrder }}</td>
+          <td class="whitespace-nowrap px-4 py-2 text-right">
+            <a [routerLink]="['/admin/tea', item.id]" class="text-forest hover:underline">Edit</a>
+            <ng-container *ngIf="canDelete()">
+              <button *ngIf="pendingDeleteId() !== item.id" type="button" class="ml-3 text-terracotta hover:underline" (click)="pendingDeleteId.set(item.id)">Delete</button>
+              <span *ngIf="pendingDeleteId() === item.id" class="ml-3">
+                <button type="button" class="font-medium text-terracotta hover:underline" (click)="confirmDelete(item)">Yes, delete</button>
+                <button type="button" class="ml-2 text-stone hover:underline" (click)="pendingDeleteId.set(null)">Cancel</button>
+              </span>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

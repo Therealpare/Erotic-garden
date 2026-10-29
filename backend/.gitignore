@@ -1,5 +1,8 @@
 # compiled output
 /dist
+
+# Admin-uploaded images (local storage driver)
+/uploads
 /node_modules
 
 # Logs

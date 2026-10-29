@@ -1,0 +1,53 @@
+<a routerLink="/admin/gallery" class="text-sm text-forest hover:underline">← Back to gallery</a>
+<h1 class="mt-4 font-display text-3xl text-forest">{{ id === null ? 'Add photo' : 'Edit photo' }}</h1>
+
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+<p *ngIf="error() && loading()" class="mt-6 text-sm text-terracotta" role="alert">{{ error() }}</p>
+
+<form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="save()" novalidate class="mt-6 grid max-w-3xl grid-cols-1 gap-5 border border-stone/20 bg-white p-6 sm:grid-cols-2">
+  <div class="sm:col-span-2">
+    <p [class]="labelClass">Photo *</p>
+    <app-image-upload-field [(url)]="imageUrl" label="Photo" inputId="gal-image"></app-image-upload-field>
+    <p *ngIf="imageMissing() && !imageUrl()" class="mt-1 text-xs text-terracotta">Please upload a photo.</p>
+  </div>
+
+  <div class="sm:col-span-2">
+    <label for="gal-title" [class]="labelClass">Title *</label>
+    <input id="gal-title" type="text" formControlName="title" [class]="inputClass" [attr.aria-invalid]="invalid('title')" />
+    <p *ngIf="invalid('title')" class="mt-1 text-xs text-terracotta">Title is required (max 200 characters).</p>
+  </div>
+
+  <div class="sm:col-span-2">
+    <label for="gal-alt" [class]="labelClass">Alt text (describe the photo) *</label>
+    <input id="gal-alt" type="text" formControlName="altText" [class]="inputClass" [attr.aria-invalid]="invalid('altText')" placeholder="e.g. A pale sculpture of two figures among palms" />
+    <p *ngIf="invalid('altText')" class="mt-1 text-xs text-terracotta">Alt text is required for accessibility.</p>
+  </div>
+
+  <div class="sm:col-span-2">
+    <label for="gal-desc" [class]="labelClass">Caption (optional)</label>
+    <textarea id="gal-desc" rows="3" formControlName="description" [class]="inputClass"></textarea>
+  </div>
+
+  <div>
+    <label for="gal-category" [class]="labelClass">Category *</label>
+    <select id="gal-category" formControlName="categoryId" [class]="inputClass">
+      <option *ngFor="let category of categories()" [ngValue]="category.id">{{ category.name }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="gal-order" [class]="labelClass">Display order</label>
+    <input id="gal-order" type="number" min="0" formControlName="sortOrder" [class]="inputClass" />
+    <p class="mt-1 text-xs text-stone">Lower numbers appear first.</p>
+  </div>
+
+  <label class="flex items-center gap-2 text-sm"><input type="checkbox" formControlName="isPublished" class="h-4 w-4 accent-forest" /> Published on the website</label>
+  <label class="flex items-center gap-2 text-sm"><input type="checkbox" formControlName="featured" class="h-4 w-4 accent-forest" /> Featured</label>
+
+  <p *ngIf="error() && !loading()" class="text-sm text-terracotta sm:col-span-2" role="alert">{{ error() }}</p>
+
+  <div class="flex gap-3 sm:col-span-2">
+    <button type="submit" [disabled]="saving()" class="bg-forest px-5 py-2 text-sm text-ivory hover:bg-charcoal disabled:opacity-50">{{ saving() ? 'Saving…' : 'Save' }}</button>
+    <a routerLink="/admin/gallery" class="border border-stone/30 px-5 py-2 text-sm hover:bg-cream">Cancel</a>
+  </div>
+</form>

@@ -1,18 +1,19 @@
 import { Controller, Get } from '@nestjs/common';
+import { TeaCategory } from './entities/tea-category.entity';
+import { TeaMenuItem } from './entities/tea-menu-item.entity';
 import { TeaHouseService } from './tea-house.service';
-import { TeaCategory, TeaMenuItem } from './entities/tea-menu.entity';
 
 @Controller('tea')
 export class TeaHouseController {
   constructor(private readonly teaHouseService: TeaHouseService) {}
 
   @Get('categories')
-  findCategories(): TeaCategory[] {
+  findCategories(): Promise<TeaCategory[]> {
     return this.teaHouseService.findCategories();
   }
 
   @Get('menu')
-  findMenu(): TeaMenuItem[] {
-    return this.teaHouseService.findMenu();
+  findMenu(): Promise<TeaMenuItem[]> {
+    return this.teaHouseService.findPublicMenu();
   }
 }

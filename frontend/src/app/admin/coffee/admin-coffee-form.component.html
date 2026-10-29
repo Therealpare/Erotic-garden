@@ -1,0 +1,125 @@
+<a routerLink="/admin/coffee" class="text-sm text-forest hover:underline">← Back to coffee</a>
+<h1 class="mt-4 font-display text-3xl text-forest">{{ id === null ? 'Add product' : 'Edit product' }}</h1>
+
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+<p *ngIf="error() && loading()" class="mt-6 text-sm text-terracotta" role="alert">{{ error() }}</p>
+
+<form *ngIf="!loading()" [formGroup]="form" (ngSubmit)="save()" novalidate class="mt-6 max-w-5xl space-y-6">
+  <!-- Basics -->
+  <section class="grid grid-cols-1 gap-5 border border-stone/20 bg-white p-6 sm:grid-cols-2" aria-labelledby="coffee-basics">
+    <h2 id="coffee-basics" class="text-xs font-medium uppercase tracking-wider text-stone sm:col-span-2">Product</h2>
+    <div class="sm:col-span-2">
+      <app-localized-fields [group]="form.controls.name" label="Name" idPrefix="coffee-name" [requiredEn]="true"></app-localized-fields>
+    </div>
+    <div class="sm:col-span-2">
+      <app-localized-fields [group]="form.controls.description" label="Description (optional)" idPrefix="coffee-desc" [multiline]="true"></app-localized-fields>
+    </div>
+    <div>
+      <label for="coffee-slug" [class]="labelClass">URL id (slug) *</label>
+      <input id="coffee-slug" type="text" formControlName="slug" [class]="inputClass" placeholder="e.g. single-origin-arabica" [attr.aria-invalid]="invalid(form.controls.slug)" />
+      <p *ngIf="invalid(form.controls.slug)" class="mt-1 text-xs text-terracotta">Lowercase letters, numbers and dashes only.</p>
+    </div>
+    <div>
+      <label for="coffee-status" [class]="labelClass">Shop visibility</label>
+      <select id="coffee-status" formControlName="status" [class]="inputClass">
+        <option value="ACTIVE">Visible in shop</option>
+        <option value="HIDDEN">Hidden from shop</option>
+      </select>
+    </div>
+    <div><label for="coffee-origin" [class]="labelClass">Origin</label><input id="coffee-origin" type="text" formControlName="origin" [class]="inputClass" /></div>
+    <div><label for="coffee-process" [class]="labelClass">Process</label><input id="coffee-process" type="text" formControlName="process" [class]="inputClass" /></div>
+    <div><label for="coffee-roast" [class]="labelClass">Roast level</label><input id="coffee-roast" type="text" formControlName="roastLevel" [class]="inputClass" /></div>
+    <div><label for="coffee-notes" [class]="labelClass">Tasting notes</label><input id="coffee-notes" type="text" formControlName="tastingNotes" [class]="inputClass" /></div>
+    <p class="text-xs text-stone sm:col-span-2">Origin, process, roast and tasting notes stay hidden on the site while empty — only fill in confirmed details.</p>
+    <div>
+      <label for="coffee-order" [class]="labelClass">Display order</label>
+      <input id="coffee-order" type="number" min="0" formControlName="sortOrder" [class]="inputClass" />
+    </div>
+  </section>
+
+  <!-- Photos -->
+  <section class="border border-stone/20 bg-white p-6" aria-labelledby="coffee-photos">
+    <h2 id="coffee-photos" class="text-xs font-medium uppercase tracking-wider text-stone">Photos</h2>
+    <p class="mt-1 text-xs text-stone">The first photo is the main shop image; all photos appear in the Coffee Collection.</p>
+    <ul class="mt-4 space-y-3">
+      <li *ngFor="let image of images(); let i = index; let last = last" class="flex flex-wrap items-center gap-3 border border-stone/15 p-3">
+        <div class="h-16 w-16 shrink-0 overflow-hidden bg-cream/40">
+          <img [src]="resolve(image.imageUrl)" [alt]="image.altText" class="h-full w-full object-cover" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <label [for]="'img-alt-' + i" class="sr-only">Alt text for photo {{ i + 1 }}</label>
+          <input [id]="'img-alt-' + i" type="text" [class]="inputClass" [value]="image.altText" (change)="setImageAlt(i, $any($event.target).value)" />
+          <p class="mt-1 text-xs text-stone">{{ i === 0 ? 'Main photo' : 'Photo ' + (i + 1) }}</p>
+        </div>
+        <div class="flex gap-1 text-xs">
+          <button type="button" class="border border-stone/30 px-2 py-1 disabled:opacity-30" [disabled]="i === 0" (click)="moveImage(i, -1)" [attr.aria-label]="'Move photo ' + (i + 1) + ' up'">↑</button>
+          <button type="button" class="border border-stone/30 px-2 py-1 disabled:opacity-30" [disabled]="last" (click)="moveImage(i, 1)" [attr.aria-label]="'Move photo ' + (i + 1) + ' down'">↓</button>
+          <button type="button" class="px-2 py-1 text-terracotta hover:underline" (click)="removeImage(i)">Remove</button>
+        </div>
+      </li>
+    </ul>
+    <div class="mt-4 border border-dashed border-stone/30 p-4">
+      <p [class]="labelClass">Add a photo</p>
+      <app-image-upload-field [(url)]="newImageUrl" label="New product photo" inputId="coffee-new-image"></app-image-upload-field>
+      <label for="coffee-new-alt" [class]="labelClass + ' mt-3'">Alt text *</label>
+      <input id="coffee-new-alt" type="text" [class]="inputClass" [value]="newImageAlt()" (input)="newImageAlt.set($any($event.target).value)" placeholder="e.g. A red bag of Erotic Garden coffee" />
+      <button type="button" class="mt-3 border border-forest px-3 py-1.5 text-sm text-forest hover:bg-forest hover:text-ivory" (click)="addImage()">Add photo</button>
+      <p *ngIf="imageError()" class="mt-2 text-xs text-terracotta" role="alert">{{ imageError() }}</p>
+    </div>
+  </section>
+
+  <!-- Sizes -->
+  <section class="border border-stone/20 bg-white p-6" aria-labelledby="coffee-sizes">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h2 id="coffee-sizes" class="text-xs font-medium uppercase tracking-wider text-stone">Sizes, prices &amp; stock</h2>
+        <p class="mt-1 text-xs text-stone">Customers choose a size before adding to the cart. Stock 0 = SOLD OUT for that size.</p>
+      </div>
+      <button type="button" class="border border-forest px-3 py-1.5 text-sm text-forest hover:bg-forest hover:text-ivory" (click)="addVariant()">+ Add size</button>
+    </div>
+
+    <p *ngIf="variants.length === 0" class="mt-4 text-sm text-stone">No sizes yet. Add one with its confirmed price and stock to start selling.</p>
+    <p *ngIf="variants.errors?.['duplicateLabels']" class="mt-3 text-xs text-terracotta" role="alert">Each size label must be different.</p>
+
+    <div formArrayName="variants" class="mt-4 space-y-3">
+      <div *ngFor="let group of variants.controls; let i = index" [formGroupName]="i" class="grid grid-cols-2 items-end gap-3 border border-stone/15 p-3 sm:grid-cols-6">
+        <div>
+          <label [for]="'v-label-' + i" [class]="labelClass">Size *</label>
+          <input [id]="'v-label-' + i" type="text" formControlName="label" [class]="inputClass" placeholder="e.g. 250g" [attr.aria-invalid]="invalid(group.get('label'))" />
+        </div>
+        <div>
+          <label [for]="'v-price-' + i" [class]="labelClass">Price (THB) *</label>
+          <input [id]="'v-price-' + i" type="number" min="0" step="0.01" formControlName="price" [class]="inputClass" [attr.aria-invalid]="invalid(group.get('price'))" />
+        </div>
+        <div>
+          <label [for]="'v-stock-' + i" [class]="labelClass">Stock *</label>
+          <input [id]="'v-stock-' + i" type="number" min="0" step="1" formControlName="stock" [class]="inputClass" [attr.aria-invalid]="invalid(group.get('stock'))" />
+        </div>
+        <div>
+          <label [for]="'v-sku-' + i" [class]="labelClass">SKU</label>
+          <input [id]="'v-sku-' + i" type="text" formControlName="sku" [class]="inputClass" />
+        </div>
+        <div>
+          <label [for]="'v-status-' + i" [class]="labelClass">Status</label>
+          <select [id]="'v-status-' + i" formControlName="status" [class]="inputClass">
+            <option value="ACTIVE">For sale</option>
+            <option value="INACTIVE">Not for sale</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between gap-2 sm:justify-end">
+          <span *ngIf="group.get('status')?.value === 'ACTIVE' && +group.get('stock')?.value === 0" class="bg-terracotta/15 px-2 py-0.5 text-xs text-terracotta">SOLD OUT</span>
+          <button type="button" class="text-sm text-terracotta hover:underline" (click)="removeVariant(i)">Remove</button>
+        </div>
+        <p *ngIf="invalid(group.get('label')) || invalid(group.get('price')) || invalid(group.get('stock'))" class="col-span-2 text-xs text-terracotta sm:col-span-6">
+          Size, a price of 0 or more and a whole-number stock of 0 or more are required.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <p *ngIf="error() && !loading()" class="text-sm text-terracotta" role="alert">{{ error() }}</p>
+  <div class="flex gap-3">
+    <button type="submit" [disabled]="saving()" class="bg-forest px-5 py-2 text-sm text-ivory hover:bg-charcoal disabled:opacity-50">{{ saving() ? 'Saving…' : 'Save product' }}</button>
+    <a routerLink="/admin/coffee" class="border border-stone/30 px-5 py-2 text-sm hover:bg-cream">Cancel</a>
+  </div>
+</form>

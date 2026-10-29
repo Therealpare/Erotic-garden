@@ -23,8 +23,11 @@
   <div class="pb-24">
     <app-gallery-grid [images]="filteredImages()" (imageSelected)="openLightbox($event)"></app-gallery-grid>
 
+    <p *ngIf="loadStatus() === 'loading'" class="text-sm text-stone" role="status">{{ 'states.loading' | translate }}</p>
+    <p *ngIf="loadStatus() === 'error'" class="border border-terracotta/30 p-6 text-sm text-terracotta" role="alert">{{ 'states.error' | translate }}</p>
+
     <app-empty-state
-      *ngIf="filteredImages().length === 0"
+      *ngIf="loadStatus() === 'ready' && filteredImages().length === 0"
       [title]="'gallery.emptyTitle' | translate"
       [message]="'gallery.emptyMessage' | translate"
     ></app-empty-state>

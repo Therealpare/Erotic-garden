@@ -43,15 +43,15 @@
         <h2 class="text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'checkout.summaryHeadline' | translate }}</h2>
         <div class="mt-4 divide-y divide-stone/10 border-y border-stone/10">
           <div *ngFor="let item of items()" class="flex flex-wrap items-center gap-4 py-4">
-            <img [src]="item.imageUrl" [alt]="item.name" class="h-16 w-16 shrink-0 object-cover" loading="lazy" />
+            <img [src]="item.imageUrl" [alt]="item.name | localized" class="h-16 w-16 shrink-0 object-cover" loading="lazy" />
             <div class="min-w-[120px] flex-1">
-              <p class="text-base text-charcoal">{{ item.name }}</p>
+              <p class="text-base text-charcoal">{{ item.name | localized }}</p>
               <p class="text-xs uppercase tracking-widest2 text-stone">{{ item.size }}</p>
             </div>
             <div class="flex items-center gap-2">
               <button
                 type="button"
-                (click)="updateQuantity(item.productId, item.quantity - 1)"
+                (click)="updateQuantity(item.variantId, item.quantity - 1)"
                 class="flex h-7 w-7 items-center justify-center border border-stone/30 text-stone transition-colors duration-400 hover:border-forest hover:text-forest"
                 [attr.aria-label]="'checkout.decreaseQuantity' | translate"
               >
@@ -60,8 +60,9 @@
               <span class="w-6 text-center text-sm">{{ item.quantity }}</span>
               <button
                 type="button"
-                (click)="updateQuantity(item.productId, item.quantity + 1)"
-                class="flex h-7 w-7 items-center justify-center border border-stone/30 text-stone transition-colors duration-400 hover:border-forest hover:text-forest"
+                (click)="updateQuantity(item.variantId, item.quantity + 1)"
+                [disabled]="item.quantity >= item.maxQuantity"
+                class="flex h-7 w-7 disabled:cursor-not-allowed disabled:opacity-40 items-center justify-center border border-stone/30 text-stone transition-colors duration-400 hover:border-forest hover:text-forest"
                 [attr.aria-label]="'checkout.increaseQuantity' | translate"
               >
                 +
@@ -70,7 +71,7 @@
             <p class="w-20 shrink-0 text-right text-sm text-charcoal">{{ item.currency === 'THB' ? '฿' : item.currency }}{{ item.price * item.quantity }}</p>
             <button
               type="button"
-              (click)="removeItem(item.productId)"
+              (click)="removeItem(item.variantId)"
               class="shrink-0 text-xs uppercase tracking-widest2 text-stone transition-colors duration-400 hover:text-terracotta"
             >
               {{ 'cart.remove' | translate }}
@@ -138,11 +139,19 @@
             </p>
           </div>
 
-          <p *ngIf="state() === 'error'" class="text-sm text-terracotta">
-            {{ 'checkout.form.errorMessage' | translate }}
-          </p>
+          <div aria-live="polite">
+            <p *ngIf="state() === 'error'" class="text-sm text-terracotta">
+              {{ 'checkout.form.errorMessage' | translate }}
+            </p>
+            <p *ngIf="state() === 'stock-changed'" class="text-sm text-terracotta">
+              {{ 'checkout.form.stockChanged' | translate }}
+            </p>
+            <p *ngIf="!orderingAvailable" class="text-sm text-stone">
+              {{ 'checkout.form.unavailable' | translate }}
+            </p>
+          </div>
 
-          <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
+          <app-button type="submit" variant="primary" [disabled]="state() === 'loading' || !orderingAvailable">
             {{ state() === 'loading' ? ('checkout.form.sending' | translate) : ('checkout.form.submit' | translate) }}
           </app-button>
         </form>

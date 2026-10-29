@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { GalleryCategory, GalleryImage } from '../models/gallery.model';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map, of } from 'rxjs';
+import { API_BASE_URL, isApiConfigured } from '../config/api.config';
+import { AdminGalleryImage, GalleryCategory, GalleryImage } from '../models/gallery.model';
+import { resolveImageUrl } from '../../shared/utils/image-url.util';
 
 /**
- * Gallery content. Garden/Art/People entries below now use real photography supplied
- * by the owner; Tea House entries remain placeholder imagery pending real photography
- * of that space (spec §17/§48).
+ * Gallery content comes from the database (managed in /admin/gallery). The arrays below
+ * are only the offline fallback used while a build has no API configured, so the public
+ * site keeps showing the photos it always had (spec §17/§48).
  */
 const DEMO_CATEGORIES: GalleryCategory[] = [
   { id: 1, name: 'Garden', slug: 'garden' },
@@ -81,11 +84,28 @@ const DEMO_IMAGES: GalleryImage[] = [
 
 @Injectable({ providedIn: 'root' })
 export class GalleryService {
+  private readonly http = inject(HttpClient);
+
   getCategories(): Observable<GalleryCategory[]> {
-    return of(DEMO_CATEGORIES);
+    if (!isApiConfigured()) return of(DEMO_CATEGORIES);
+    return this.http.get<GalleryCategory[]>(`${API_BASE_URL}/gallery/categories`);
   }
 
   getAll(): Observable<GalleryImage[]> {
-    return of(DEMO_IMAGES);
+    if (!isApiConfigured()) return of(DEMO_IMAGES);
+    return this.http.get<AdminGalleryImage[]>(`${API_BASE_URL}/gallery`).pipe(
+      map((images) =>
+        images.map((image) => ({
+          id: image.id,
+          categorySlug: image.category.slug,
+          title: image.title,
+          imageUrl: resolveImageUrl(image.imageUrl),
+          description: image.description,
+          altText: image.altText,
+          featured: image.featured,
+          sortOrder: image.sortOrder,
+        })),
+      ),
+    );
   }
 }

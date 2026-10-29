@@ -14,6 +14,9 @@ export class AdminLayoutComponent {
 
   readonly links = [
     { label: 'Event inquiries', path: '/admin/events' },
+    { label: 'Gallery', path: '/admin/gallery' },
+    { label: 'Tea House', path: '/admin/tea' },
+    { label: 'Coffee & stock', path: '/admin/coffee' },
     { label: 'Media', path: '/admin/media' },
   ];
 }

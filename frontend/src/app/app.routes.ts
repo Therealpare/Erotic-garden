@@ -105,6 +105,51 @@ export const routes: Routes = [
             title: 'Event inquiry — EG Admin',
           },
           {
+            path: 'gallery',
+            loadComponent: () => import('./admin/gallery/admin-gallery-list.component').then((m) => m.AdminGalleryListComponent),
+            title: 'Gallery — EG Admin',
+          },
+          {
+            path: 'gallery/new',
+            loadComponent: () => import('./admin/gallery/admin-gallery-form.component').then((m) => m.AdminGalleryFormComponent),
+            title: 'Add photo — EG Admin',
+          },
+          {
+            path: 'gallery/:id',
+            loadComponent: () => import('./admin/gallery/admin-gallery-form.component').then((m) => m.AdminGalleryFormComponent),
+            title: 'Edit photo — EG Admin',
+          },
+          {
+            path: 'tea',
+            loadComponent: () => import('./admin/tea/admin-tea-list.component').then((m) => m.AdminTeaListComponent),
+            title: 'Tea House menu — EG Admin',
+          },
+          {
+            path: 'tea/new',
+            loadComponent: () => import('./admin/tea/admin-tea-form.component').then((m) => m.AdminTeaFormComponent),
+            title: 'Add menu item — EG Admin',
+          },
+          {
+            path: 'tea/:id',
+            loadComponent: () => import('./admin/tea/admin-tea-form.component').then((m) => m.AdminTeaFormComponent),
+            title: 'Edit menu item — EG Admin',
+          },
+          {
+            path: 'coffee',
+            loadComponent: () => import('./admin/coffee/admin-coffee-list.component').then((m) => m.AdminCoffeeListComponent),
+            title: 'Coffee & stock — EG Admin',
+          },
+          {
+            path: 'coffee/new',
+            loadComponent: () => import('./admin/coffee/admin-coffee-form.component').then((m) => m.AdminCoffeeFormComponent),
+            title: 'Add product — EG Admin',
+          },
+          {
+            path: 'coffee/:id',
+            loadComponent: () => import('./admin/coffee/admin-coffee-form.component').then((m) => m.AdminCoffeeFormComponent),
+            title: 'Edit product — EG Admin',
+          },
+          {
             path: 'media',
             loadComponent: () =>
               import('./admin/media/admin-media-list.component').then((m) => m.AdminMediaListComponent),

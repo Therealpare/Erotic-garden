@@ -85,7 +85,7 @@
     <app-section-header [eyebrow]="'coffee.tasteProfile.eyebrow' | translate" [headline]="'coffee.tasteProfile.headline' | translate"></app-section-header>
     <div class="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       <div *ngFor="let product of products()" class="border border-stone/15 p-8">
-        <h3 class="text-xl">{{ product.name }}</h3>
+        <h3 class="text-xl">{{ (product.localizedName ?? product.name) | localized }}</h3>
         <dl class="mt-4 space-y-2 text-sm">
           <div *ngIf="product.origin" class="flex justify-between gap-4">
             <dt class="text-stone">{{ 'coffee.tasteProfile.labelOrigin' | translate }}</dt>
@@ -117,12 +117,14 @@
       [headline]="'coffee.collection.headline' | translate"
       [supportingText]="'coffee.collection.sub' | translate"
     ></app-section-header>
+    <p *ngIf="collection().status === 'loading'" class="mt-14 text-sm text-stone" role="status">{{ 'states.loading' | translate }}</p>
+    <p *ngIf="collection().status === 'error'" class="mt-14 border border-terracotta/30 p-6 text-sm text-terracotta" role="alert">{{ 'states.error' | translate }}</p>
     <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3">
       <div *ngFor="let product of products()">
         <div class="aspect-[3/4] w-full bg-ivory">
           <app-image-reveal [src]="product.imageUrl" [alt]="product.altText"></app-image-reveal>
         </div>
-        <h3 class="mt-5 text-xl">{{ product.name }}</h3>
+        <h3 class="mt-5 text-xl">{{ (product.localizedName ?? product.name) | localized }}</h3>
         <p *ngIf="product.weight" class="mt-1 text-xs uppercase tracking-widest2 text-terracotta">{{ product.weight }}</p>
         <p *ngIf="product.price" class="mt-1 text-sm text-stone">{{ product.price }}</p>
       </div>
@@ -138,17 +140,63 @@
       [headline]="'coffee.shop.headline' | translate"
       [supportingText]="'coffee.shop.sub' | translate"
     ></app-section-header>
-    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-3">
+    <p *ngIf="shop().status === 'loading'" class="mt-14 text-sm text-stone" role="status">{{ 'states.loading' | translate }}</p>
+    <p *ngIf="shop().status === 'error'" class="mt-14 border border-terracotta/30 p-6 text-sm text-terracotta" role="alert">{{ 'states.error' | translate }}</p>
+    <p *ngIf="shop().status === 'ready' && !orderingAvailable" class="mt-10 border border-stone/30 p-5 text-sm text-stone">
+      {{ 'coffee.shop.unavailable' | translate }}
+    </p>
+    <div *ngIf="shop().status === 'ready' && shopProducts().length === 0" class="mt-14">
+      <app-empty-state [title]="'coffee.shop.emptyTitle' | translate" [message]="'coffee.shop.emptyMessage' | translate"></app-empty-state>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
       <div *ngFor="let product of shopProducts()">
-        <div class="aspect-[3/4] w-full bg-ivory">
-          <app-image-reveal [src]="product.imageUrl" [alt]="product.altText"></app-image-reveal>
-        </div>
-        <h3 class="mt-5 text-xl">{{ product.name }}</h3>
-        <p class="mt-1 text-xs uppercase tracking-widest2 text-terracotta">{{ product.size }}</p>
-        <p class="mt-1 text-sm text-stone">{{ formatPrice(product.price, product.currency) }}</p>
-        <div class="mt-4">
-          <app-button variant="secondary" (click)="addToCart(product)">{{ 'coffee.shop.addToCart' | translate }}</app-button>
-        </div>
+        <ng-container *ngIf="selectedVariant(product) as variant">
+          <div class="relative aspect-[3/4] w-full bg-ivory">
+            <app-image-reveal *ngIf="product.images[0] as image" [src]="image.imageUrl" [alt]="image.altText"></app-image-reveal>
+            <span
+              *ngIf="variant.soldOut"
+              class="absolute left-4 top-4 bg-charcoal px-3 py-1 text-[10px] font-medium uppercase tracking-widest2 text-ivory"
+            >{{ 'coffee.shop.soldOut' | translate }}</span>
+          </div>
+          <h3 class="mt-5 text-xl">{{ product.name | localized }}</h3>
+          <p *ngIf="product.description | localized as description" class="mt-1 text-sm text-stone">{{ description }}</p>
+
+          <fieldset class="mt-4">
+            <legend class="mb-2 text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'coffee.shop.chooseSize' | translate }}</legend>
+            <div class="flex flex-wrap gap-2">
+              <label
+                *ngFor="let option of product.variants"
+                class="relative cursor-pointer border px-3 py-2 text-xs uppercase tracking-widest2 transition-colors duration-400 focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-terracotta"
+                [ngClass]="option.id === variant.id ? 'border-forest bg-forest text-ivory' : 'border-stone/30 text-charcoal hover:border-forest'"
+              >
+                <input
+                  type="radio"
+                  class="sr-only"
+                  [name]="'size-' + product.id"
+                  [checked]="option.id === variant.id"
+                  (change)="selectSize(product, option)"
+                />
+                {{ option.label }}
+                <span *ngIf="option.soldOut" class="ml-1 normal-case tracking-normal opacity-80">· {{ 'coffee.shop.soldOut' | translate }}</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <p class="mt-3 text-sm text-stone">
+            {{ formatPrice(variant.price, variant.currency) }}
+            <span *ngIf="!variant.soldOut && variant.stock <= 5" class="ml-2 text-xs text-terracotta">{{ onlyLeftLabel(variant.stock) }}</span>
+          </p>
+
+          <div class="mt-4">
+            <app-button variant="secondary" [disabled]="!canAdd(variant)" (click)="canAdd(variant) && addToCart(product)">
+              {{ variant.soldOut ? ('coffee.shop.soldOut' | translate) : ('coffee.shop.addToCart' | translate) }}
+            </app-button>
+          </div>
+          <p *ngIf="notice()?.productId === product.id" class="mt-2 text-xs" [class.text-forest]="notice()?.kind === 'added'" [class.text-terracotta]="notice()?.kind === 'max'" role="status">
+            {{ (notice()?.kind === 'added' ? 'coffee.shop.added' : 'coffee.shop.maxInCart') | translate }}
+          </p>
+        </ng-container>
       </div>
     </div>
   </app-container>
@@ -161,15 +209,15 @@
       <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'cart.headline' | translate }}</h2>
       <div class="mt-10 divide-y divide-stone/10 border-y border-stone/10">
         <div *ngFor="let item of cartItems()" class="flex flex-wrap items-center gap-4 py-4">
-          <img [src]="item.imageUrl" [alt]="item.name" class="h-16 w-16 shrink-0 object-cover" loading="lazy" />
+          <img [src]="item.imageUrl" [alt]="item.name | localized" class="h-16 w-16 shrink-0 object-cover" loading="lazy" />
           <div class="min-w-[120px] flex-1">
-            <p class="text-base text-charcoal">{{ item.name }}</p>
+            <p class="text-base text-charcoal">{{ item.name | localized }}</p>
             <p class="text-xs uppercase tracking-widest2 text-stone">{{ item.size }}</p>
           </div>
           <div class="flex items-center gap-2">
             <button
               type="button"
-              (click)="updateQuantity(item.productId, item.quantity - 1)"
+              (click)="updateQuantity(item.variantId, item.quantity - 1)"
               class="flex h-7 w-7 items-center justify-center border border-stone/30 text-stone transition-colors duration-400 hover:border-forest hover:text-forest"
               [attr.aria-label]="'checkout.decreaseQuantity' | translate"
             >
@@ -178,8 +226,9 @@
             <span class="w-6 text-center text-sm">{{ item.quantity }}</span>
             <button
               type="button"
-              (click)="updateQuantity(item.productId, item.quantity + 1)"
-              class="flex h-7 w-7 items-center justify-center border border-stone/30 text-stone transition-colors duration-400 hover:border-forest hover:text-forest"
+              (click)="updateQuantity(item.variantId, item.quantity + 1)"
+              [disabled]="item.quantity >= item.maxQuantity"
+              class="flex h-7 w-7 disabled:cursor-not-allowed disabled:opacity-40 items-center justify-center border border-stone/30 text-stone transition-colors duration-400 hover:border-forest hover:text-forest"
               [attr.aria-label]="'checkout.increaseQuantity' | translate"
             >
               +
@@ -188,7 +237,7 @@
           <p class="w-20 shrink-0 text-right text-sm text-charcoal">{{ formatPrice(item.price * item.quantity, item.currency) }}</p>
           <button
             type="button"
-            (click)="removeItem(item.productId)"
+            (click)="removeItem(item.variantId)"
             class="shrink-0 text-xs uppercase tracking-widest2 text-stone transition-colors duration-400 hover:text-terracotta"
           >
             {{ 'cart.remove' | translate }}

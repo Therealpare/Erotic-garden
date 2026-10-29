@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { GalleryGridComponent } from '../../shared/components/gallery-grid/gallery-grid.component';
@@ -11,6 +10,7 @@ import { GalleryCategorySlug } from '../../core/models/gallery.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
 import { getDictionary } from '../../core/i18n/dictionaries';
+import { loadState } from '../../shared/utils/load-state.util';
 
 type CategoryFilter = 'ALL' | GalleryCategorySlug;
 
@@ -25,8 +25,15 @@ export class GalleryComponent {
   private readonly galleryService = inject(GalleryService);
   private readonly languageService = inject(LanguageService);
 
-  readonly categories = toSignal(this.galleryService.getCategories(), { initialValue: [] });
-  readonly images = toSignal(this.galleryService.getAll(), { initialValue: [] });
+  private readonly categoriesState = loadState(this.galleryService.getCategories(), []);
+  private readonly imagesState = loadState(this.galleryService.getAll(), []);
+
+  readonly categories = computed(() => this.categoriesState().data);
+  readonly images = computed(() => this.imagesState().data);
+  readonly loadStatus = computed(() => {
+    const states = [this.categoriesState().status, this.imagesState().status];
+    return states.includes('error') ? 'error' : states.includes('loading') ? 'loading' : 'ready';
+  });
 
   readonly activeCategory = signal<CategoryFilter>('ALL');
   readonly activeIndex = signal<number | null>(null);

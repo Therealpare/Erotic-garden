@@ -1,0 +1,83 @@
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="font-display text-3xl text-forest">Coffee &amp; stock</h1>
+    <p class="mt-1 text-sm text-stone">Products sold on /coffee. Each size has its own price and stock; a size with stock 0 shows as SOLD OUT and can't be added to the cart.</p>
+  </div>
+  <a routerLink="/admin/coffee/new" class="bg-forest px-4 py-2 text-sm text-ivory hover:bg-charcoal">+ Add product</a>
+</div>
+
+<p *ngIf="error()" class="mt-6 border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta" role="alert">
+  {{ error() }} <button type="button" class="ml-2 underline" (click)="load()">Retry</button>
+</p>
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+<div *ngIf="!loading() && !error() && products().length === 0" class="mt-6 border border-dashed border-stone/30 bg-white px-6 py-12 text-center text-sm text-stone">
+  No products yet. <a routerLink="/admin/coffee/new" class="text-forest underline">Add the first one</a>.
+</div>
+
+<article *ngFor="let product of products()" class="mt-6 border border-stone/20 bg-white">
+  <header class="flex flex-wrap items-center gap-4 border-b border-stone/10 p-4">
+    <img *ngIf="product.images[0] as image" [src]="resolve(image.imageUrl)" [alt]="image.altText" class="h-16 w-16 object-cover" loading="lazy" />
+    <div class="min-w-0 flex-1">
+      <h2 class="font-display text-xl text-forest">{{ product.name.en }}</h2>
+      <p class="text-xs text-stone">
+        {{ product.slug }} · {{ product.images.length }} photo(s) ·
+        <span [class.text-terracotta]="product.status === 'HIDDEN'">{{ product.status === 'ACTIVE' ? 'Visible in shop' : 'Hidden from shop' }}</span>
+      </p>
+    </div>
+    <div class="flex items-center gap-3 text-sm">
+      <a [routerLink]="['/admin/coffee', product.id]" class="text-forest hover:underline">Edit product</a>
+      <ng-container *ngIf="canDelete()">
+        <button *ngIf="pendingDeleteId() !== product.id" type="button" class="text-terracotta hover:underline" (click)="pendingDeleteId.set(product.id)">Delete</button>
+        <span *ngIf="pendingDeleteId() === product.id">
+          <button type="button" class="font-medium text-terracotta hover:underline" (click)="confirmDelete(product)">Yes, delete product</button>
+          <button type="button" class="ml-2 text-stone hover:underline" (click)="pendingDeleteId.set(null)">Cancel</button>
+        </span>
+      </ng-container>
+    </div>
+  </header>
+
+  <p *ngIf="product.variants.length === 0" class="p-4 text-sm text-stone">No sizes yet — <a [routerLink]="['/admin/coffee', product.id]" class="text-forest underline">add one</a> to start selling.</p>
+  <div *ngIf="product.variants.length > 0" class="overflow-x-auto">
+    <table class="w-full min-w-[640px] text-left text-sm">
+      <thead class="bg-cream/60 text-xs uppercase tracking-wider text-stone">
+        <tr>
+          <th scope="col" class="px-4 py-2">Size</th>
+          <th scope="col" class="px-4 py-2">Price</th>
+          <th scope="col" class="px-4 py-2">Status</th>
+          <th scope="col" class="px-4 py-2">Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let variant of product.variants" class="border-t border-stone/10">
+          <td class="px-4 py-2 font-medium">{{ variant.label }}<span *ngIf="variant.sku" class="ml-2 text-xs font-normal text-stone">{{ variant.sku }}</span></td>
+          <td class="px-4 py-2">{{ variant.price }} {{ variant.currency }}</td>
+          <td class="px-4 py-2">
+            <span *ngIf="variant.status === 'INACTIVE'" class="bg-stone/15 px-2 py-0.5 text-xs text-stone">Not for sale</span>
+            <span *ngIf="variant.status === 'ACTIVE' && variant.stock === 0" class="bg-terracotta/15 px-2 py-0.5 text-xs text-terracotta">SOLD OUT</span>
+            <span *ngIf="variant.status === 'ACTIVE' && variant.stock > 0" class="bg-forest/15 px-2 py-0.5 text-xs text-forest">In stock</span>
+          </td>
+          <td class="px-4 py-2">
+            <form class="flex items-center gap-2" (submit)="$event.preventDefault(); saveStock(variant)">
+              <label [for]="'stock-' + variant.id" class="sr-only">Stock for {{ product.name.en }} {{ variant.label }}</label>
+              <input
+                [id]="'stock-' + variant.id"
+                type="number"
+                min="0"
+                step="1"
+                inputmode="numeric"
+                class="w-24 border border-stone/30 bg-white px-2 py-1 text-sm focus:border-forest focus:outline-none"
+                [value]="draftFor(variant)"
+                (input)="setDraft(variant, $any($event.target).value)"
+              />
+              <button type="submit" class="border border-forest px-2 py-1 text-xs text-forest hover:bg-forest hover:text-ivory disabled:opacity-50" [disabled]="stockSaving() === variant.id || draftFor(variant) === '' + variant.stock">
+                {{ stockSaving() === variant.id ? 'Saving…' : 'Update' }}
+              </button>
+              <span *ngIf="stockSaved() === variant.id" class="text-xs text-forest" role="status">Saved</span>
+            </form>
+            <p *ngIf="stockErrors()[variant.id] as message" class="mt-1 text-xs text-terracotta" role="alert">{{ message }}</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</article>

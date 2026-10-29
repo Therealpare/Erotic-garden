@@ -1,58 +1,78 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { TeaCategory, TeaMenuItem } from '../models/tea-menu.model';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map, of } from 'rxjs';
+import { API_BASE_URL, isApiConfigured } from '../config/api.config';
+import { ApiTeaCategory, ApiTeaMenuItem, TeaCategory, TeaMenuItem } from '../models/tea-menu.model';
+import { resolveImageUrl } from '../../shared/utils/image-url.util';
 
 /**
- * Real tea house menu (spec §25/§48). Tea and coffee are included in admission — no
- * fixed price to fabricate. Item names/descriptions are translated via
- * teaHouse.menuItems[slug] in the i18n dictionaries (EN|TH|DE), not stored here;
- * the component merges them in by slug, mirroring ExperienceComponent's pattern.
- * Dessert has no fixed lineup (it changes day to day) so it carries no items here —
- * the page shows an explanatory note instead. "Special" has no real content yet, so
- * it stays empty until the owner provides one.
+ * Tea house menu, managed in /admin/tea and stored in the database. Tea and coffee are
+ * included in admission (no fabricated prices, spec §25/§48). The constants below are the
+ * offline fallback used only while a build has no API configured, mirroring what the site
+ * showed before the menu moved to the database.
  */
-const DEMO_CATEGORIES: TeaCategory[] = [
+const FALLBACK_CATEGORIES: TeaCategory[] = [
   { id: 1, name: 'Tea' },
   { id: 2, name: 'Coffee' },
   { id: 3, name: 'Dessert' },
   { id: 4, name: 'Special' },
 ];
 
-function makeItem(id: number, slug: string, category: TeaCategory['name'], sortOrder: number): TeaMenuItem {
-  return {
-    id,
-    slug,
-    category,
-    name: '',
-    description: '',
-    price: '',
-    imageUrl: `https://picsum.photos/seed/eg-menu-${slug}/600/600`,
-    available: true,
-    sortOrder,
-  };
-}
-
-const DEMO_MENU: TeaMenuItem[] = [
-  makeItem(1, 'hot-tea', 'Tea', 0),
-  makeItem(2, 'green-tea', 'Tea', 1),
-  makeItem(3, 'iced-tea', 'Tea', 2),
-  makeItem(4, 'lemon-tea', 'Tea', 3),
-  makeItem(5, 'black-tea', 'Tea', 4),
-  makeItem(6, 'americano', 'Coffee', 0),
-  makeItem(7, 'espresso', 'Coffee', 1),
-  makeItem(8, 'latte', 'Coffee', 2),
-  makeItem(9, 'cappuccino', 'Coffee', 3),
-  makeItem(10, 'mocha', 'Coffee', 4),
-  makeItem(11, 'macchiato', 'Coffee', 5),
+const FALLBACK_ITEMS: [string, TeaMenuItem['category'], TeaMenuItem['name']][] = [
+  ['hot-tea', 'Tea', { en: 'Hot Tea', th: 'ชาร้อน', de: 'Heißer Tee' }],
+  ['green-tea', 'Tea', { en: 'Green Tea', th: 'ชาเขียว', de: 'Grüner Tee' }],
+  ['iced-tea', 'Tea', { en: 'Iced Tea', th: 'ชาเย็น', de: 'Eistee' }],
+  ['lemon-tea', 'Tea', { en: 'Lemon Tea', th: 'ชามะนาว', de: 'Zitronentee' }],
+  ['black-tea', 'Tea', { en: 'Black Tea', th: 'ชาดำ', de: 'Schwarzer Tee' }],
+  ['americano', 'Coffee', { en: 'Americano', th: 'อเมริกาโน่' }],
+  ['espresso', 'Coffee', { en: 'Espresso', th: 'เอสเปรสโซ' }],
+  ['latte', 'Coffee', { en: 'Latte', th: 'ลาเต้' }],
+  ['cappuccino', 'Coffee', { en: 'Cappuccino', th: 'คาปูชิโน่' }],
+  ['mocha', 'Coffee', { en: 'Mocha', th: 'มอคค่า' }],
+  ['macchiato', 'Coffee', { en: 'Macchiato', th: 'มัคคิอาโต้' }],
 ];
+
+const FALLBACK_MENU: TeaMenuItem[] = FALLBACK_ITEMS.map(([slug, category, name], index) => ({
+  id: index + 1,
+  slug,
+  category,
+  name,
+  description: {},
+  price: null,
+  includedInAdmission: true,
+  imageUrl: null,
+  status: 'AVAILABLE',
+  sortOrder: index,
+}));
 
 @Injectable({ providedIn: 'root' })
 export class TeaHouseService {
+  private readonly http = inject(HttpClient);
+
   getCategories(): Observable<TeaCategory[]> {
-    return of(DEMO_CATEGORIES);
+    if (!isApiConfigured()) return of(FALLBACK_CATEGORIES);
+    return this.http
+      .get<ApiTeaCategory[]>(`${API_BASE_URL}/tea/categories`)
+      .pipe(map((categories) => categories.map((category) => ({ id: category.id, name: category.key }))));
   }
 
   getMenu(): Observable<TeaMenuItem[]> {
-    return of(DEMO_MENU);
+    if (!isApiConfigured()) return of(FALLBACK_MENU);
+    return this.http.get<ApiTeaMenuItem[]>(`${API_BASE_URL}/tea/menu`).pipe(
+      map((items) =>
+        items.map((item) => ({
+          id: item.id,
+          slug: item.slug,
+          category: item.category.key,
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          includedInAdmission: item.includedInAdmission,
+          imageUrl: item.imageUrl ? resolveImageUrl(item.imageUrl) : null,
+          status: item.status,
+          sortOrder: item.sortOrder,
+        })),
+      ),
+    );
   }
 }

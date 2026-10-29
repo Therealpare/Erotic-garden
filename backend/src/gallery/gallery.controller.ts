@@ -1,19 +1,20 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { GalleryService } from './gallery.service';
 import { QueryGalleryDto } from './dto/query-gallery.dto';
-import { GalleryCategory, GalleryImage } from './entities/gallery.entity';
+import { GalleryCategory } from './entities/gallery-category.entity';
+import { GalleryImage } from './entities/gallery-image.entity';
+import { GalleryService } from './gallery.service';
 
 @Controller('gallery')
 export class GalleryController {
   constructor(private readonly galleryService: GalleryService) {}
 
   @Get()
-  findAll(@Query() query: QueryGalleryDto): GalleryImage[] {
-    return this.galleryService.findAll(query.category);
+  findAll(@Query() query: QueryGalleryDto): Promise<GalleryImage[]> {
+    return this.galleryService.findPublished(query.category);
   }
 
   @Get('categories')
-  findCategories(): GalleryCategory[] {
+  findCategories(): Promise<GalleryCategory[]> {
     return this.galleryService.findCategories();
   }
 }

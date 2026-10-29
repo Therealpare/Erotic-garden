@@ -1,23 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Observable, delay, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { API_BASE_URL, isApiConfigured } from '../config/api.config';
 import { OrderConfirmation, OrderRequest } from '../models/order.model';
 
 /**
- * Mocks POST /api/v1/orders until the real backend is connected (mirrors
- * BookingService). The real backend generates the order number server-side
- * on insert; this mock generates one client-side only so the confirmation
- * UI has something real to show. No payment gateway yet — every order is
- * created with status PENDING.
+ * POST /api/v1/orders. The server prices every line from the database and takes the
+ * stock in one transaction; a 409 response lists sizes that ran out in the meantime.
  */
 @Injectable({ providedIn: 'root' })
 export class OrderService {
-  submit(payload: OrderRequest): Observable<OrderConfirmation> {
-    const code = this.generateOrderCode();
-    return of({ orderNumber: code, status: 'PENDING' as const }).pipe(delay(700));
-  }
+  private readonly http = inject(HttpClient);
 
-  private generateOrderCode(): string {
-    const random = Math.random().toString(36).slice(2, 8).toUpperCase();
-    return `EGC-${random}`;
+  readonly isAvailable = isApiConfigured;
+
+  submit(payload: OrderRequest): Observable<OrderConfirmation> {
+    if (!isApiConfigured()) return throwError(() => new Error('API not configured'));
+    return this.http.post<OrderConfirmation>(`${API_BASE_URL}/orders`, payload);
   }
 }

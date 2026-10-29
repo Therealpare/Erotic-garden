@@ -1,18 +1,12 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { Product } from './entities/product.entity';
+import { Controller, Get } from '@nestjs/common';
+import { ProductsService, PublicProduct } from './products.service';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll(): Product[] {
-    return this.productsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Product | undefined {
-    return this.productsService.findById(id);
+  findAll(): Promise<PublicProduct[]> {
+    return this.productsService.findPublic();
   }
 }

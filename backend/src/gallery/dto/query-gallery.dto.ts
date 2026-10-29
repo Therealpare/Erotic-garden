@@ -1,15 +1,8 @@
-import { IsIn, IsOptional } from 'class-validator';
-import { GalleryCategorySlug } from '../entities/gallery.entity';
-
-const CATEGORY_SLUGS: GalleryCategorySlug[] = [
-  'garden',
-  'art',
-  'tea-house',
-  'people',
-];
+import { IsOptional, IsString, Matches } from 'class-validator';
 
 export class QueryGalleryDto {
   @IsOptional()
-  @IsIn(CATEGORY_SLUGS)
-  category?: GalleryCategorySlug;
+  @IsString()
+  @Matches(/^[a-z0-9-]{1,60}$/)
+  category?: string;
 }

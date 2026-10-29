@@ -1,6 +1,9 @@
+import { LocalizedText } from './localized-text.model';
+
 export interface CoffeeProduct {
   id: number;
   name: string;
+  localizedName?: LocalizedText;
   weight: string;
   origin: string;
   process: string;

@@ -1,10 +1,7 @@
 export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
 export interface OrderItemRequest {
-  productId: number;
-  name: string;
-  size: string;
-  price: number;
+  variantId: number;
   quantity: number;
 }
 
@@ -14,11 +11,17 @@ export interface OrderRequest {
   address: string;
   contactChannel: string;
   items: OrderItemRequest[];
-  totalAmount: number;
-  currency: string;
 }
 
 export interface OrderConfirmation {
   orderNumber: string;
   status: OrderStatus;
+  totalAmount: number;
+  currency: string;
+}
+
+/** 409 body when stock ran out between adding to cart and placing the order. */
+export interface StockProblem {
+  variantId: number;
+  available: number;
 }

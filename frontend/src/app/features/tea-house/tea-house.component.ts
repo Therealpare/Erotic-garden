@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { SectionHeaderComponent } from '../../shared/components/section-header/section-header.component';
@@ -11,6 +10,8 @@ import { EmptyStateComponent } from '../../shared/components/empty-state/empty-s
 import { TeaHouseService } from '../../core/services/tea-house.service';
 import { TeaCategoryName } from '../../core/models/tea-menu.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { pickLocalized } from '../../shared/pipes/localized.pipe';
+import { loadState } from '../../shared/utils/load-state.util';
 import { LanguageService } from '../../core/i18n/language.service';
 import { getDictionary } from '../../core/i18n/dictionaries';
 
@@ -34,24 +35,28 @@ export class TeaHouseComponent {
   private readonly teaHouseService = inject(TeaHouseService);
   private readonly languageService = inject(LanguageService);
 
-  readonly categories = toSignal(this.teaHouseService.getCategories(), { initialValue: [] });
-  private readonly rawMenu = toSignal(this.teaHouseService.getMenu(), { initialValue: [] });
+  private readonly categoriesState = loadState(this.teaHouseService.getCategories(), []);
+  private readonly menuState = loadState(this.teaHouseService.getMenu(), []);
+
+  readonly categories = computed(() => this.categoriesState().data);
+  readonly loadStatus = computed(() => {
+    const states = [this.categoriesState().status, this.menuState().status];
+    return states.includes('error') ? 'error' : states.includes('loading') ? 'loading' : 'ready';
+  });
 
   readonly activeCategory = signal<TeaCategoryName>('Tea');
 
+  /** Display-ready items: name/description in the current language and a formatted price label. */
   readonly menu = computed(() => {
-    const t = getDictionary(this.languageService.lang()).teaHouse;
-    const items = t.menuItems as Record<string, { name: string }>;
-    const free = t.menu.free;
-    return this.rawMenu().map((item) => {
-      const translated = items[item.slug];
-      const isIncluded = item.category === 'Tea' || item.category === 'Coffee';
-      return {
-        ...item,
-        name: translated ? translated.name : item.name,
-        price: isIncluded ? free : item.price,
-      };
-    });
+    const lang = this.languageService.lang();
+    const free = getDictionary(lang).teaHouse.menu.free;
+    return this.menuState().data.map((item) => ({
+      ...item,
+      displayName: pickLocalized(item.name, lang),
+      displayDescription: pickLocalized(item.description, lang),
+      priceLabel: item.includedInAdmission ? free : item.price !== null ? `฿${item.price}` : '',
+      soldOut: item.status === 'SOLD_OUT',
+    }));
   });
 
   readonly filteredMenu = computed(() => this.menu().filter((item) => item.category === this.activeCategory()));
@@ -60,9 +65,14 @@ export class TeaHouseComponent {
 
   readonly emptyStateText = computed(() => {
     const t = getDictionary(this.languageService.lang()).teaHouse.menu;
-    return this.activeCategory() === 'Dessert'
-      ? { title: t.dessertEmptyTitle, message: t.dessertEmptyMessage }
-      : { title: t.specialEmptyTitle, message: t.specialEmptyMessage };
+    switch (this.activeCategory()) {
+      case 'Dessert':
+        return { title: t.dessertEmptyTitle, message: t.dessertEmptyMessage };
+      case 'Drinks':
+        return { title: t.drinksEmptyTitle, message: t.drinksEmptyMessage };
+      default:
+        return { title: t.specialEmptyTitle, message: t.specialEmptyMessage };
+    }
   });
 
   setCategory(category: TeaCategoryName): void {
@@ -74,6 +84,7 @@ export class TeaHouseComponent {
     const map: Record<TeaCategoryName, string> = {
       Tea: t.categoryTea,
       Coffee: t.categoryCoffee,
+      Drinks: t.categoryDrinks,
       Dessert: t.categoryDessert,
       Special: t.categorySpecial,
     };

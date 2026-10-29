@@ -2,20 +2,22 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { CartService } from '../../core/services/cart.service';
 import { OrderService } from '../../core/services/order.service';
-import { OrderConfirmation } from '../../core/models/order.model';
+import { OrderConfirmation, StockProblem } from '../../core/models/order.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 
-type SubmitState = 'idle' | 'loading' | 'success' | 'error';
+type SubmitState = 'idle' | 'loading' | 'success' | 'error' | 'stock-changed';
 
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, ContainerComponent, ButtonComponent, TranslatePipe],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ContainerComponent, ButtonComponent, TranslatePipe, LocalizedPipe],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css',
 })
@@ -28,6 +30,7 @@ export class CheckoutComponent {
   readonly totalQuantity = this.cartService.totalQuantity;
   readonly totalAmount = this.cartService.totalAmount;
 
+  readonly orderingAvailable = this.orderService.isAvailable();
   readonly state = signal<SubmitState>('idle');
   readonly confirmation = signal<OrderConfirmation | undefined>(undefined);
 
@@ -41,7 +44,7 @@ export class CheckoutComponent {
   });
 
   submit(): void {
-    if (this.form.invalid || this.items().length === 0) {
+    if (!this.orderingAvailable || this.form.invalid || this.items().length === 0) {
       this.form.markAllAsTouched();
       return;
     }
@@ -50,19 +53,12 @@ export class CheckoutComponent {
     this.state.set('loading');
     this.orderService
       .submit({
-        name: values.name,
-        phone: values.phone,
-        address: values.address,
-        contactChannel: values.contactChannel,
-        items: this.items().map((item) => ({
-          productId: item.productId,
-          name: item.name,
-          size: item.size,
-          price: item.price,
-          quantity: item.quantity,
-        })),
-        totalAmount: this.totalAmount(),
-        currency: this.currency(),
+        name: values.name.trim(),
+        phone: values.phone.trim(),
+        address: values.address.trim(),
+        contactChannel: values.contactChannel.trim(),
+        // Only ids and quantities are sent: the server prices each line from the database.
+        items: this.items().map((item) => ({ variantId: item.variantId, quantity: item.quantity })),
       })
       .subscribe({
         next: (confirmation) => {
@@ -71,16 +67,24 @@ export class CheckoutComponent {
           this.cartService.clear();
           this.form.reset();
         },
-        error: () => this.state.set('error'),
+        error: (error: unknown) => {
+          const problems = error instanceof HttpErrorResponse && error.status === 409 ? (error.error?.items as StockProblem[] | undefined) : undefined;
+          if (problems?.length) {
+            this.cartService.applyStockProblems(problems);
+            this.state.set('stock-changed');
+          } else {
+            this.state.set('error');
+          }
+        },
       });
   }
 
-  updateQuantity(productId: number, quantity: number): void {
-    this.cartService.updateQuantity(productId, quantity);
+  updateQuantity(variantId: number, quantity: number): void {
+    this.cartService.updateQuantity(variantId, quantity);
   }
 
-  removeItem(productId: number): void {
-    this.cartService.removeItem(productId);
+  removeItem(variantId: number): void {
+    this.cartService.removeItem(variantId);
   }
 
   fieldInvalid(name: keyof typeof this.form.controls): boolean {

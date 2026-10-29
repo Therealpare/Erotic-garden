@@ -21,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { MediaModule } from './media/media.module';
 import { EventInquiriesModule } from './event-inquiries/event-inquiries.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { EventInquiriesModule } from './event-inquiries/event-inquiries.module';
     DatabaseModule,
     AuthModule,
     NotificationsModule,
+    StorageModule,
     ArtworksModule,
     GalleryModule,
     ExperiencesModule,

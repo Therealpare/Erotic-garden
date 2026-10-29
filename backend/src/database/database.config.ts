@@ -2,8 +2,30 @@ import { DataSourceOptions } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { MediaItem } from '../media/entities/media-item.entity';
 import { EventInquiry } from '../event-inquiries/entities/event-inquiry.entity';
+import { GalleryCategory } from '../gallery/entities/gallery-category.entity';
+import { GalleryImage } from '../gallery/entities/gallery-image.entity';
+import { TeaCategory } from '../tea-house/entities/tea-category.entity';
+import { TeaMenuItem } from '../tea-house/entities/tea-menu-item.entity';
+import { Product } from '../products/entities/product.entity';
+import { ProductImage } from '../products/entities/product-image.entity';
+import { ProductVariant } from '../products/entities/product-variant.entity';
+import { Order } from '../orders/entities/order.entity';
+import { OrderItem } from '../orders/entities/order-item.entity';
 
-export const ENTITIES = [User, MediaItem, EventInquiry];
+export const ENTITIES = [
+  User,
+  MediaItem,
+  EventInquiry,
+  GalleryCategory,
+  GalleryImage,
+  TeaCategory,
+  TeaMenuItem,
+  Product,
+  ProductImage,
+  ProductVariant,
+  Order,
+  OrderItem,
+];
 
 /**
  * Builds PostgreSQL connection options from environment variables. Shared by the Nest app

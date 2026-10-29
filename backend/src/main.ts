@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { UPLOADS_DIR, UPLOADS_URL_PREFIX } from './storage/storage.service';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -16,7 +17,17 @@ async function bootstrap() {
     app.set('trust proxy', 1);
   }
 
-  app.use(helmet());
+  // Images are loaded by the Angular site from another origin, so allow cross-origin reads of resources.
+  app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+
+  // Locally stored admin uploads (StorageService "local" driver). Never lists directories.
+  app.useStaticAssets(UPLOADS_DIR, {
+    prefix: UPLOADS_URL_PREFIX,
+    index: false,
+    dotfiles: 'deny',
+    maxAge: '7d',
+    immutable: true,
+  });
   // Comma-separated so the deployed site and local dev can both be allowed.
   app.enableCors({
     origin: configService

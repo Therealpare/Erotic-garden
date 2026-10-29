@@ -1,55 +1,36 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { CoffeeProduct } from '../models/coffee-product.model';
+import { ProductService } from './product.service';
 
 /**
- * Real Erotic Garden coffee products, photographed from the owner's own packaging.
- * Per-bag origin/process/roast/tasting-note specs and pricing are printed in small
- * type on the bags but not yet owner-confirmed as site copy (spec §48), so they are
- * left blank here — templates hide those rows rather than guessing from the photos.
+ * The Coffee page's "Collection" showcase: every photo of every product, with the
+ * owner-entered origin/process/roast/tasting details (blank rows stay hidden, spec §48).
+ * Sourced from the same products as the shop, so admins manage both in /admin/coffee.
  */
-const COFFEE_PRODUCTS: CoffeeProduct[] = [
-  {
-    id: 1,
-    name: 'Erotic Garden Single Origin Arabica Coffee',
-    weight: '100g',
-    origin: '',
-    process: '',
-    roastLevel: '',
-    tastingNotes: '',
-    price: '',
-    imageUrl: 'images/garden/cof1-3.webp',
-    altText: 'A red bag of Erotic Garden single origin arabica coffee',
-  },
-  {
-    id: 2,
-    name: 'Erotic Garden Single Origin Arabica Coffee',
-    weight: '100g',
-    origin: '',
-    process: '',
-    roastLevel: '',
-    tastingNotes: '',
-    price: '',
-    imageUrl: 'images/garden/cof2.webp',
-    altText: 'A dark bag of Erotic Garden single origin arabica coffee, standing on a wooden table',
-  },
-  {
-    id: 3,
-    name: 'Erotic Garden Single Origin Arabica Coffee',
-    weight: '250g',
-    origin: '',
-    process: '',
-    roastLevel: '',
-    tastingNotes: '',
-    price: '',
-    imageUrl: 'images/garden/cof4.webp',
-    altText: 'A green bag of Erotic Garden single origin arabica coffee',
-  },
-];
-
 @Injectable({ providedIn: 'root' })
 export class CoffeeService {
+  private readonly productService = inject(ProductService);
+
   getAll(): Observable<CoffeeProduct[]> {
-    return of(COFFEE_PRODUCTS);
+    return this.productService.getAll().pipe(
+      map((products) =>
+        products.flatMap((product) =>
+          product.images.map((image, index) => ({
+            id: product.id * 1000 + index,
+            name: product.name.en,
+            weight: '',
+            origin: index === 0 ? (product.origin ?? '') : '',
+            process: index === 0 ? (product.process ?? '') : '',
+            roastLevel: index === 0 ? (product.roastLevel ?? '') : '',
+            tastingNotes: index === 0 ? (product.tastingNotes ?? '') : '',
+            price: '',
+            imageUrl: image.imageUrl,
+            altText: image.altText,
+            localizedName: product.name,
+          })),
+        ),
+      ),
+    );
   }
 }

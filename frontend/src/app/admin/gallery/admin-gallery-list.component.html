@@ -1,0 +1,60 @@
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <h1 class="font-display text-3xl text-forest">Gallery</h1>
+    <p class="mt-1 text-sm text-stone">Photos on the public /gallery page. Lower order numbers appear first; changes show on the site after saving.</p>
+  </div>
+  <a routerLink="/admin/gallery/new" class="bg-forest px-4 py-2 text-sm text-ivory hover:bg-charcoal">+ Add photo</a>
+</div>
+
+<div class="mt-6 flex flex-wrap items-end gap-4">
+  <div>
+    <label for="gal-cat" [class]="labelClass">Category</label>
+    <select id="gal-cat" [class]="inputClass" [ngModel]="categoryFilter()" (ngModelChange)="categoryFilter.set($event === '' ? '' : +$event)">
+      <option value="">All categories</option>
+      <option *ngFor="let category of categories()" [value]="category.id">{{ category.name }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="gal-vis" [class]="labelClass">Visibility</label>
+    <select id="gal-vis" [class]="inputClass" [ngModel]="visibilityFilter()" (ngModelChange)="visibilityFilter.set($event)">
+      <option value="">All</option>
+      <option value="published">Published</option>
+      <option value="hidden">Hidden</option>
+    </select>
+  </div>
+  <p *ngIf="!loading()" class="pb-2 text-sm text-stone">{{ visible().length }} of {{ images().length }} photos</p>
+</div>
+
+<p *ngIf="error()" class="mt-6 border border-terracotta/30 bg-terracotta/5 p-3 text-sm text-terracotta" role="alert">
+  {{ error() }} <button type="button" class="ml-2 underline" (click)="load()">Retry</button>
+</p>
+<p *ngIf="loading()" class="mt-6 text-sm text-stone" role="status">Loading…</p>
+
+<div *ngIf="!loading() && !error() && visible().length === 0" class="mt-6 border border-dashed border-stone/30 bg-white px-6 py-12 text-center text-sm text-stone">
+  No photos match. <a routerLink="/admin/gallery/new" class="text-forest underline">Add one</a>.
+</div>
+
+<ul *ngIf="!loading()" class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+  <li *ngFor="let image of visible()" class="flex flex-col border border-stone/20 bg-white">
+    <a [routerLink]="['/admin/gallery', image.id]" class="relative block aspect-square overflow-hidden bg-cream/40">
+      <img [src]="resolve(image.imageUrl)" [alt]="image.altText" loading="lazy" class="h-full w-full object-cover" [class.opacity-40]="!image.isPublished" />
+      <span *ngIf="!image.isPublished" class="absolute left-2 top-2 bg-charcoal px-2 py-0.5 text-xs text-ivory">Hidden</span>
+      <span *ngIf="image.featured" class="absolute right-2 top-2 bg-gold/90 px-2 py-0.5 text-xs text-charcoal">★</span>
+    </a>
+    <div class="flex flex-1 flex-col gap-1 p-3 text-sm">
+      <a [routerLink]="['/admin/gallery', image.id]" class="font-medium text-forest hover:underline">{{ image.title }}</a>
+      <p class="text-xs text-stone">{{ image.category.name }} · order {{ image.sortOrder }}</p>
+      <div class="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-2 text-xs">
+        <a [routerLink]="['/admin/gallery', image.id]" class="text-forest hover:underline">Edit</a>
+        <button type="button" class="text-forest hover:underline" (click)="togglePublished(image)">{{ image.isPublished ? 'Hide' : 'Publish' }}</button>
+        <ng-container *ngIf="canDelete()">
+          <button *ngIf="pendingDeleteId() !== image.id" type="button" class="text-terracotta hover:underline" (click)="pendingDeleteId.set(image.id)">Delete</button>
+          <span *ngIf="pendingDeleteId() === image.id">
+            <button type="button" class="font-medium text-terracotta hover:underline" (click)="confirmDelete(image)">Yes, delete</button>
+            <button type="button" class="ml-2 text-stone hover:underline" (click)="pendingDeleteId.set(null)">Cancel</button>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+  </li>
+</ul>
