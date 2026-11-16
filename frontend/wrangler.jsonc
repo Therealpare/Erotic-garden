@@ -1,0 +1,13 @@
+// Cloudflare Workers static site (Workers & Pages → "eroticgarden").
+// Build settings in the dashboard: root directory `frontend`, build command
+// `npm run build`, deploy command `npx wrangler deploy`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "eroticgarden",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist/frontend/browser",
+    // Angular handles routes like /coffee in the browser: unknown paths get index.html.
+    "not_found_handling": "single-page-application"
+  }
+}
