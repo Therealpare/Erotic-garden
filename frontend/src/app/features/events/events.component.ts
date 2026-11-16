@@ -10,6 +10,10 @@ import { SectionHeaderComponent } from '../../shared/components/section-header/s
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { EventInquiryService } from '../../core/services/event-inquiry.service';
+import { LanguageService } from '../../core/i18n/language.service';
+import { getDictionary } from '../../core/i18n/dictionaries';
+import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { composeLineMessage, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 import {
   CONTACT_PREFERENCES,
   ContactPreference,
@@ -40,7 +44,12 @@ export class EventsComponent {
   private readonly inquiryService = inject(EventInquiryService);
   private readonly injector = inject(Injector);
 
-  readonly isAvailable = this.inquiryService.isAvailable();
+  private readonly languageService = inject(LanguageService);
+
+  /** Without the API (the live site) the inquiry is sent to the garden's LINE account instead. */
+  readonly viaLine = !this.inquiryService.isAvailable();
+  /** The LINE link of the last inquiry, for "Open LINE again". */
+  readonly sentUrl = signal<string | null>(null);
   readonly state = signal<SubmitState>('idle');
   readonly referenceCode = signal<string | null>(null);
   readonly minDate = todayIso();
@@ -85,6 +94,10 @@ export class EventsComponent {
     }
 
     const value = this.form.getRawValue();
+    if (this.viaLine) {
+      this.sendViaLine(value);
+      return;
+    }
     this.state.set('loading');
     this.inquiryService
       .submit({
@@ -116,7 +129,33 @@ export class EventsComponent {
 
   startOver(): void {
     this.referenceCode.set(null);
+    this.sentUrl.set(null);
     this.state.set('idle');
+  }
+
+  private sendViaLine(value: ReturnType<typeof this.form.getRawValue>): void {
+    const lang = this.languageService.lang();
+    const t = lineLabels(lang);
+    const types = getDictionary(lang === 'th' ? 'th' : 'en').events.form.eventTypes as Record<string, string>;
+    const date = formatVisitDate(value.preferredDate, lang) + (value.flexibleDate ? ` (${t.flexible})` : '');
+    const url = lineMessageUrl(
+      composeLineMessage(
+        t.event,
+        [
+          [t.name, value.name],
+          [t.organization, value.organization],
+          [t.eventType, types[value.eventType] ?? value.eventType],
+          [t.visitDate, date],
+          [t.guests, value.guestCount],
+          [t.phone, value.phone],
+          [t.email, value.email],
+        ],
+        ['', value.message.trim()],
+      ),
+    );
+    this.sentUrl.set(url);
+    openLine(url);
+    afterNextRender(() => document.getElementById('inquiry-sent')?.focus(), { injector: this.injector });
   }
 
   fieldInvalid(name: keyof typeof this.form.controls): boolean {

@@ -1,0 +1,10 @@
+product,name_en,name_th,name_de,size,price,available,image,image_alt,origin,process,altitude,roast,notes,body,description_en,description_th,description_de
+coffee-beans,Coffee Beans,เมล็ดกาแฟ,Kaffeebohnen,100g,350,yes,images/garden/cof2.webp,"A dark bag of Erotic Garden single origin arabica coffee, standing on a wooden table",,,,,,,,,
+coffee-beans,,,,,,,images/garden/cof1-3.webp,A red bag of Erotic Garden single origin arabica coffee,,,,,,,,,
+coffee-beans,,,,,,,images/garden/cof4.webp,A green bag of Erotic Garden single origin arabica coffee,,,,,,,,,
+khun-chang-khian-honey,Khun Chang Khian,ขุนช่างเคี่ยน,Khun Chang Khian,100g,350,yes,images/coffee/khun-chang-khian-honey.webp,"Yellow bag of Erotic Garden single origin coffee from Khun Chang Khian, honey process, light roast",Khun Chang Khian,Honey,"1,200 – 1,400 MASL",Light,"White floral, lemon, apple, honey",Smooth body,,,
+pangkhum-natural,Pangkhum,ปางขุม,Pangkhum,100g,350,yes,images/coffee/pangkhum-natural.webp,"Red bag of Erotic Garden single origin coffee from Pangkhum, natural process, light-medium roast",Pangkhum,Natural,"1,400 MASL",Light-Medium,"Berry, floral, rosé wine, stone fruit, chocolate",Full body,,,
+pangkhum-natural,,,,200g,,yes,,,,,,,,,,,
+mae-poon-luang-washed,Mae Poon Luang,แม่พูนหลวง,Mae Poon Luang,100g,350,yes,images/coffee/mae-poon-luang-washed.webp,"Blue bag of Erotic Garden single origin coffee from Mae Poon Luang, washed process, medium-dark roast",Mae Poon Luang,Washed,"1,300 MASL",Medium-Dark,"White flowers, honey, oolong tea",Full body,,,
+mae-poon-luang-washed,,,,250g,,yes,,,,,,,,,,,
+mae-poon-luang-washed,,,,500g,,yes,,,,,,,,,,,

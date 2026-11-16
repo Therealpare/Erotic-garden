@@ -1,19 +1,31 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { CartService } from '../../core/services/cart.service';
-import { OrderService } from '../../core/services/order.service';
-import { OrderConfirmation, StockProblem } from '../../core/models/order.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
-import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
+import { LanguageService } from '../../core/i18n/language.service';
+import { LocalizedPipe, pickLocalized } from '../../shared/pipes/localized.pipe';
+import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { composeLineMessage, formatBaht, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 
-type SubmitState = 'idle' | 'loading' | 'success' | 'error' | 'stock-changed';
+/** Today's date as YYYY-MM-DD in the visitor's own time zone. */
+export function todayIso(): string {
+  const now = new Date();
+  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
+}
 
+export function notInPast(control: AbstractControl<string>): ValidationErrors | null {
+  return control.value && control.value < todayIso() ? { past: true } : null;
+}
+
+/**
+ * Pre-order for a garden visit. Nothing is stored or charged here: the list is sent to the
+ * garden's LINE account as a typed-in message, and staff confirm it in the chat.
+ */
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -24,59 +36,44 @@ type SubmitState = 'idle' | 'loading' | 'success' | 'error' | 'stock-changed';
 export class CheckoutComponent {
   private readonly fb = inject(FormBuilder);
   private readonly cartService = inject(CartService);
-  private readonly orderService = inject(OrderService);
+  private readonly languageService = inject(LanguageService);
 
   readonly items = this.cartService.items;
-  readonly totalQuantity = this.cartService.totalQuantity;
   readonly totalAmount = this.cartService.totalAmount;
+  readonly hasUnpricedItems = this.cartService.hasUnpricedItems;
+  readonly hasPricedItems = computed(() => this.items().some((item) => item.price !== null));
 
-  readonly orderingAvailable = this.orderService.isAvailable();
-  readonly state = signal<SubmitState>('idle');
-  readonly confirmation = signal<OrderConfirmation | undefined>(undefined);
-
-  readonly currency = computed(() => this.items()[0]?.currency ?? 'THB');
+  readonly minDate = todayIso();
+  /** The LINE link of the last pre-order, for "Open LINE again". */
+  readonly sentUrl = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    phone: ['', [Validators.required, Validators.minLength(6)]],
-    address: ['', [Validators.required, Validators.minLength(5)]],
-    contactChannel: ['', [Validators.required, Validators.minLength(2)]],
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],
+    visitDate: ['', [Validators.required, notInPast]],
+    guests: [null as number | null, [Validators.min(1), Validators.max(50)]],
+    phone: ['', [Validators.pattern(/^[+\d][\d\s()-]{5,38}$/)]],
+    note: ['', [Validators.maxLength(500)]],
   });
 
   submit(): void {
-    if (!this.orderingAvailable || this.form.invalid || this.items().length === 0) {
+    if (this.form.invalid || this.items().length === 0) {
       this.form.markAllAsTouched();
       return;
     }
+    const url = lineMessageUrl(this.message());
+    this.sentUrl.set(url);
+    openLine(url);
+  }
 
-    const values = this.form.getRawValue();
-    this.state.set('loading');
-    this.orderService
-      .submit({
-        name: values.name.trim(),
-        phone: values.phone.trim(),
-        address: values.address.trim(),
-        contactChannel: values.contactChannel.trim(),
-        // Only ids and quantities are sent: the server prices each line from the database.
-        items: this.items().map((item) => ({ variantId: item.variantId, quantity: item.quantity })),
-      })
-      .subscribe({
-        next: (confirmation) => {
-          this.confirmation.set(confirmation);
-          this.state.set('success');
-          this.cartService.clear();
-          this.form.reset();
-        },
-        error: (error: unknown) => {
-          const problems = error instanceof HttpErrorResponse && error.status === 409 ? (error.error?.items as StockProblem[] | undefined) : undefined;
-          if (problems?.length) {
-            this.cartService.applyStockProblems(problems);
-            this.state.set('stock-changed');
-          } else {
-            this.state.set('error');
-          }
-        },
-      });
+  /** The guest has sent the message in LINE: start a fresh list. */
+  finish(): void {
+    this.cartService.clear();
+    this.form.reset();
+    this.sentUrl.set(null);
+  }
+
+  formatPrice(amount: number): string {
+    return formatBaht(amount);
   }
 
   updateQuantity(variantId: number, quantity: number): void {
@@ -90,5 +87,28 @@ export class CheckoutComponent {
   fieldInvalid(name: keyof typeof this.form.controls): boolean {
     const control = this.form.controls[name];
     return control.invalid && control.touched;
+  }
+
+  private message(): string {
+    const lang = this.languageService.lang();
+    const t = lineLabels(lang);
+    const value = this.form.getRawValue();
+    const lines = this.items().map((item) => {
+      const price = item.price === null ? t.priceOnLine : formatBaht(item.price * item.quantity);
+      return `• ${pickLocalized(item.name, lang)} ${item.size} × ${item.quantity} — ${price}`;
+    });
+    const total = this.hasPricedItems()
+      ? `${t.total}: ${formatBaht(this.totalAmount())}${this.hasUnpricedItems() ? ` ${t.plusOnLine}` : ''}`
+      : '';
+    return composeLineMessage(
+      t.preOrder,
+      [
+        [t.name, value.name],
+        [t.visitDate, formatVisitDate(value.visitDate, lang)],
+        [t.guests, value.guests],
+        [t.phone, value.phone],
+      ],
+      [`${t.items}:`, ...lines, total, value.note.trim() ? `${t.note}: ${value.note.trim()}` : ''],
+    );
   }
 }

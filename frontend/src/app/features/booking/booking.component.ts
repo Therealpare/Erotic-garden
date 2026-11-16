@@ -1,19 +1,14 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
-import { ExperienceService } from '../../core/services/experience.service';
-import { BookingService } from '../../core/services/booking.service';
-import { BookingConfirmation } from '../../core/models/booking.model';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
-import { getDictionary } from '../../core/i18n/dictionaries';
-
-type SubmitState = 'idle' | 'loading' | 'success' | 'error';
+import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { composeLineMessage, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 
 function notPastDateValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) return null;
@@ -30,36 +25,24 @@ function notPastDateValidator(control: AbstractControl): ValidationErrors | null
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css',
 })
+/** Visit booking request, sent to the garden's LINE account as a typed-in message. */
 export class BookingComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly experienceService = inject(ExperienceService);
-  private readonly bookingService = inject(BookingService);
   private readonly languageService = inject(LanguageService);
 
-  private readonly rawExperiences = toSignal(this.experienceService.getAll(), { initialValue: [] });
-
-  readonly experiences = computed(() => {
-    const items = getDictionary(this.languageService.lang()).experience.items as Record<string, { title: string }>;
-    return this.rawExperiences().map((experience) => {
-      const translated = items[experience.slug];
-      return translated ? { ...experience, title: translated.title } : experience;
-    });
-  });
-
-  readonly state = signal<SubmitState>('idle');
-  readonly confirmation = signal<BookingConfirmation | undefined>(undefined);
+  /** The LINE link of the last request, for "Open LINE again". */
+  readonly sentUrl = signal<string | null>(null);
 
   readonly today = new Date().toISOString().split('T')[0];
 
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.minLength(6)]],
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],
+    email: ['', [Validators.email, Validators.maxLength(255)]],
+    phone: ['', [Validators.pattern(/^[+\d][\d\s()-]{5,38}$/)]],
     visitDate: ['', [Validators.required, notPastDateValidator]],
-    preferredTime: ['', [Validators.required]],
+    preferredTime: [''],
     guestCount: [2, [Validators.required, Validators.min(1), Validators.max(20)]],
-    experienceId: [null as number | null, [Validators.required]],
-    message: [''],
+    message: ['', [Validators.maxLength(1000)]],
   });
 
   submit(): void {
@@ -67,21 +50,27 @@ export class BookingComponent {
       this.form.markAllAsTouched();
       return;
     }
-
-    this.state.set('loading');
-    this.bookingService.submit(this.form.getRawValue()).subscribe({
-      next: (confirmation) => {
-        this.confirmation.set(confirmation);
-        this.state.set('success');
-        this.form.reset({ guestCount: 2 });
-      },
-      error: () => this.state.set('error'),
-    });
+    const lang = this.languageService.lang();
+    const t = lineLabels(lang);
+    const value = this.form.getRawValue();
+    const url = lineMessageUrl(
+      composeLineMessage(t.booking, [
+        [t.name, value.name],
+        [t.visitDate, formatVisitDate(value.visitDate, lang)],
+        [t.time, value.preferredTime],
+        [t.guests, value.guestCount],
+        [t.phone, value.phone],
+        [t.email, value.email],
+        [t.note, value.message],
+      ]),
+    );
+    this.sentUrl.set(url);
+    openLine(url);
   }
 
   startNewBooking(): void {
-    this.state.set('idle');
-    this.confirmation.set(undefined);
+    this.sentUrl.set(null);
+    this.form.reset({ guestCount: 2 });
   }
 
   fieldInvalid(name: keyof typeof this.form.controls): boolean {

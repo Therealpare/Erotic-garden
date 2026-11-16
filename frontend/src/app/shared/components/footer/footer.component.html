@@ -42,6 +42,12 @@
         <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-gold">{{ 'footer.follow' | translate }}</p>
         <ul class="space-y-4 text-sm text-cream/80">
           <li>
+            <a [href]="lineUrl" target="_blank" rel="noopener noreferrer" class="block transition-colors duration-400 hover:text-ivory">
+              <span class="block">LINE</span>
+              <span class="block break-all text-cream/60">{{ lineId }}</span>
+            </a>
+          </li>
+          <li>
             <a
               [href]="siteSettings()?.instagram"
               target="_blank"

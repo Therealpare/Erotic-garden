@@ -11,4 +11,11 @@ export const environment = {
    * Use a key restricted to your production domain. See environment.ts for setup steps.
    */
   googleMapsApiKey: '',
+  /**
+   * Products Google Sheet published as CSV (File → Share → Publish to web → CSV), so the
+   * owner can change products, sizes, prices and availability without a deploy. Used when
+   * there is no API; while empty, or if the sheet can't be read, the site uses the
+   * snapshot in public/data/products.csv.
+   */
+  productsSheetUrl: '',
 };

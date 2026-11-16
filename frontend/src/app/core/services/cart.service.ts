@@ -1,7 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { CartItem } from '../models/cart.model';
 import { Product, ProductVariant } from '../models/product.model';
-import { StockProblem } from '../models/order.model';
 
 const STORAGE_KEY = 'eg-cart';
 
@@ -10,13 +9,15 @@ export class CartService {
   readonly items = signal<CartItem[]>(this.readInitial());
 
   readonly totalQuantity = computed(() => this.items().reduce((sum, item) => sum + item.quantity, 0));
-  readonly totalAmount = computed(() => this.items().reduce((sum, item) => sum + item.price * item.quantity, 0));
+  /** Total of the lines that have a price; see `hasUnpricedItems` for the rest. */
+  readonly totalAmount = computed(() => this.items().reduce((sum, item) => sum + (item.price ?? 0) * item.quantity, 0));
+  readonly hasUnpricedItems = computed(() => this.items().some((item) => item.price === null));
 
   quantityOf(variantId: number): number {
     return this.items().find((item) => item.variantId === variantId)?.quantity ?? 0;
   }
 
-  /** Adds one size of a product. Never exceeds the stock known for that size; returns false if nothing was added. */
+  /** Adds one size of a product, up to its per-order limit; returns false if nothing was added. */
   addItem(product: Product, variant: ProductVariant, quantity = 1): boolean {
     if (variant.soldOut || variant.stock <= 0) return false;
     const items = this.items();
@@ -54,20 +55,6 @@ export class CartService {
 
   removeItem(variantId: number): void {
     this.set(this.items().filter((item) => item.variantId !== variantId));
-  }
-
-  /** Applies the server's stock report after a 409: lowers quantities, drops sold-out lines. */
-  applyStockProblems(problems: StockProblem[]): void {
-    const available = new Map(problems.map((problem) => [problem.variantId, problem.available]));
-    this.set(
-      this.items()
-        .map((item) =>
-          available.has(item.variantId)
-            ? { ...item, maxQuantity: available.get(item.variantId)!, quantity: Math.min(item.quantity, available.get(item.variantId)!) }
-            : item,
-        )
-        .filter((item) => item.quantity > 0),
-    );
   }
 
   clear(): void {

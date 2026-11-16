@@ -65,17 +65,14 @@ describe('CartService', () => {
     expect(cart.quantityOf(1)).toBe(2);
   });
 
-  it('applies the server stock report: lowers quantities and drops sold-out lines', () => {
-    const a = variant(1, 5);
-    const b = variant(2, 5);
-    const p = product([a, b]);
-    cart.addItem(p, a, 3);
-    cart.addItem(p, b, 2);
-    cart.applyStockProblems([
-      { variantId: 1, available: 1 },
-      { variantId: 2, available: 0 },
-    ]);
-    expect(cart.items().map((item) => [item.variantId, item.quantity, item.maxQuantity])).toEqual([[1, 1, 1]]);
+  it('totals only priced lines and flags the ones priced on LINE', () => {
+    const priced = variant(1, 5);
+    const onRequest = { ...variant(2, 5), price: null };
+    const p = product([priced, onRequest]);
+    cart.addItem(p, priced, 2);
+    cart.addItem(p, onRequest, 1);
+    expect(cart.totalAmount()).toBe(2 * (priced.price ?? 0));
+    expect(cart.hasUnpricedItems()).toBeTrue();
   });
 
   it('discards carts saved by the old (pre-size) cart format', () => {

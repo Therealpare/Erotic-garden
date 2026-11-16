@@ -13,4 +13,11 @@ export const environment = {
    *    for CI/CD, inject it at build time instead (e.g. replace this file or use a build script).
    */
   googleMapsApiKey: '',
+  /**
+   * Products Google Sheet published as CSV (File → Share → Publish to web → CSV), so the
+   * owner can change products, sizes, prices and availability without a deploy. Used when
+   * there is no API; while empty, or if the sheet can't be read, the site uses the
+   * snapshot in public/data/products.csv.
+   */
+  productsSheetUrl: '',
 };

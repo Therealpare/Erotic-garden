@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ContainerComponent } from '../../shared/components/container/container.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
-import { ContactService } from '../../core/services/contact.service';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
+import { LanguageService } from '../../core/i18n/language.service';
+import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { composeLineMessage, lineLabels } from '../../shared/utils/line-message.util';
 
-type SubmitState = 'idle' | 'loading' | 'success' | 'error';
-
+/** Contact form, sent to the garden's LINE account as a typed-in message. */
 @Component({
   selector: 'app-contact',
   standalone: true,
@@ -18,15 +19,16 @@ type SubmitState = 'idle' | 'loading' | 'success' | 'error';
 })
 export class ContactComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly contactService = inject(ContactService);
+  private readonly languageService = inject(LanguageService);
 
-  readonly state = signal<SubmitState>('idle');
+  /** The LINE link of the last message, for "Open LINE again". */
+  readonly sentUrl = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email]],
-    subject: ['', [Validators.required, Validators.minLength(2)]],
-    message: ['', [Validators.required, Validators.minLength(10)]],
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],
+    email: ['', [Validators.email, Validators.maxLength(255)]],
+    subject: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(160)]],
+    message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]],
   });
 
   submit(): void {
@@ -34,15 +36,22 @@ export class ContactComponent {
       this.form.markAllAsTouched();
       return;
     }
+    const t = lineLabels(this.languageService.lang());
+    const value = this.form.getRawValue();
+    const url = lineMessageUrl(
+      composeLineMessage(t.contact, [
+        [t.name, value.name],
+        [t.email, value.email],
+        [t.subject, value.subject],
+      ], ['', value.message.trim()]),
+    );
+    this.sentUrl.set(url);
+    openLine(url);
+  }
 
-    this.state.set('loading');
-    this.contactService.submit(this.form.getRawValue()).subscribe({
-      next: () => {
-        this.state.set('success');
-        this.form.reset();
-      },
-      error: () => this.state.set('error'),
-    });
+  startOver(): void {
+    this.sentUrl.set(null);
+    this.form.reset();
   }
 
   fieldInvalid(name: 'name' | 'email' | 'subject' | 'message'): boolean {

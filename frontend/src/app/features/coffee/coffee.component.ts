@@ -17,6 +17,7 @@ import { getDictionary } from '../../core/i18n/dictionaries';
 import { Product, ProductVariant } from '../../core/models/product.model';
 import { CoffeeGuideEntry } from '../../core/models/coffee-guide.model';
 import { loadState } from '../../shared/utils/load-state.util';
+import { formatBaht } from '../../shared/utils/line-message.util';
 import { ROAST_STEPS, processKey, roastKeys, roastStep } from '../../shared/utils/coffee-profile.util';
 
 /** A message shown under one product after pressing "Add to Cart". */
@@ -68,7 +69,6 @@ export class CoffeeComponent {
 
   /** Products that have at least one size on sale. */
   readonly shopProducts = computed(() => this.shop().data.filter((product) => product.variants.length > 0));
-  readonly orderingAvailable = this.productService.isLive();
 
   /** Coffees with label details (roast or process filled in by an admin). */
   readonly beans = computed<BeanProfile[]>(() => {
@@ -94,6 +94,7 @@ export class CoffeeComponent {
 
   readonly cartItems = this.cartService.items;
   readonly cartTotalAmount = this.cartService.totalAmount;
+  readonly cartHasUnpriced = this.cartService.hasUnpricedItems;
 
   /** Our coffees whose label roast falls in this roast level (light-medium counts for both). */
   beansAtRoast(key: string): BeanProfile[] {
@@ -132,9 +133,9 @@ export class CoffeeComponent {
     this.notice.set(null);
   }
 
-  /** In-stock and not already fully in the cart. */
+  /** Available and not already at its per-order limit. Pre-orders go through LINE, so this never needs the API. */
   canAdd(variant: ProductVariant): boolean {
-    return this.orderingAvailable && !variant.soldOut && this.cartService.quantityOf(variant.id) < variant.stock;
+    return !variant.soldOut && this.cartService.quantityOf(variant.id) < variant.stock;
   }
 
   addToCart(product: Product): void {
@@ -155,7 +156,10 @@ export class CoffeeComponent {
     this.cartService.removeItem(variantId);
   }
 
-  formatPrice(price: number, currency: string): string {
-    return currency === 'THB' ? `฿${price}` : `${currency} ${price}`;
+  /** "฿350"; null when the price is confirmed on LINE (the template shows that label instead). */
+  formatPrice(price: number | null, currency: string): string | null {
+    if (price === null) return null;
+    return currency === 'THB' ? formatBaht(price) : `${currency} ${price}`;
   }
+
 }

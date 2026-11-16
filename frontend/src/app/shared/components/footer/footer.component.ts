@@ -7,6 +7,7 @@ import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 import { LanguageService } from '../../../core/i18n/language.service';
 import { getDictionary } from '../../../core/i18n/dictionaries';
 import { SiteSettingsService } from '../../../core/services/site-settings.service';
+import { LINE_ADD_FRIEND_URL, LINE_OA_ID } from '../../../core/config/line.config';
 
 interface NavLink {
   label: string;
@@ -21,6 +22,9 @@ interface NavLink {
   styleUrl: './footer.component.css',
 })
 export class FooterComponent {
+  readonly lineUrl = LINE_ADD_FRIEND_URL;
+  readonly lineId = LINE_OA_ID;
+
   private readonly languageService = inject(LanguageService);
   private readonly siteSettingsService = inject(SiteSettingsService);
 

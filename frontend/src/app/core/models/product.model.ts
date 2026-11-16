@@ -7,11 +7,11 @@ export interface ProductImage {
   sortOrder: number;
 }
 
-/** One purchasable size, e.g. 100g. `soldOut` is true whenever stock is 0. */
+/** One size, e.g. 100g. `soldOut` is true whenever stock is 0. A null price means "ask on LINE". */
 export interface ProductVariant {
   id: number;
   label: string;
-  price: number;
+  price: number | null;
   currency: string;
   stock: number;
   soldOut: boolean;

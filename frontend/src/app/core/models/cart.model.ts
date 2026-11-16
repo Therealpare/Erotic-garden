@@ -7,10 +7,11 @@ export interface CartItem {
   slug: string;
   name: LocalizedText;
   size: string;
-  price: number;
+  /** Null when the price is confirmed on LINE. */
+  price: number | null;
   currency: string;
   imageUrl: string;
   quantity: number;
-  /** Stock known when added/refreshed; the server re-checks before creating the order. */
+  /** Most that can be pre-ordered of this size in one order. */
   maxQuantity: number;
 }

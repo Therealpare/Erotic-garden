@@ -297,9 +297,6 @@
     ></app-section-header>
     <p *ngIf="shop().status === 'loading'" class="mt-14 text-sm text-stone" role="status">{{ 'states.loading' | translate }}</p>
     <p *ngIf="shop().status === 'error'" class="mt-14 border border-terracotta/30 p-6 text-sm text-terracotta" role="alert">{{ 'states.error' | translate }}</p>
-    <p *ngIf="shop().status === 'ready' && !orderingAvailable" class="mt-10 border border-stone/30 p-5 text-sm text-stone">
-      {{ 'coffee.shop.unavailable' | translate }}
-    </p>
     <div *ngIf="shop().status === 'ready' && shopProducts().length === 0" class="mt-14">
       <app-empty-state [title]="'coffee.shop.emptyTitle' | translate" [message]="'coffee.shop.emptyMessage' | translate"></app-empty-state>
     </div>
@@ -339,7 +336,7 @@
           </fieldset>
 
           <p class="mt-3 text-sm text-stone">
-            {{ formatPrice(variant.price, variant.currency) }}
+            {{ formatPrice(variant.price, variant.currency) ?? ('coffee.shop.priceOnLine' | translate) }}
             <span *ngIf="!variant.soldOut && variant.stock <= 5" class="ml-2 text-xs text-terracotta">{{ onlyLeftLabel(variant.stock) }}</span>
           </p>
 
@@ -389,7 +386,7 @@
               +
             </button>
           </div>
-          <p class="w-20 shrink-0 text-right text-sm text-charcoal">{{ formatPrice(item.price * item.quantity, item.currency) }}</p>
+          <p class="w-20 shrink-0 text-right text-sm text-charcoal">{{ item.price !== null ? formatPrice(item.price * item.quantity, item.currency) : ('checkout.priceOnLine' | translate) }}</p>
           <button
             type="button"
             (click)="removeItem(item.variantId)"
@@ -401,7 +398,10 @@
       </div>
       <div class="mt-6 flex items-center justify-between">
         <p class="text-sm uppercase tracking-widest2 text-stone">{{ 'cart.subtotal' | translate }}</p>
-        <p class="text-xl text-forest">{{ formatPrice(cartTotalAmount(), cartItems()[0].currency) }}</p>
+        <p class="text-right text-xl text-forest">
+          {{ formatPrice(cartTotalAmount(), cartItems()[0].currency) }}
+          <span *ngIf="cartHasUnpriced()" class="block text-xs text-stone">{{ 'checkout.plusOnLine' | translate }}</span>
+        </p>
       </div>
       <div class="mt-8">
         <app-button variant="primary" routerLink="/checkout">{{ 'cart.checkout' | translate }}</app-button>

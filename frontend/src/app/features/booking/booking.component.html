@@ -11,19 +11,20 @@
 <section class="py-24 sm:py-32">
   <app-container>
     <div class="mx-auto max-w-xl">
-      <div *ngIf="state() === 'success'; else formBlock" class="border border-forest/20 bg-cream p-10 text-center">
-        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'booking.success.eyebrow' | translate }}</p>
-        <p class="font-display text-3xl text-forest">{{ 'booking.success.title' | translate }}</p>
-        <p class="mt-4 text-sm leading-relaxed text-stone">
-          {{ 'booking.success.body' | translate }}
-        </p>
-        <p class="mt-6 border border-dashed border-stone/30 bg-ivory px-6 py-4 font-display text-2xl tracking-widest2 text-forest">
-          {{ confirmation()?.bookingCode }}
-        </p>
-        <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <div *ngIf="sentUrl() as url; else formBlock" class="border border-forest/20 bg-cream p-10 text-center" role="status">
+        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'line.sentEyebrow' | translate }}</p>
+        <p class="font-display text-3xl text-forest">{{ 'line.sentTitle' | translate }}</p>
+        <p class="mt-4 text-sm leading-relaxed text-stone">{{ 'line.sentBody' | translate }}</p>
+        <div class="mt-8 flex flex-col items-center gap-4">
+          <a
+            [href]="url"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 bg-[#06C755] px-6 py-3 text-xs font-medium uppercase tracking-widest2 text-white transition-opacity duration-400 hover:opacity-90"
+          >{{ 'line.openAgain' | translate }}</a>
           <app-button variant="secondary" (click)="startNewBooking()">{{ 'booking.success.bookAnother' | translate }}</app-button>
-          <app-button variant="primary" routerLink="/">{{ 'booking.success.backToHome' | translate }}</app-button>
         </div>
+        <p class="mt-6 text-xs text-stone">{{ 'line.noLine' | translate }}</p>
       </div>
 
       <ng-template #formBlock>
@@ -119,23 +120,6 @@
                 {{ 'booking.form.guestCountError' | translate }}
               </p>
             </div>
-
-            <div>
-              <label for="experienceId" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.experience' | translate }}</label>
-              <select
-                id="experienceId"
-                formControlName="experienceId"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('experienceId')"
-                aria-describedby="experienceId-error"
-              >
-                <option [ngValue]="null" disabled>{{ 'booking.form.experiencePlaceholder' | translate }}</option>
-                <option *ngFor="let experience of experiences()" [ngValue]="experience.id">{{ experience.title }}</option>
-              </select>
-              <p *ngIf="fieldInvalid('experienceId')" id="experienceId-error" class="mt-2 text-xs text-terracotta">
-                {{ 'booking.form.experienceError' | translate }}
-              </p>
-            </div>
           </div>
 
           <div>
@@ -148,13 +132,15 @@
             ></textarea>
           </div>
 
-          <p *ngIf="state() === 'error'" class="text-sm text-terracotta">
-            {{ 'booking.form.errorMessage' | translate }}
-          </p>
-
-          <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
-            {{ state() === 'loading' ? ('booking.form.sending' | translate) : ('booking.form.submit' | translate) }}
-          </app-button>
+          <div>
+            <button
+              type="submit"
+              class="inline-flex w-full items-center justify-center bg-[#06C755] px-6 py-4 text-xs font-medium uppercase tracking-widest2 text-white transition-opacity duration-400 hover:opacity-90 sm:w-auto"
+            >
+              {{ 'booking.form.submit' | translate }}
+            </button>
+            <p class="mt-3 text-xs text-stone">{{ 'line.noLine' | translate }}</p>
+          </div>
         </form>
       </ng-template>
     </div>

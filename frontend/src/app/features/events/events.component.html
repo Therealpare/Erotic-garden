@@ -25,14 +25,37 @@
       <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'events.form.eyebrow' | translate }}</p>
       <h2 id="inquiry-title" class="text-4xl leading-tight sm:text-5xl">{{ 'events.form.headline' | translate }}</h2>
 
-      <!-- No API configured for this build: be honest and route visitors to Contact. -->
-      <div *ngIf="!isAvailable" class="mt-10 border border-stone/30 p-8">
-        <p class="text-sm leading-relaxed text-stone">{{ 'events.form.unavailable' | translate }}</p>
-        <app-button class="mt-6 inline-block" variant="secondary" routerLink="/contact">{{ 'events.form.contactLink' | translate }}</app-button>
+      <!-- Live site (no API): the inquiry was handed to LINE -->
+      <div
+        *ngIf="sentUrl() as url"
+        id="inquiry-sent"
+        tabindex="-1"
+        class="mt-10 scroll-mt-28 border border-forest/20 bg-ivory p-10 text-center focus:outline-none"
+        role="status"
+      >
+        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'line.sentEyebrow' | translate }}</p>
+        <p class="font-display text-3xl text-forest">{{ 'line.sentTitle' | translate }}</p>
+        <p class="mt-3 text-sm leading-relaxed text-stone">{{ 'line.sentBody' | translate }}</p>
+        <div class="mt-8 flex flex-col items-center gap-4">
+          <a
+            [href]="url"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 bg-[#06C755] px-6 py-3 text-xs font-medium uppercase tracking-widest2 text-white transition-opacity duration-400 hover:opacity-90"
+          >{{ 'line.openAgain' | translate }}</a>
+          <button
+            type="button"
+            (click)="startOver()"
+            class="text-xs font-medium uppercase tracking-widest2 text-forest underline-offset-4 hover:text-terracotta hover:underline"
+          >
+            {{ 'events.success.another' | translate }}
+          </button>
+        </div>
+        <p class="mt-6 text-xs text-stone">{{ 'line.noLine' | translate }}</p>
       </div>
 
       <div
-        *ngIf="isAvailable && state() === 'success'"
+        *ngIf="!viaLine && state() === 'success'"
         id="inquiry-success"
         tabindex="-1"
         class="mt-10 scroll-mt-28 border border-forest/20 bg-ivory p-10 text-center focus:outline-none"
@@ -51,7 +74,7 @@
       </div>
 
       <form
-        *ngIf="isAvailable && state() !== 'success'"
+        *ngIf="state() !== 'success' && !sentUrl()"
         id="event-inquiry-form"
         [formGroup]="form"
         (ngSubmit)="submit()"
@@ -192,9 +215,20 @@
           <p *ngIf="state() === 'rate-limited'" class="text-sm text-terracotta">{{ 'events.form.rateLimited' | translate }}</p>
         </div>
 
-        <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
-          {{ state() === 'loading' ? ('events.form.sending' | translate) : ('events.form.submit' | translate) }}
-        </app-button>
+        <div *ngIf="viaLine; else apiSubmit">
+          <button
+            type="submit"
+            class="inline-flex w-full items-center justify-center bg-[#06C755] px-6 py-4 text-xs font-medium uppercase tracking-widest2 text-white transition-opacity duration-400 hover:opacity-90 sm:w-auto"
+          >
+            {{ 'events.form.submitLine' | translate }}
+          </button>
+          <p class="mt-3 text-xs text-stone">{{ 'line.noLine' | translate }}</p>
+        </div>
+        <ng-template #apiSubmit>
+          <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
+            {{ state() === 'loading' ? ('events.form.sending' | translate) : ('events.form.submit' | translate) }}
+          </app-button>
+        </ng-template>
       </form>
     </div>
   </app-container>
