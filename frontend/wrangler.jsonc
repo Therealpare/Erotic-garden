@@ -10,8 +10,10 @@
   "assets": {
     "directory": "./dist/frontend/browser",
     "binding": "ASSETS",
-    // Angular handles routes like /coffee in the browser: unknown paths get index.html.
-    "not_found_handling": "single-page-application",
+    // Pages are prerendered to e.g. coffee/index.html and served at /coffee (no trailing slash).
+    // Anything else falls through to the Worker, which serves the app shell (index.csr.html).
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "none",
     // Every request goes through the Worker first: it redirects www/http/workers.dev to the
     // main address and handles /api/booking; everything else is served from the assets.
     "run_worker_first": true

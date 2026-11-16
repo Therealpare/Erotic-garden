@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, effect, inject, input, viewChild } from '@angular/core';
-import * as L from 'leaflet';
+import { Component, ElementRef, OnDestroy, afterNextRender, effect, input, viewChild } from '@angular/core';
+import type * as Leaflet from 'leaflet';
 
 /** Terracotta/ivory pin matching the site's brand palette — avoids bundling Leaflet's default marker image assets. */
-const MARKER_ICON = L.divIcon({
+const MARKER_ICON_OPTIONS: Leaflet.DivIconOptions = {
   className: 'app-map-marker',
   html: `<svg width="32" height="42" viewBox="0 0 32 42" xmlns="http://www.w3.org/2000/svg">
       <path d="M16 0C7.163 0 0 7.163 0 16c0 11 16 26 16 26s16-15 16-26C32 7.163 24.837 0 16 0z" fill="#A85C43"/>
@@ -11,7 +11,7 @@ const MARKER_ICON = L.divIcon({
   iconSize: [32, 42],
   iconAnchor: [16, 42],
   popupAnchor: [0, -38],
-});
+};
 
 @Component({
   selector: 'app-map',
@@ -20,7 +20,8 @@ const MARKER_ICON = L.divIcon({
   templateUrl: './map.component.html',
   styleUrl: './map.component.css',
 })
-export class MapComponent implements AfterViewInit, OnDestroy {
+/** Leaflet touches `window` as soon as it loads, so it is imported in the browser only (never while prerendering). */
+export class MapComponent implements OnDestroy {
   latitude = input.required<number>();
   longitude = input.required<number>();
   /** Place name shown in the marker popup and used as the iframe title. */
@@ -29,7 +30,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   address = input.required<string>();
 
   private readonly mapContainer = viewChild.required<ElementRef<HTMLElement>>('mapContainer');
-  private map?: L.Map;
+  private map?: Leaflet.Map;
 
   constructor() {
     effect(() => {
@@ -38,9 +39,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       const lng = this.longitude();
       this.map?.setView([lat, lng]);
     });
+    afterNextRender(() => void this.createMap());
   }
 
-  ngAfterViewInit(): void {
+  private async createMap(): Promise<void> {
+    // Leaflet is CommonJS: depending on the bundler its API is on the module or on `default`.
+    const leaflet = await import('leaflet');
+    const L = (leaflet as unknown as { default?: typeof Leaflet }).default ?? leaflet;
     const map = L.map(this.mapContainer().nativeElement, {
       center: [this.latitude(), this.longitude()],
       zoom: 15,
@@ -52,7 +57,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       maxZoom: 19,
     }).addTo(map);
 
-    L.marker([this.latitude(), this.longitude()], { icon: MARKER_ICON })
+    L.marker([this.latitude(), this.longitude()], { icon: L.divIcon(MARKER_ICON_OPTIONS) })
       .addTo(map)
       .bindPopup(`<strong>${this.label()}</strong><br>${this.address()}`)
       .openPopup();

@@ -15,6 +15,7 @@ export const LINE_ADD_FRIEND_URL = `https://line.me/R/ti/p/${encodeURIComponent(
 
 /** Phones and tablets, where line.me links should hand over to the LINE app. */
 export function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false; // prerendering at build time
   return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
 }
 

@@ -186,6 +186,31 @@ export default {
     const { pathname } = new URL(request.url);
     if (pathname === '/api/booking') return handleBooking(request, env);
     if (pathname.startsWith('/api/')) return json(404, { error: 'not-found' });
-    return env.ASSETS.fetch(request);
+
+    const response = await env.ASSETS.fetch(request);
+    if (response.status !== 404 || !isPageRequest(request, pathname)) return response;
+    return appShell(request, env);
   },
 };
+
+/** A page navigation (not a missing image, script or other file). */
+function isPageRequest(request: Request, pathname: string): boolean {
+  return (request.method === 'GET' || request.method === 'HEAD') && !/\.[a-z0-9]+$/i.test(pathname);
+}
+
+/**
+ * Pages that weren't prerendered (e.g. /art/some-piece, or a mistyped address) get the
+ * empty app shell, and Angular renders the right page — or its "not found" page — in the
+ * browser. Serving the prerendered home page instead would flash the wrong content.
+ */
+async function appShell(request: Request, env: Env): Promise<Response> {
+  let shell = await env.ASSETS.fetch(new Request(new URL('/index.csr.html', request.url)));
+  const location = shell.headers.get('Location');
+  if (shell.status >= 300 && shell.status < 400 && location) {
+    shell = await env.ASSETS.fetch(new Request(new URL(location, request.url)));
+  }
+  return new Response(request.method === 'HEAD' ? null : shell.body, {
+    status: 200,
+    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0, must-revalidate' },
+  });
+}

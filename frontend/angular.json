@@ -35,10 +35,15 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "leaflet"
-            ]
+            ],
+            "loader": {
+              ".csv": "text"
+            }
           },
           "configurations": {
             "production": {
+              "server": "src/main.server.ts",
+              "outputMode": "static",
               "budgets": [
                 {
                   "type": "initial",
