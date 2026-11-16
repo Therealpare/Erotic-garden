@@ -12,7 +12,7 @@ import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { EventInquiryService } from '../../core/services/event-inquiry.service';
 import { LanguageService } from '../../core/i18n/language.service';
 import { getDictionary } from '../../core/i18n/dictionaries';
-import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { lineLinkTarget, lineMessageUrl, openLine } from '../../core/config/line.config';
 import { composeLineMessage, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 import {
   CONTACT_PREFERENCES,
@@ -50,6 +50,7 @@ export class EventsComponent {
   readonly viaLine = !this.inquiryService.isAvailable();
   /** The LINE link of the last inquiry, for "Open LINE again". */
   readonly sentUrl = signal<string | null>(null);
+  readonly lineTarget = lineLinkTarget();
   readonly state = signal<SubmitState>('idle');
   readonly referenceCode = signal<string | null>(null);
   readonly minDate = todayIso();

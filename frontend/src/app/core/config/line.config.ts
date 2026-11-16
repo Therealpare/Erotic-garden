@@ -13,8 +13,28 @@ export function lineMessageUrl(text: string): string {
 /** Adds the account as a friend (shows a QR code on desktop). */
 export const LINE_ADD_FRIEND_URL = `https://line.me/R/ti/p/${encodeURIComponent(LINE_OA_ID)}`;
 
-/** Opens LINE in a new tab; returns false if the browser blocked it (the page then shows a link). */
+/** Phones and tablets, where line.me links should hand over to the LINE app. */
+export function isMobileDevice(): boolean {
+  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
+}
+
+/** `target` for "Open LINE" links: same tab on phones (see openLine), a new tab on desktop. */
+export function lineLinkTarget(): '_blank' | null {
+  return isMobileDevice() ? null : '_blank';
+}
+
+/**
+ * Opens the LINE chat. On phones the link is followed in the same tab: a new tab
+ * (window.open) often fails to hand over to the LINE app — especially in in-app browsers
+ * (LINE, Facebook, Instagram) — and lands on the line.me homepage instead. On desktop a
+ * new tab keeps the site open next to LINE's QR page. Returns false if a popup was
+ * blocked (the page always shows an "Open LINE again" link as well).
+ */
 export function openLine(url: string): boolean {
+  if (isMobileDevice()) {
+    window.location.assign(url);
+    return true;
+  }
   // Not passing "noopener" as a feature: it makes window.open always return null.
   const opened = window.open(url, '_blank');
   if (opened) opened.opener = null;

@@ -7,7 +7,7 @@ import { ContainerComponent } from '../../shared/components/container/container.
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
-import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { lineLinkTarget, lineMessageUrl, openLine } from '../../core/config/line.config';
 import { composeLineMessage, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 
 function notPastDateValidator(control: AbstractControl): ValidationErrors | null {
@@ -32,6 +32,7 @@ export class BookingComponent {
 
   /** The LINE link of the last request, for "Open LINE again". */
   readonly sentUrl = signal<string | null>(null);
+  readonly lineTarget = lineLinkTarget();
 
   readonly today = new Date().toISOString().split('T')[0];
 

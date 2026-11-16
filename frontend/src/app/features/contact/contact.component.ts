@@ -6,7 +6,7 @@ import { ContainerComponent } from '../../shared/components/container/container.
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
-import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { lineLinkTarget, lineMessageUrl, openLine } from '../../core/config/line.config';
 import { composeLineMessage, lineLabels } from '../../shared/utils/line-message.util';
 
 /** Contact form, sent to the garden's LINE account as a typed-in message. */
@@ -23,6 +23,7 @@ export class ContactComponent {
 
   /** The LINE link of the last message, for "Open LINE again". */
   readonly sentUrl = signal<string | null>(null);
+  readonly lineTarget = lineLinkTarget();
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],

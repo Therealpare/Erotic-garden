@@ -9,7 +9,7 @@ import { CartService } from '../../core/services/cart.service';
 import { TranslatePipe } from '../../core/i18n/translate.pipe';
 import { LanguageService } from '../../core/i18n/language.service';
 import { LocalizedPipe, pickLocalized } from '../../shared/pipes/localized.pipe';
-import { lineMessageUrl, openLine } from '../../core/config/line.config';
+import { lineLinkTarget, lineMessageUrl, openLine } from '../../core/config/line.config';
 import { composeLineMessage, formatBaht, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 
 /** Today's date as YYYY-MM-DD in the visitor's own time zone. */
@@ -46,6 +46,7 @@ export class CheckoutComponent {
   readonly minDate = todayIso();
   /** The LINE link of the last pre-order, for "Open LINE again". */
   readonly sentUrl = signal<string | null>(null);
+  readonly lineTarget = lineLinkTarget();
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],
