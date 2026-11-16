@@ -11,6 +11,7 @@ export const DE: typeof EN = {
     visit: 'Besuch',
     media: 'Medien',
     events: 'Events',
+    explore: 'Entdecken',
   },
   cta: {
     planYourVisit: 'Besuch planen',

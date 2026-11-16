@@ -11,6 +11,7 @@ export const TH: typeof EN = {
     visit: 'แผนการมาเยือน',
     media: 'สื่อ',
     events: 'จัดงาน',
+    explore: 'สำรวจ',
   },
   cta: {
     planYourVisit: 'วางแผนการมาเยือน',

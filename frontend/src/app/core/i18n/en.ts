@@ -9,6 +9,7 @@ export const EN = {
     visit: 'Visit',
     media: 'Media',
     events: 'Events',
+    explore: 'Explore',
   },
   cta: {
     planYourVisit: 'Plan Your Visit',

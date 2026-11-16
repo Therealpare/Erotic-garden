@@ -5,25 +5,68 @@
         Erotic Garden
       </a>
 
-      <nav class="hidden items-center gap-5 min-[1440px]:flex 2xl:gap-8" aria-label="Primary">
+      <nav class="hidden items-center gap-7 lg:flex xl:gap-9" aria-label="Primary">
+        <ng-container *ngTemplateOutlet="desktopLinks; context: { $implicit: menu().before }"></ng-container>
+
+        <div class="relative" data-explore>
+          <button
+            type="button"
+            data-explore-trigger
+            (click)="toggleExplore()"
+            (keydown)="onExploreTriggerKeydown($event)"
+            aria-haspopup="menu"
+            [attr.aria-expanded]="isExploreOpen()"
+            class="flex items-center gap-1.5 whitespace-nowrap text-xs font-medium uppercase tracking-widest2 transition-colors duration-400 hover:text-terracotta focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-forest"
+            [class.text-terracotta]="isExploreOpen() || exploreActive()"
+            [class.text-charcoal]="!isExploreOpen() && !exploreActive()"
+          >
+            {{ exploreLabel() }}
+            <svg class="h-2.5 w-2.5 transition-transform duration-400" [class.rotate-180]="isExploreOpen()" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+              <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <div
+            *ngIf="isExploreOpen()"
+            role="menu"
+            [attr.aria-label]="exploreLabel()"
+            (keydown)="onExploreMenuKeydown($event)"
+            class="absolute left-1/2 top-full z-50 mt-5 min-w-[11rem] -translate-x-1/2 border border-stone/15 bg-ivory py-2 shadow-[0_12px_32px_-12px_rgba(39,38,34,0.25)]"
+          >
+            <a
+              *ngFor="let link of menu().explore"
+              role="menuitem"
+              [routerLink]="link.path"
+              routerLinkActive="text-terracotta"
+              class="block whitespace-nowrap px-5 py-2.5 text-sm text-charcoal transition-colors duration-400 hover:bg-cream focus:bg-cream focus:outline-none"
+            >
+              {{ link.label }}
+            </a>
+          </div>
+        </div>
+
+        <ng-container *ngTemplateOutlet="desktopLinks; context: { $implicit: menu().after }"></ng-container>
+      </nav>
+
+      <ng-template #desktopLinks let-links>
         <a
-          *ngFor="let link of links()"
+          *ngFor="let link of links"
           [routerLink]="link.path"
           routerLinkActive="text-terracotta"
           class="whitespace-nowrap text-xs font-medium uppercase tracking-widest2 text-charcoal transition-colors duration-400 hover:text-terracotta"
         >
           {{ link.label }}
         </a>
-      </nav>
+      </ng-template>
 
-      <div class="hidden items-center gap-6 min-[1440px]:flex">
+      <div class="hidden items-center gap-6 lg:flex">
         <app-language-switcher></app-language-switcher>
         <app-button variant="primary" routerLink="/booking">{{ 'cta.planYourVisit' | translate }}</app-button>
       </div>
 
       <button
         type="button"
-        class="flex h-10 w-10 items-center justify-center min-[1440px]:hidden"
+        class="flex h-10 w-10 items-center justify-center lg:hidden"
         (click)="toggleMenu()"
         [attr.aria-expanded]="isMenuOpen()"
         aria-controls="mobile-menu"
@@ -54,19 +97,37 @@
     id="mobile-menu"
     *ngIf="isMenuOpen()"
     aria-label="Mobile"
-    class="border-t border-stone/10 bg-ivory min-[1440px]:hidden"
+    class="max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-stone/10 bg-ivory lg:hidden"
   >
     <app-container>
       <div class="flex flex-col gap-6 py-8">
-        <a
-          *ngFor="let link of links()"
-          [routerLink]="link.path"
-          routerLinkActive="text-terracotta"
-          (click)="closeMenu()"
-          class="font-display text-2xl text-forest"
-        >
-          {{ link.label }}
-        </a>
+        <ng-container *ngTemplateOutlet="mobileLinks; context: { $implicit: menu().before }"></ng-container>
+        <div class="border-y border-stone/10 py-5">
+          <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-stone">{{ exploreLabel() }}</p>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-4">
+            <a
+              *ngFor="let link of menu().explore"
+              [routerLink]="link.path"
+              routerLinkActive="text-terracotta"
+              (click)="closeMenu()"
+              class="font-display text-xl text-forest"
+            >
+              {{ link.label }}
+            </a>
+          </div>
+        </div>
+        <ng-container *ngTemplateOutlet="mobileLinks; context: { $implicit: menu().after }"></ng-container>
+        <ng-template #mobileLinks let-links>
+          <a
+            *ngFor="let link of links"
+            [routerLink]="link.path"
+            routerLinkActive="text-terracotta"
+            (click)="closeMenu()"
+            class="font-display text-2xl text-forest"
+          >
+            {{ link.label }}
+          </a>
+        </ng-template>
         <app-language-switcher align="left"></app-language-switcher>
         <app-button variant="primary" routerLink="/booking" (click)="closeMenu()">{{ 'cta.planYourVisit' | translate }}</app-button>
       </div>
