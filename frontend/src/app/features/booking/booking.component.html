@@ -125,16 +125,40 @@
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label for="phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.phone' | translate }}</label>
-              <input
-                id="phone"
-                type="tel"
-                formControlName="phone"
-                autocomplete="tel"
-                placeholder="+66 …"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('phone')"
-                aria-describedby="phone-error"
-              />
+              <div class="flex border border-stone/30 focus-within:border-forest" [class.border-terracotta]="fieldInvalid('phone')">
+                <!-- Native select (phone pickers, screen readers, keyboard) under a compact "🇹🇭 +66 ▾" face. -->
+                <div class="relative flex shrink-0 items-center gap-1.5 border-r border-stone/30 bg-cream/60 px-3 text-sm focus-within:outline focus-within:outline-1 focus-within:outline-forest">
+                  <span aria-hidden="true" class="whitespace-nowrap">{{ phoneCountryLabel() }}</span>
+                  <svg class="h-2.5 w-2.5 text-stone" viewBox="0 0 10 6" fill="none" aria-hidden="true">
+                    <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <select
+                    id="phoneCountry"
+                    formControlName="phoneCountry"
+                    autocomplete="tel-country-code"
+                    [attr.aria-label]="'booking.form.countryCode' | translate"
+                    class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                  >
+                    <optgroup [label]="'booking.form.commonCountries' | translate">
+                      <option *ngFor="let country of countries().common" [value]="country.code">{{ country.flag }} {{ country.name }} (+{{ country.dial }})</option>
+                    </optgroup>
+                    <optgroup [label]="'booking.form.allCountries' | translate">
+                      <option *ngFor="let country of countries().others" [value]="country.code">{{ country.flag }} {{ country.name }} (+{{ country.dial }})</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <input
+                  id="phone"
+                  type="tel"
+                  formControlName="phone"
+                  autocomplete="tel-national"
+                  inputmode="tel"
+                  placeholder="81 234 5678"
+                  class="w-full min-w-0 bg-transparent px-4 py-3 text-sm focus:outline-none"
+                  [attr.aria-invalid]="fieldInvalid('phone')"
+                  aria-describedby="phone-error"
+                />
+              </div>
               <p *ngIf="fieldInvalid('phone')" id="phone-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.phoneError' | translate }}</p>
             </div>
             <div>

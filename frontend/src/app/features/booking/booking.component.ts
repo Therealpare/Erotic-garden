@@ -1,4 +1,4 @@
-import { Component, Injector, afterNextRender, inject, signal } from '@angular/core';
+import { Component, Injector, afterNextRender, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -11,6 +11,14 @@ import { LanguageService } from '../../core/i18n/language.service';
 import { lineLinkTarget, lineMessageUrl, openLine } from '../../core/config/line.config';
 import { composeLineMessage, formatVisitDate, lineLabels } from '../../shared/utils/line-message.util';
 import { notInPast, todayIso } from '../checkout/checkout.component';
+import {
+  DEFAULT_COUNTRY,
+  countriesFor,
+  countryFromLocale,
+  dialCodeOf,
+  flagOf,
+  internationalNumber,
+} from '../../shared/utils/country-codes';
 
 /** Handled by the site's Cloudflare Worker (frontend/worker/index.ts), which alerts staff on LINE. */
 const BOOKING_ENDPOINT = '/api/booking';
@@ -52,6 +60,8 @@ export class BookingComponent {
   readonly lineTarget = lineLinkTarget();
   readonly preferences: ContactPreference[] = ['EMAIL', 'WHATSAPP', 'PHONE', 'LINE'];
   readonly today = todayIso();
+  /** Country list for the phone field, named in the page language. */
+  readonly countries = computed(() => countriesFor(this.languageService.lang()));
 
   readonly form = this.fb.nonNullable.group(
     {
@@ -60,7 +70,9 @@ export class BookingComponent {
       preferredTime: ['', [Validators.pattern(/^([01]\d|2[0-3]):[0-5]\d$/)]],
       guestCount: [2, [Validators.required, Validators.min(1), Validators.max(50)]],
       email: ['', [Validators.email, Validators.maxLength(255)]],
-      phone: ['', [Validators.pattern(/^[+\d][\d\s()-]{5,38}$/)]],
+      phoneCountry: [DEFAULT_COUNTRY],
+      /** Number without the country code; a number typed with its own "+" is also accepted. */
+      phone: ['', [Validators.pattern(/^\+?\d[\d\s()-]{4,30}$/)]],
       lineId: ['', [Validators.maxLength(60)]],
       contactPreference: ['EMAIL' as ContactPreference],
       message: ['', [Validators.maxLength(1000)]],
@@ -69,6 +81,21 @@ export class BookingComponent {
     },
     { validators: contactForPreference },
   );
+
+  constructor() {
+    // Guests usually give their home number: start from the browser's country (e.g. de-DE → +49).
+    afterNextRender(() => {
+      const control = this.form.controls.phoneCountry;
+      const country = countryFromLocale(navigator.language);
+      if (country && control.pristine) control.setValue(country);
+    });
+  }
+
+  /** "🇹🇭 +66" for the closed picker. */
+  phoneCountryLabel(): string {
+    const code = this.form.controls.phoneCountry.value;
+    return `${flagOf(code)} +${dialCodeOf(code) ?? ''}`;
+  }
 
   submit(): void {
     if (this.form.invalid) {
@@ -85,7 +112,7 @@ export class BookingComponent {
         preferredTime: value.preferredTime,
         guestCount: Number(value.guestCount),
         email: value.email.trim(),
-        phone: value.phone.trim(),
+        phone: internationalNumber(value.phoneCountry, value.phone),
         lineId: value.lineId.trim(),
         contactPreference: value.contactPreference,
         message: value.message.trim(),
@@ -120,7 +147,7 @@ export class BookingComponent {
         [t.visitDate, formatVisitDate(value.visitDate, lang)],
         [t.time, value.preferredTime],
         [t.guests, value.guestCount],
-        [t.phone, value.phone],
+        [t.phone, internationalNumber(value.phoneCountry, value.phone)],
         [t.email, value.email],
         [t.note, value.message],
       ]),
@@ -133,7 +160,7 @@ export class BookingComponent {
     this.reference.set(null);
     this.sentUrl.set(null);
     this.state.set('idle');
-    this.form.reset({ guestCount: 2, contactPreference: 'EMAIL' });
+    this.form.reset({ guestCount: 2, contactPreference: 'EMAIL', phoneCountry: this.form.controls.phoneCountry.value });
   }
 
   fieldInvalid(name: keyof typeof this.form.controls): boolean {
