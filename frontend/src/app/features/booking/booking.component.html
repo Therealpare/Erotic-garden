@@ -11,7 +11,27 @@
 <section class="py-24 sm:py-32">
   <app-container>
     <div class="mx-auto max-w-xl">
-      <div *ngIf="sentUrl() as url; else formBlock" class="border border-forest/20 bg-cream p-10 text-center" role="status">
+      <!-- SENT FROM THE FORM: staff were alerted on LINE -->
+      <div
+        *ngIf="reference() as code"
+        id="booking-done"
+        tabindex="-1"
+        class="border border-forest/20 bg-cream p-10 text-center focus:outline-none"
+        role="status"
+      >
+        <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'booking.success.eyebrow' | translate }}</p>
+        <p class="font-display text-3xl text-forest">{{ 'booking.success.title' | translate }}</p>
+        <p class="mt-4 text-sm leading-relaxed text-stone">{{ 'booking.success.body' | translate }}</p>
+        <p class="mt-6 text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.success.referenceLabel' | translate }}</p>
+        <p class="mt-2 border border-dashed border-stone/30 bg-ivory px-6 py-4 font-display text-2xl tracking-widest2 text-forest">{{ code }}</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <app-button variant="secondary" (click)="startNewBooking()">{{ 'booking.success.bookAnother' | translate }}</app-button>
+          <app-button variant="primary" routerLink="/">{{ 'booking.success.backToHome' | translate }}</app-button>
+        </div>
+      </div>
+
+      <!-- SENT VIA LINE CHAT -->
+      <div *ngIf="!reference() && sentUrl() as url" class="border border-forest/20 bg-cream p-10 text-center" role="status">
         <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'line.sentEyebrow' | translate }}</p>
         <p class="font-display text-3xl text-forest">{{ 'line.sentTitle' | translate }}</p>
         <p class="mt-4 text-sm leading-relaxed text-stone">{{ 'line.sentBody' | translate }}</p>
@@ -27,122 +47,169 @@
         <p class="mt-6 text-xs text-stone">{{ 'line.noLine' | translate }}</p>
       </div>
 
-      <ng-template #formBlock>
-        <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6">
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>
-              <label for="name" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.name' | translate }}</label>
-              <input
-                id="name"
-                type="text"
-                formControlName="name"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('name')"
-                aria-describedby="name-error"
-              />
-              <p *ngIf="fieldInvalid('name')" id="name-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.nameError' | translate }}</p>
-            </div>
+      <form *ngIf="!reference() && !sentUrl()" id="booking-form" [formGroup]="form" (ngSubmit)="submit()" novalidate class="space-y-6">
+        <div>
+          <label for="name" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.name' | translate }}</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            autocomplete="name"
+            class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+            [attr.aria-invalid]="fieldInvalid('name')"
+            aria-describedby="name-error"
+          />
+          <p *ngIf="fieldInvalid('name')" id="name-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.nameError' | translate }}</p>
+        </div>
 
-            <div>
-              <label for="email" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.email' | translate }}</label>
-              <input
-                id="email"
-                type="email"
-                formControlName="email"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('email')"
-                aria-describedby="email-error"
-              />
-              <p *ngIf="fieldInvalid('email')" id="email-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.emailError' | translate }}</p>
-            </div>
-          </div>
-
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
           <div>
-            <label for="phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.phone' | translate }}</label>
+            <label for="visitDate" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.visitDate' | translate }}</label>
             <input
-              id="phone"
-              type="tel"
-              formControlName="phone"
+              id="visitDate"
+              type="date"
+              [min]="today"
+              formControlName="visitDate"
               class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-              [attr.aria-invalid]="fieldInvalid('phone')"
-              aria-describedby="phone-error"
+              [attr.aria-invalid]="fieldInvalid('visitDate')"
+              aria-describedby="visitDate-error"
             />
-            <p *ngIf="fieldInvalid('phone')" id="phone-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.phoneError' | translate }}</p>
+            <p *ngIf="fieldInvalid('visitDate')" id="visitDate-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.visitDateError' | translate }}</p>
           </div>
-
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>
-              <label for="visitDate" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.visitDate' | translate }}</label>
-              <input
-                id="visitDate"
-                type="date"
-                [min]="today"
-                formControlName="visitDate"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('visitDate')"
-                aria-describedby="visitDate-error"
-              />
-              <p *ngIf="fieldInvalid('visitDate')" id="visitDate-error" class="mt-2 text-xs text-terracotta">
-                {{ 'booking.form.visitDateError' | translate }}
-              </p>
-            </div>
-
-            <div>
-              <label for="preferredTime" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.preferredTime' | translate }}</label>
-              <input
-                id="preferredTime"
-                type="time"
-                formControlName="preferredTime"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('preferredTime')"
-                aria-describedby="preferredTime-error"
-              />
-              <p *ngIf="fieldInvalid('preferredTime')" id="preferredTime-error" class="mt-2 text-xs text-terracotta">
-                {{ 'booking.form.preferredTimeError' | translate }}
-              </p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>
-              <label for="guestCount" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.guestCount' | translate }}</label>
-              <input
-                id="guestCount"
-                type="number"
-                min="1"
-                max="20"
-                formControlName="guestCount"
-                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-                [attr.aria-invalid]="fieldInvalid('guestCount')"
-                aria-describedby="guestCount-error"
-              />
-              <p *ngIf="fieldInvalid('guestCount')" id="guestCount-error" class="mt-2 text-xs text-terracotta">
-                {{ 'booking.form.guestCountError' | translate }}
-              </p>
-            </div>
-          </div>
-
           <div>
-            <label for="message" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.message' | translate }}</label>
-            <textarea
-              id="message"
-              rows="4"
-              formControlName="message"
+            <label for="preferredTime" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.preferredTime' | translate }}</label>
+            <input
+              id="preferredTime"
+              type="time"
+              formControlName="preferredTime"
               class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
-            ></textarea>
+              [attr.aria-invalid]="fieldInvalid('preferredTime')"
+              aria-describedby="preferredTime-error"
+            />
+            <p *ngIf="fieldInvalid('preferredTime')" id="preferredTime-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.preferredTimeError' | translate }}</p>
+          </div>
+          <div>
+            <label for="guestCount" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.guestCount' | translate }}</label>
+            <input
+              id="guestCount"
+              type="number"
+              min="1"
+              max="50"
+              formControlName="guestCount"
+              class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('guestCount')"
+              aria-describedby="guestCount-error"
+            />
+            <p *ngIf="fieldInvalid('guestCount')" id="guestCount-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.guestCountError' | translate }}</p>
+          </div>
+        </div>
+
+        <fieldset class="space-y-5 border border-stone/20 p-5 sm:p-6">
+          <legend class="px-2 text-xs font-medium uppercase tracking-widest2 text-forest">{{ 'booking.form.contactHeading' | translate }}</legend>
+          <p class="text-xs text-stone">{{ 'booking.form.contactHint' | translate }}</p>
+
+          <div>
+            <label for="email" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.email' | translate }}</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              autocomplete="email"
+              class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              [attr.aria-invalid]="fieldInvalid('email') || (contactMissing() && form.controls.contactPreference.value === 'EMAIL')"
+              aria-describedby="email-error"
+            />
+            <p *ngIf="fieldInvalid('email')" id="email-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.emailError' | translate }}</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label for="phone" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.phone' | translate }}</label>
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                autocomplete="tel"
+                placeholder="+66 …"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+                [attr.aria-invalid]="fieldInvalid('phone')"
+                aria-describedby="phone-error"
+              />
+              <p *ngIf="fieldInvalid('phone')" id="phone-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.phoneError' | translate }}</p>
+            </div>
+            <div>
+              <label for="lineId" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.lineId' | translate }}</label>
+              <input
+                id="lineId"
+                type="text"
+                formControlName="lineId"
+                class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+              />
+            </div>
           </div>
 
           <div>
-            <button
-              type="submit"
-              class="inline-flex w-full items-center justify-center bg-[#06C755] px-6 py-4 text-xs font-medium uppercase tracking-widest2 text-white transition-opacity duration-400 hover:opacity-90 sm:w-auto"
-            >
-              {{ 'booking.form.submit' | translate }}
-            </button>
-            <p class="mt-3 text-xs text-stone">{{ 'line.noLine' | translate }}</p>
+            <p class="mb-2 text-xs font-medium uppercase tracking-widest2 text-stone" id="preference-label">{{ 'booking.form.preferred' | translate }}</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-3" role="radiogroup" aria-labelledby="preference-label">
+              <label *ngFor="let option of preferences" class="flex items-center gap-2 text-sm text-charcoal">
+                <input type="radio" formControlName="contactPreference" [value]="option" class="h-4 w-4 accent-forest" />
+                {{ 'booking.form.preference.' + option | translate }}
+              </label>
+            </div>
+            <p *ngIf="contactMissing()" class="mt-2 text-xs text-terracotta" role="alert">{{ 'booking.form.contactError' | translate }}</p>
           </div>
-        </form>
-      </ng-template>
+        </fieldset>
+
+        <div>
+          <label for="message" class="mb-2 block text-xs font-medium uppercase tracking-widest2 text-stone">{{ 'booking.form.message' | translate }}</label>
+          <textarea
+            id="message"
+            rows="4"
+            formControlName="message"
+            class="w-full border border-stone/30 bg-transparent px-4 py-3 text-sm focus:border-forest focus:outline-none"
+          ></textarea>
+        </div>
+
+        <!-- Honeypot for bots: hidden from people and screen readers. -->
+        <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <label for="bk-website">Website</label>
+          <input id="bk-website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div>
+          <label class="flex items-start gap-3 text-sm leading-relaxed text-charcoal">
+            <input
+              type="checkbox"
+              formControlName="consent"
+              class="mt-1 h-4 w-4 shrink-0 accent-forest"
+              [attr.aria-invalid]="fieldInvalid('consent')"
+              [attr.aria-describedby]="fieldInvalid('consent') ? 'consent-error' : null"
+            />
+            <span>{{ 'booking.form.consent' | translate }}</span>
+          </label>
+          <p *ngIf="fieldInvalid('consent')" id="consent-error" class="mt-2 text-xs text-terracotta">{{ 'booking.form.consentError' | translate }}</p>
+        </div>
+
+        <div aria-live="polite">
+          <p *ngIf="state() === 'error'" class="text-sm text-terracotta">{{ 'booking.form.errorMessage' | translate }}</p>
+          <p *ngIf="state() === 'rate-limited'" class="text-sm text-terracotta">{{ 'booking.form.rateLimited' | translate }}</p>
+        </div>
+
+        <app-button type="submit" variant="primary" [disabled]="state() === 'loading'">
+          {{ state() === 'loading' ? ('booking.form.sending' | translate) : ('booking.form.submit' | translate) }}
+        </app-button>
+
+        <div class="border-t border-stone/15 pt-6">
+          <p class="text-xs uppercase tracking-widest2 text-stone">{{ 'booking.form.orLine' | translate }}</p>
+          <button
+            type="button"
+            (click)="sendViaLine()"
+            class="mt-3 inline-flex items-center justify-center bg-[#06C755] px-6 py-3 text-xs font-medium uppercase tracking-widest2 text-white transition-opacity duration-400 hover:opacity-90"
+          >
+            {{ 'booking.form.lineButton' | translate }}
+          </button>
+        </div>
+      </form>
     </div>
   </app-container>
 </section>

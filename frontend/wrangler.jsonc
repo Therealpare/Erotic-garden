@@ -1,13 +1,27 @@
-// Cloudflare Workers static site (Workers & Pages → "eroticgarden").
+// Cloudflare Worker for the site (Workers & Pages → "eroticgarden").
 // Build settings in the dashboard: root directory `frontend`, build command
 // `npm run build`, deploy command `npx wrangler deploy`.
+// Secrets (Settings → Variables and Secrets): LINE_CHANNEL_ACCESS_TOKEN, LINE_ADMIN_USER_ID.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "eroticgarden",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./dist/frontend/browser",
+    "binding": "ASSETS",
     // Angular handles routes like /coffee in the browser: unknown paths get index.html.
-    "not_found_handling": "single-page-application"
-  }
+    "not_found_handling": "single-page-application",
+    // Only the booking API runs code; every other request is served straight from assets.
+    "run_worker_first": ["/api/*"]
+  },
+  // At most 5 booking requests per minute from one IP address.
+  "ratelimits": [
+    {
+      "name": "BOOKING_RATE_LIMIT",
+      "namespace_id": "1001",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
+  "observability": { "enabled": true }
 }
