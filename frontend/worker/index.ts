@@ -19,6 +19,8 @@ interface Env {
   LINE_ADMIN_USER_ID?: string;
   /** Tests only: point the push at a fake LINE API. */
   LINE_API_BASE?: string;
+  /** The one public host (wrangler.jsonc vars); other hosts are redirected to it. */
+  SITE_HOST?: string;
 }
 
 export interface BookingRequest {
@@ -165,8 +167,22 @@ async function handleBooking(request: Request, env: Env): Promise<Response> {
   return sent ? json(200, { reference }) : json(502, { error: 'not-delivered' });
 }
 
+/**
+ * www., http:// and *.workers.dev copies of the site redirect permanently to the main
+ * address, so search engines see one site instead of several duplicates.
+ */
+export function canonicalRedirect(request: Request, siteHost: string | undefined): Response | null {
+  if (!siteHost || (request.method !== 'GET' && request.method !== 'HEAD')) return null;
+  const url = new URL(request.url);
+  if (url.hostname === siteHost && url.protocol === 'https:') return null;
+  if (url.hostname !== siteHost && url.hostname !== `www.${siteHost}` && !url.hostname.endsWith('.workers.dev')) return null;
+  return Response.redirect(`https://${siteHost}${url.pathname}${url.search}`, 301);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const redirect = canonicalRedirect(request, env.SITE_HOST);
+    if (redirect) return redirect;
     const { pathname } = new URL(request.url);
     if (pathname === '/api/booking') return handleBooking(request, env);
     if (pathname.startsWith('/api/')) return json(404, { error: 'not-found' });

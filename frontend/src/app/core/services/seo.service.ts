@@ -3,6 +3,10 @@ import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
+/** Link-preview image (LINE, Facebook, Google): 1200×630, in public/images. */
+const SHARE_IMAGE = 'images/og-cover.jpg';
 
 export const DEFAULT_DESCRIPTION =
   'A Garden Beyond Imagination — where art, nature and human expression meet in the hills of Chiang Mai, Thailand.';
@@ -33,7 +37,10 @@ export class SeoService {
     const robots = this.router.url.startsWith('/admin')
       ? 'noindex, nofollow'
       : ((route.data['robots'] as string | undefined) ?? 'index, follow');
-    const url = `${this.document.location.origin}${this.router.url.split(/[?#]/)[0]}`;
+    // One address for every copy of the site (www, workers.dev…), so search engines index a single URL.
+    const origin = environment.siteUrl || this.document.location.origin;
+    const path = this.router.url.split(/[?#]/)[0];
+    const url = `${origin}${path === '/' ? '/' : path.replace(/\/$/, '')}`;
 
     this.meta.updateTag({ name: 'description', content: description });
     this.meta.updateTag({ name: 'robots', content: robots });
@@ -42,6 +49,10 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:title', content: this.title.getTitle() });
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:url', content: url });
+    this.meta.updateTag({ property: 'og:image', content: `${origin}/${SHARE_IMAGE}` });
+    this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+    this.meta.updateTag({ property: 'og:image:height', content: '630' });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.setCanonical(url);
   }
 

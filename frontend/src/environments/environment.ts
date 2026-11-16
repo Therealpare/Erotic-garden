@@ -3,6 +3,8 @@ export const environment = {
    * Local NestJS API (`npm run start:dev` in /backend).
    */
   apiBaseUrl: 'http://localhost:3000/api/v1',
+  /** Public address used for canonical links and social previews ('' = current origin). */
+  siteUrl: '',
   production: false,
   /**
    * >>> PUT YOUR GOOGLE MAPS EMBED API KEY HERE <<<

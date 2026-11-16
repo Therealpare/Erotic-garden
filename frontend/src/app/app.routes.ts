@@ -158,6 +158,7 @@ export const routes: Routes = [
     path: 'checkout',
     loadComponent: () => import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
     title: 'Checkout — Erotic Garden & Teahouse',
+    data: { robots: 'noindex, follow' },
   },
   {
     path: 'visit',

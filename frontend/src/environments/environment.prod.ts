@@ -5,6 +5,8 @@ export const environment = {
    * the event inquiry form points visitors to the Contact page instead.
    */
   apiBaseUrl: '',
+  /** Public address used for canonical links and social previews ('' = current origin). */
+  siteUrl: 'https://eroticgardenchiangmai.com',
   production: true,
   /**
    * >>> PUT YOUR PRODUCTION GOOGLE MAPS EMBED API KEY HERE <<<
