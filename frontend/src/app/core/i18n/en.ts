@@ -47,7 +47,7 @@ export const EN = {
     },
     intro: {
       headline: 'More than a garden.\nMore than an art space.',
-      body1: 'Chiang Mai Erotic Garden & Teahouse brings together contemporary sculpture, tropical planting and a boutique teahouse across a series of quiet, shaded terraces in Mae Rim. At its heart is a simple question: why do we see some things as erotic at all? The garden doesn’t answer for you — it just gives you the space to notice.',
+      body1: 'Chiang Mai Erotic Garden brings together contemporary sculpture, tropical planting and a boutique tea house across a series of quiet, shaded terraces in Mae Rim. At its heart is a simple question: why do we see some things as erotic at all? The garden doesn’t answer for you — it just gives you the space to notice.',
       body2: 'Visitors are invited to move at their own pace: through the garden, into the gallery spaces, and finally to rest with tea overlooking the hills.',
     },
     experience: {
@@ -75,7 +75,7 @@ export const EN = {
     },
     teaHouse: {
       headline: 'Slow down.\nHave some tea.',
-      body: 'After the garden, rest a while. The teahouse serves tea, coffee and homemade treats in a quiet room overlooking the planting — a place built for lingering, not rushing.',
+      body: 'After the garden, rest a while. The tea house serves tea, coffee and homemade treats in a quiet room overlooking the planting — a place built for lingering, not rushing.',
       tagTea: 'Tea',
       tagCoffee: 'Coffee',
       tagTreats: 'Homemade Treats',
@@ -121,7 +121,7 @@ export const EN = {
     hero: {
       eyebrow: 'About',
       headline: 'Our Story',
-      sub: 'Erotic Garden & Teahouse is home to beautiful, one-of-a-kind sculptures, exotic flowers and a sensual garden landscape. We offer private tours and host events.',
+      sub: 'Erotic Garden is home to beautiful, one-of-a-kind sculptures, exotic flowers and a sensual garden landscape. We offer private tours and host events.',
     },
     story: {
       headline: 'How it began',
@@ -151,7 +151,7 @@ export const EN = {
       stat2Value: '4',
       stat2Label: 'Ways to experience the garden',
       stat3Value: '1',
-      stat3Label: 'Teahouse overlooking the hills',
+      stat3Label: 'Tea house overlooking the hills',
       stat4Value: '~11',
       stat4Label: 'Years bringing art and nature together',
       visitorNote: 'Most visitors travel from abroad to see it — roughly 85% from Europe and 10% from Asia, based on visitor data collected on site (figures approximate).',
@@ -238,8 +238,8 @@ export const EN = {
     },
     story: {
       headline: 'A place to rest',
-      body1: 'After walking the garden, the teahouse offers a quiet room to sit with tea, coffee or something sweet — a place built for lingering, not rushing.',
-      body2: 'The coffee side of the teahouse began as an idea from Katai’s son, but it was Katai who studied it properly — learning where the beans are grown, which varieties matter, how roasting affects quality, and what visitors actually want in a cup. She calls herself the “first gate” of understanding: before any business idea moves forward, she needs to understand it fully herself, not just know what’s for sale.',
+      body1: 'After walking the garden, the tea house offers a quiet room to sit with tea, coffee or something sweet — a place built for lingering, not rushing.',
+      body2: 'The coffee side of the tea house began as an idea from Katai’s son, but it was Katai who studied it properly — learning where the beans are grown, which varieties matter, how roasting affects quality, and what visitors actually want in a cup. She calls herself the “first gate” of understanding: before any business idea moves forward, she needs to understand it fully herself, not just know what’s for sale.',
     },
     coffee: {
       eyebrow: 'Our Coffee',
@@ -249,7 +249,7 @@ export const EN = {
     atmosphere: {
       eyebrow: 'Atmosphere',
       headline: 'Built for lingering',
-      sub: 'The garden invites you to look differently. The teahouse invites you to taste differently — both are about slowing down enough to notice.',
+      sub: 'The garden invites you to look differently. The tea house invites you to taste differently — both are about slowing down enough to notice.',
     },
     menu: {
       eyebrow: 'Menu',
@@ -297,7 +297,7 @@ export const EN = {
     story: {
       eyebrow: 'Coffee Story',
       headline: 'Katai’s First Gate',
-      body: 'The coffee side of the teahouse began as an idea from Katai’s son, but it was Katai who studied it properly — learning where the beans are grown, which varieties matter, how roasting affects quality, and what visitors actually want in a cup. She calls herself the “first gate” of understanding: before any business idea moves forward, she needs to understand it fully herself, not just know what’s for sale.',
+      body: 'The coffee side of the tea house began as an idea from Katai’s son, but it was Katai who studied it properly — learning where the beans are grown, which varieties matter, how roasting affects quality, and what visitors actually want in a cup. She calls herself the “first gate” of understanding: before any business idea moves forward, she needs to understand it fully herself, not just know what’s for sale.',
     },
     origin: {
       eyebrow: 'Origin',
@@ -474,7 +474,7 @@ export const EN = {
     hero: {
       eyebrow: 'Contact',
       headline: 'Get in Touch',
-      sub: 'Questions about the garden, the teahouse, or planning a group visit? Your message is sent to us on LINE and we’ll reply in the chat.',
+      sub: 'Questions about the garden, the tea house, or planning a group visit? Your message is sent to us on LINE and we’ll reply in the chat.',
     },
     success: {
       title: 'Message sent',
@@ -533,7 +533,7 @@ export const EN = {
         LINE: 'LINE',
       },
       message: 'Message (optional)',
-      consent: 'I agree that Erotic Garden & Teahouse may use these details to reply to my booking request.',
+      consent: 'I agree that Erotic Garden may use these details to reply to my booking request.',
       consentError: 'Please tick the box so we can reply to you.',
       submit: 'Send Booking Request',
       sending: 'Sending…',
@@ -627,7 +627,7 @@ export const EN = {
       message: 'Tell us about your event',
       messageHint: 'For example: the occasion, timing, and anything special you have in mind.',
       messageError: 'Please write at least 10 characters.',
-      consent: 'I agree that Erotic Garden & Teahouse may use these details to reply to my inquiry.',
+      consent: 'I agree that Erotic Garden may use these details to reply to my inquiry.',
       consentError: 'Please confirm so we can reply to you.',
       submit: 'Send Inquiry',
       submitLine: 'Send Inquiry on LINE',

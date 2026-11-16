@@ -25,7 +25,7 @@ export class MapComponent implements OnDestroy {
   latitude = input.required<number>();
   longitude = input.required<number>();
   /** Place name shown in the marker popup and used as the iframe title. */
-  label = input('Erotic Garden & Teahouse');
+  label = input('Erotic Garden');
   /** Full postal address shown under the place name in the marker popup. */
   address = input.required<string>();
 

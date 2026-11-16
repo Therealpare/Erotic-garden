@@ -49,7 +49,7 @@ export const DE: typeof EN = {
     },
     intro: {
       headline: 'Mehr als ein Garten.\nMehr als ein Kunstraum.',
-      body1: 'Chiang Mai Erotic Garden & Teahouse vereint zeitgenössische Skulptur, tropische Bepflanzung und ein kleines Teehaus auf mehreren ruhigen, schattigen Terrassen in Mae Rim. Im Zentrum steht eine einfache Frage: Warum empfinden wir manche Dinge überhaupt als erotisch? Der Garten gibt keine Antwort vor — er schafft nur den Raum, es selbst zu bemerken.',
+      body1: 'Chiang Mai Erotic Garden vereint zeitgenössische Skulptur, tropische Bepflanzung und ein kleines Teehaus auf mehreren ruhigen, schattigen Terrassen in Mae Rim. Im Zentrum steht eine einfache Frage: Warum empfinden wir manche Dinge überhaupt als erotisch? Der Garten gibt keine Antwort vor — er schafft nur den Raum, es selbst zu bemerken.',
       body2: 'Besucher sind eingeladen, sich in ihrem eigenen Tempo zu bewegen: durch den Garten, in die Ausstellungsräume, und schließlich zur Ruhe bei einer Tasse Tee mit Blick auf die Hügel.',
     },
     experience: {
@@ -123,7 +123,7 @@ export const DE: typeof EN = {
     hero: {
       eyebrow: 'Über uns',
       headline: 'Unsere Geschichte',
-      sub: 'Erotic Garden & Teahouse beherbergt wunderschöne, einzigartige Skulpturen, exotische Blumen und eine sinnliche Gartenlandschaft. Wir bieten private Führungen an und veranstalten Events.',
+      sub: 'Erotic Garden beherbergt wunderschöne, einzigartige Skulpturen, exotische Blumen und eine sinnliche Gartenlandschaft. Wir bieten private Führungen an und veranstalten Events.',
     },
     story: {
       headline: 'Wie alles begann',
@@ -535,7 +535,7 @@ export const DE: typeof EN = {
         LINE: 'LINE',
       },
       message: 'Nachricht (optional)',
-      consent: 'Ich bin einverstanden, dass Erotic Garden & Teahouse diese Angaben nutzt, um auf meine Buchungsanfrage zu antworten.',
+      consent: 'Ich bin einverstanden, dass Erotic Garden diese Angaben nutzt, um auf meine Buchungsanfrage zu antworten.',
       consentError: 'Bitte setzen Sie das Häkchen, damit wir Ihnen antworten können.',
       submit: 'Buchungsanfrage senden',
       sending: 'Wird gesendet…',
@@ -629,7 +629,7 @@ export const DE: typeof EN = {
       message: 'Erzählen Sie uns von Ihrer Veranstaltung',
       messageHint: 'Zum Beispiel: Anlass, Zeitraum und besondere Wünsche.',
       messageError: 'Bitte schreiben Sie mindestens 10 Zeichen.',
-      consent: 'Ich bin einverstanden, dass Erotic Garden & Teahouse diese Angaben zur Beantwortung meiner Anfrage verwendet.',
+      consent: 'Ich bin einverstanden, dass Erotic Garden diese Angaben zur Beantwortung meiner Anfrage verwendet.',
       consentError: 'Bitte bestätigen Sie, damit wir Ihnen antworten können.',
       submit: 'Anfrage senden',
       submitLine: 'Anfrage per LINE senden',

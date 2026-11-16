@@ -115,86 +115,86 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
-    title: 'Chiang Mai Erotic Garden & Teahouse — A Garden Beyond Imagination',
-    data: { description: 'Chiang Mai Erotic Garden & Teahouse in Mae Rim — an art garden where sculpture, nature and human expression meet, with a tea house and Northern Thai coffee. Open Wednesday–Sunday, 10:00–16:00.' },
+    title: 'Chiang Mai Erotic Garden — A Garden Beyond Imagination',
+    data: { description: 'Chiang Mai Erotic Garden in Mae Rim — an art garden where sculpture, nature and human expression meet, with a tea house and Northern Thai coffee. Open Wednesday–Sunday, 10:00–16:00.' },
   },
   {
     path: 'about',
     loadComponent: () => import('./features/about/about.component').then((m) => m.AboutComponent),
-    title: 'About — Erotic Garden & Teahouse',
-    data: { description: 'The story of Chiang Mai Erotic Garden & Teahouse, an art garden in Mae Rim, Chiang Mai, where sculpture, nature and human expression meet.' },
+    title: 'About — Erotic Garden',
+    data: { description: 'The story of Chiang Mai Erotic Garden, an art garden in Mae Rim, Chiang Mai, where sculpture, nature and human expression meet.' },
   },
   {
     path: 'experience',
     loadComponent: () => import('./features/experience/experience.component').then((m) => m.ExperienceComponent),
-    title: 'Experience — Erotic Garden & Teahouse',
-    data: { description: 'Ways to spend your visit at Chiang Mai Erotic Garden & Teahouse in Mae Rim, Chiang Mai.' },
+    title: 'Experience — Erotic Garden',
+    data: { description: 'Ways to spend your visit at Chiang Mai Erotic Garden in Mae Rim, Chiang Mai.' },
   },
   {
     path: 'art',
     loadComponent: () =>
       import('./features/artworks/artwork-list/artwork-list.component').then((m) => m.ArtworkListComponent),
-    title: 'Art — Erotic Garden & Teahouse',
-    data: { description: 'Sculpture and art set among the planting of Chiang Mai Erotic Garden & Teahouse in Mae Rim, Chiang Mai.' },
+    title: 'Art — Erotic Garden',
+    data: { description: 'Sculpture and art set among the planting of Chiang Mai Erotic Garden in Mae Rim, Chiang Mai.' },
   },
   {
     path: 'art/:slug',
     loadComponent: () =>
       import('./features/artworks/artwork-detail/artwork-detail.component').then((m) => m.ArtworkDetailComponent),
-    title: 'Artwork — Erotic Garden & Teahouse',
+    title: 'Artwork — Erotic Garden',
   },
   {
     path: 'gallery',
     loadComponent: () => import('./features/gallery/gallery.component').then((m) => m.GalleryComponent),
-    title: 'Gallery — Erotic Garden & Teahouse',
-    data: { description: 'Photos of Chiang Mai Erotic Garden & Teahouse: the flowering pergola, garden sculptures, the tea house and our coffee.' },
+    title: 'Gallery — Erotic Garden',
+    data: { description: 'Photos of Chiang Mai Erotic Garden: the flowering pergola, garden sculptures, the tea house and our coffee.' },
   },
   {
     path: 'tea-house',
     loadComponent: () => import('./features/tea-house/tea-house.component').then((m) => m.TeaHouseComponent),
-    title: 'Tea House — Erotic Garden & Teahouse',
+    title: 'Tea House — Erotic Garden',
     data: { description: 'The tea house at Chiang Mai Erotic Garden in Mae Rim: teas, coffee, drinks and desserts served in the garden.' },
   },
   {
     path: 'coffee',
     loadComponent: () => import('./features/coffee/coffee.component').then((m) => m.CoffeeComponent),
-    title: 'Coffee — Erotic Garden & Teahouse',
+    title: 'Coffee — Erotic Garden',
     data: { description: 'Erotic Garden single origin arabica from Northern Thailand — Khun Chang Khian, Pangkhum and Mae Poon Luang. Pre-order coffee for your visit via LINE.' },
   },
   {
     path: 'checkout',
     loadComponent: () => import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
-    title: 'Checkout — Erotic Garden & Teahouse',
+    title: 'Checkout — Erotic Garden',
     data: { robots: 'noindex, follow' },
   },
   {
     path: 'visit',
     loadComponent: () => import('./features/visit/visit.component').then((m) => m.VisitComponent),
-    title: 'Plan Your Visit — Erotic Garden & Teahouse',
-    data: { description: 'Plan your visit to Chiang Mai Erotic Garden & Teahouse in Mae Rim: open Wednesday–Sunday 10:00–16:00, address, map and directions.' },
+    title: 'Plan Your Visit — Erotic Garden',
+    data: { description: 'Plan your visit to Chiang Mai Erotic Garden in Mae Rim: open Wednesday–Sunday 10:00–16:00, address, map and directions.' },
   },
   {
     path: 'booking',
     loadComponent: () => import('./features/booking/booking.component').then((m) => m.BookingComponent),
-    title: 'Booking — Erotic Garden & Teahouse',
-    data: { description: 'Request a visit to Chiang Mai Erotic Garden & Teahouse. Choose your date and group size — we confirm by email, WhatsApp or LINE.' },
+    title: 'Booking — Erotic Garden',
+    data: { description: 'Request a visit to Chiang Mai Erotic Garden. Choose your date and group size — we confirm by email, WhatsApp or LINE.' },
   },
   {
     path: 'media',
     loadComponent: () => import('./features/media/media.component').then((m) => m.MediaComponent),
-    title: 'Media & Press — Erotic Garden & Teahouse',
+    title: 'Media & Press — Erotic Garden',
     data: {
       description:
-        'Videos, articles, magazine features, TV segments and reels about Chiang Mai Erotic Garden & Teahouse.',
+        'Videos, articles, magazine features, TV segments and reels about Chiang Mai Erotic Garden.',
     },
   },
   {
     path: 'events',
     loadComponent: () => import('./features/events/events.component').then((m) => m.EventsComponent),
-    title: 'Private Events — Erotic Garden & Teahouse',
+    title: 'Private Events — Erotic Garden',
     data: {
       description:
-        'Host your private event at Chiang Mai Erotic Garden & Teahouse. Send an event inquiry and our team will get back to you.',
+        'Host your private event at Chiang Mai Erotic Garden. Send an event inquiry and our team will get back to you.',
     },
   },
   // The admin CMS needs the API; on the static live site (no API) it doesn't exist.
@@ -202,13 +202,13 @@ export const routes: Routes = [
   {
     path: 'contact',
     loadComponent: () => import('./features/contact/contact.component').then((m) => m.ContactComponent),
-    title: 'Contact — Erotic Garden & Teahouse',
-    data: { description: 'Contact Chiang Mai Erotic Garden & Teahouse in Mae Rim, Chiang Mai — LINE @582nujvq or phone 083 318 4855.' },
+    title: 'Contact — Erotic Garden',
+    data: { description: 'Contact Chiang Mai Erotic Garden in Mae Rim, Chiang Mai — LINE @582nujvq or phone 083 318 4855.' },
   },
   {
     path: '**',
     component: PlaceholderPageComponent,
     data: { title: 'Page Not Found' },
-    title: 'Not Found — Erotic Garden & Teahouse',
+    title: 'Not Found — Erotic Garden',
   },
 ];

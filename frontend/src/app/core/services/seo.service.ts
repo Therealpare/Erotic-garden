@@ -45,7 +45,7 @@ export class SeoService {
     this.meta.updateTag({ name: 'description', content: description });
     this.meta.updateTag({ name: 'robots', content: robots });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
-    this.meta.updateTag({ property: 'og:site_name', content: 'Erotic Garden & Teahouse' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'Erotic Garden' });
     this.meta.updateTag({ property: 'og:title', content: this.title.getTitle() });
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:url', content: url });

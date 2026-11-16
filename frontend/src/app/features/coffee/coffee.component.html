@@ -32,14 +32,14 @@
 <!-- COFFEE STORY -->
 <section class="py-24 sm:py-32">
   <app-container>
-    <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
-      <div class="lg:col-span-2">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3">
         <p class="mb-4 text-xs font-medium uppercase tracking-widest2 text-terracotta">{{ 'coffee.story.eyebrow' | translate }}</p>
         <h2 class="text-4xl leading-tight sm:text-5xl">{{ 'coffee.story.headline' | translate }}</h2>
         <p class="mt-6 text-base leading-relaxed text-stone">{{ 'coffee.story.body' | translate }}</p>
       </div>
-      <div class="lg:col-span-3">
-        <div class="aspect-[6/5] w-full">
+      <div class="lg:col-span-2">
+        <div class="mx-auto aspect-[4/5] w-full max-w-xs sm:max-w-sm">
           <app-image-reveal src="images/garden/cof1.webp" alt="A top-down view of a freshly poured espresso"></app-image-reveal>
         </div>
       </div>
@@ -301,7 +301,7 @@
       <app-empty-state [title]="'coffee.shop.emptyTitle' | translate" [message]="'coffee.shop.emptyMessage' | translate"></app-empty-state>
     </div>
 
-    <div class="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-14 grid grid-cols-1 gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
       <div *ngFor="let product of shopProducts()">
         <ng-container *ngIf="selectedVariant(product) as variant">
           <div class="relative aspect-[3/4] w-full bg-ivory">
