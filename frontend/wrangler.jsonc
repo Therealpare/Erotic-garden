@@ -27,5 +27,7 @@
     }
   ],
   "vars": { "SITE_HOST": "eroticgardenchiangmai.com" },
+  // Keep variables added in the dashboard when deploying (LINE_* must still be type "Secret").
+  "keep_vars": true,
   "observability": { "enabled": true }
 }
