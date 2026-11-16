@@ -19,5 +19,6 @@ export const environment = {
    * there is no API; while empty, or if the sheet can't be read, the site uses the
    * snapshot in public/data/products.csv.
    */
-  productsSheetUrl: '',
+  productsSheetUrl:
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vTs1ZeqXw3t3JjgSKN-ratoiwPDuOMcAcdHymKtX90FWqpAzMreYtob56FOyhxW3aogSShu--tnGX7l/pub?gid=1541621659&single=true&output=csv',
 };
